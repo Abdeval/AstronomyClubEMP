@@ -12,9 +12,9 @@ function App() {
     <BrowserRouter>
      
       <Routes>
+        <Route index element={<LandingPage />} />
         <Route element={<GuestLayout />}>
            <Route path="news" element={<News />} />
-        <Route index element={<LandingPage />} />
 
         </Route>
       </Routes>
