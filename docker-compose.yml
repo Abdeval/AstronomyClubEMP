@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:5173
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+      - redis
+      - image-processing
+    environment:
+      - MONGO_URI=mongodb://172.31.64.1:27017/astronomy?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.9
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - IMAGE_PROCESSING_URL=http://image-processing:5001
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  image-processing:
+    build: ./image-processing
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./image-processing:/app
+
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mongo_data:
+  redis_data:
