@@ -1,7 +1,10 @@
+import ParallaxComponent from "@/components/landing/parallax"
 
 const Article = () => {
   return (
-    <div>Article</div>
+    <div className="h-full w-full">
+      {/* <ParallaxComponent /> */}
+    </div>
   )
 }
 

@@ -3,6 +3,7 @@ import Landing from "@/pages/landing";
 import News from "@/pages/news";
 import { Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import Article from "@/pages/article";
 
 export default function AppRouter() {
   return (
@@ -17,6 +18,7 @@ export default function AppRouter() {
 
         <Route path="/guests" element={<GuestLayout />}>
           <Route path="news" element={<News />} />
+          <Route path="articles" element={<Article />} />
           {/* <Route index element={<LandingPage />} /> */}
         </Route>
       </Routes>

@@ -5,7 +5,7 @@ const GuestLayout = () => {
 
   return (
     <>
-    <div className="w-screen h-screen pt-20">
+    <div className="">
         <Outlet />
     </div>
     </>

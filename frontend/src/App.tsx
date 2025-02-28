@@ -5,11 +5,11 @@ import AppRouter from "./routes";
 
 function App() {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <Router>
         <AppRouter />
       </Router>
-    </>
+    </div>
   );
 }
 
