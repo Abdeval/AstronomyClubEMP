@@ -1,6 +1,6 @@
 import ParallaxComponent from "@/components/landing/parallax"
 
-const Article = () => {
+const Articles = () => {
   return (
     <div className="h-full w-full">
       {/* <ParallaxComponent /> */}
@@ -8,4 +8,4 @@ const Article = () => {
   )
 }
 
-export default Article
+export default Articles

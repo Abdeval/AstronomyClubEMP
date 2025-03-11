@@ -7,6 +7,12 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily: {
+			regular: ['pRegular'],
+			medium: ['pMedium'],
+			bold: ['pBold', "iBold"],
+			semibold: ['pSemibold', "iSemibold"],
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

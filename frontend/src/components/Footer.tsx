@@ -1,18 +1,17 @@
-import React from "react";
+
 import Logo from "./Logo";
 import { Icon } from "@iconify/react";
 import { BorderBeam } from "./magicui/border-beam";
-import { div } from "./ui/div";
-import { DotBackground, DotPattern } from "./magicui/dot-pattern";
-import { cn } from "@/lib/utils";
+import { DotBackground } from "./magicui/dot-pattern";
+
 
 export default function Footer() {
   return (
-    <section className="relative px-4 flex-col z-50 flex justify-between items-center w-full bg-black">
+    <section className="relative px-4 flex-col z-50 flex justify-between items-center w-full bg-background">
       <div className="w-full px-4 flex items-center gap-8 justify-around">
         <div className="flex items-center flex-col gap-2">
           <Logo type="d"/>
-          <span className="font-bold text-xl text-white ">البتاني</span>
+          <span className="font-bold text-xl text-foreground ">البتاني</span>
         </div>
         <div className="flex-1 border-[0.5px] border-muted-foreground/30 mb-4"/>
         <div className="w-[120px]"/>
