@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  mydb:
+    image: postgres:9.6
+    volumes:
+      - mydata:/var/lib/postgresql/data 
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    ports:
+      - "5433:5432"
+    networks:
+      - astronetwork
+
+networks:
+  astronetwork:
+    driver: bridge
+volumes:
+  mydata:

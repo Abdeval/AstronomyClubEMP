@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  cellId    String?
+  cell      Cell?    @relation(fields: [cellId], references: [id])
+  articles  Article[]
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Cell {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  objective   String
+  members     User[]
+  tasks       Task[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  deadline    DateTime
+  status      TaskStatus @default(PENDING)
+  cellId      String
+  cell        Cell   @relation(fields: [cellId], references: [id])
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+model Article {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  createdAt   DateTime @default(now())
+  authorId    String
+  author      User   @relation(fields: [authorId], references: [id])
+}
+
+model Image {
+  id          String   @id @default(uuid())
+  url         String
+  description String?
+  takenAt     DateTime @default(now())
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  date        DateTime
+  description String?
+}
