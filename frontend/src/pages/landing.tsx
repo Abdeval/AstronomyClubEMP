@@ -8,9 +8,8 @@ import { Ripple } from "@/components/magicui/ripple";
 import LandingNav from "@/components/navs/LandingNav";
 // import { Button } from "@/components/ui/button";
 import { Brain } from "lucide-react";
-import Spline from "@splinetool/react-spline";
-import { DotBackground, DotPattern } from "@/components/magicui/dot-pattern";
-import { cn } from "@/lib/utils";
+import { DotBackground } from "@/components/magicui/dot-pattern";
+
 import PlanetArticles from "@/components/articles/articles-list";
 
 export default function Landing() {

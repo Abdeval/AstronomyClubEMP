@@ -1,7 +1,12 @@
-import React from 'react'
+import BarChartComponent from '@/components/charts/bar-chart'
+import PageHeader from '@/components/page-header'
+
 
 export default function MemberDashboard() {
   return (
-    <div className="w-full h-full bg-gray-500">MemberDashboard</div>
+    <div className="w-full h-full">
+      <PageHeader title="Dashboard"/>
+      <BarChartComponent />
+    </div>
   )
 }

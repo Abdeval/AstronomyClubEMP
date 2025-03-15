@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/context/theme-provider";
+import { Button } from "./ui/button";
+import { MoonIcon, SunIcon } from "lucide-react";
 
 export default function ChangeThemeButton() {
   const { theme, setTheme } = useTheme();
@@ -23,12 +24,18 @@ export default function ChangeThemeButton() {
   }
 
   return (
-    <div className="items-center flex gap-4">
-      <span className="text-foreground font-bold">{theme}</span>
-      <Switch
-        checked={theme === "dark" ? true : false}
-        onCheckedChange={toggleTheme}
-      />
-    </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleTheme}
+      className="ml-2 rounded-full"
+    >
+      {theme === "dark" ? (
+        <SunIcon className="h-5 w-5" />
+      ) : (
+        <MoonIcon className="h-5 w-5" />
+      )}
+      <span className="sr-only">Toggle theme</span>
+    </Button>
   );
 }

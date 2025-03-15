@@ -1,3 +1,4 @@
+import ChangeThemeButton from "../change-theme-button";
 import SearchInput from "../inputs/SearchInput";
 import Logo from "../Logo";
 import UserInfo from "../profile/UserInfo";
@@ -13,6 +14,9 @@ export default function DashboardNavbar() {
 
       {/* the search box */}
       <SearchInput />
+
+      {/* toggle theme */}
+      <ChangeThemeButton />
 
 
       {/* the profile trigger */}
