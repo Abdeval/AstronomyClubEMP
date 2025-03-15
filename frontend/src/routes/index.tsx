@@ -14,6 +14,8 @@ import Images from "@/pages/members/images";
 import Groups from "@/pages/members/groups";
 import Collaborators from "@/pages/members/collaborators";
 import About from "@/pages/guests/about";
+import SignIn from "@/pages/auth/sign-in";
+import SignUp from "@/pages/auth/sign-up";
 
 
 export default function AppRouter() {
@@ -22,6 +24,12 @@ export default function AppRouter() {
       <Routes>
         <Route path="/" element={<Navigate to="/landing" replace />} />
         <Route path="/landing" element={<Landing />} />
+
+        {/* auth routes */}
+        <Route path="/auth">
+          <Route path="sign-in" element={<SignIn />}/>
+          <Route path="sign-in" element={<SignUp />}/>
+        </Route>
 
         <Route path="/guests" element={<GuestLayout />}>
           <Route path="news" element={<News />} />

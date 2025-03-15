@@ -12,6 +12,7 @@ export default {
 			medium: ['pMedium'],
 			bold: ['pBold', "iBold"],
 			semibold: ['pSemibold', "iSemibold"],
+			italic: ["pItalic"]
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
