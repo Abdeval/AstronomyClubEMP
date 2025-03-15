@@ -125,28 +125,39 @@ export const planets: Planet[] = [
 
 export const dashboardNavs: DashboardNavType[] = [
   {
+    name: "dashboard",
+    icon: "Home",
+    link: ""
+  },
+  {
     name: "profile",
-    icon: <UserIcon className="text-foreground" />,
+    icon: "UserIcon",
+    link: "profile"
   },
   {
     name: "calendar",
-    icon: <Calendar className="text-foreground" />,
+    icon: "Calendar",
+    link: "calendar"
   },
   {
     name: "collaborators",
-    icon: <Users2 className="text-foreground" />,
+    icon: "Users2",
+    link: "collaborators"
   },
   {
     name: "groups",
-    icon: <GitBranch className="text-foreground" />,
+    icon: "GitBranch",
+    link: "groups"
   },
   {
     name: "images",
-    icon: <Images className="text-foreground" />,
+    icon: "Images",
+    link: "images"
   },
   {
     name: "settings",
-    icon: <Settings2 className="text-foreground" />,
+    icon: "Settings2",
+    link: "settings"
   },
 ];
 

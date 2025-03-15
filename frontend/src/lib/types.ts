@@ -9,7 +9,8 @@ export interface Planet {
 
 export type DashboardNavType = {
   name: string,
-  icon: React.ReactNode
+  icon: string,
+  link: string
 }
 
 export type GroupCardType = {

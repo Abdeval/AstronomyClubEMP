@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import CurvedItem from "./CurvedItem";
 import { Link } from "react-router-dom";
+import { DynamicIcon } from "../ui/dynamic-icon";
 
 export default function DashboardSidebar() {
   const [selectedNav, setSelectedNav] = useState<number>(() => {
@@ -19,7 +20,7 @@ export default function DashboardSidebar() {
       {/* desctop */}
       <div className="sm:block hidden h-full bg-background w-[180px] space-y-2">
         {dashboardNavs.map((nav: DashboardNavType, index: number) => (
-          <Link to={`/members/${nav.name}`} key={index}>
+          <Link to={`/members/${nav.link}`} key={index}>
             <div
               onClick={() => setSelectedNav(index)}
               className={`bg-background h-14 flex items-center relative cursor-pointer`}
@@ -32,7 +33,7 @@ export default function DashboardSidebar() {
                     : "pl-2 text-primary-foreground"
                 )}
               >
-                {nav.icon}
+                <DynamicIcon name={nav.icon} className="text-foreground"/>
                 <span
                   className={cn(
                     isSelected(index) ? "font-semibold" : "font-regular",
