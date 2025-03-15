@@ -12,7 +12,7 @@ export default function LandingNav() {
           <Link to={'/guests/articles'} className='font-medium text-yellow-400 hover:text-white capitalize transition-all duration-200'>
             articles
           </Link>
-          <Link to={'/dashboard'} className='font-medium text-yellow-400 hover:text-white capitalize transition-all duration-200'>
+          <Link to={'/memebers'} className='font-medium text-yellow-400 hover:text-white capitalize transition-all duration-200'>
             dashboard
           </Link>
           <Link to={'/guests/articles'} className='font-medium text-yellow-400 hover:text-white capitalize transition-all duration-200'>

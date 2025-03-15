@@ -10,7 +10,21 @@ export interface Planet {
 export type DashboardNavType = {
   name: string,
   icon: React.ReactNode
-} 
+}
+
+export type GroupCardType = {
+  name: string,
+  image: string,
+  icon: string,
+  isActive: boolean
+}
+
+export type CategoryCardType = {
+  name: string,
+  image: string,
+  // icon: string,
+  // isActive: boolean
+}
 
 
 // ! calendar types
@@ -70,7 +84,7 @@ export interface AstronomyEvent {
   isAllDay?: boolean
   location?: string
   telescopeId?: string
-  telescopeName?: string | null 
+  telescopeName?: string | null
   teamMemberIds?: string[] // Used in forms
   teamMembers?: TeamMember[]
   celestialObjectIds?: string[] // Used in forms

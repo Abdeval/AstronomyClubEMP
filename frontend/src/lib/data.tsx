@@ -1,5 +1,48 @@
-import { Calendar, GitBranch, Images, Settings2, UserIcon, Users2 } from "lucide-react";
+import {
+  Calendar,
+  GitBranch,
+  Images,
+  Settings2,
+  UserIcon,
+  Users2,
+} from "lucide-react";
 import { DashboardNavType, Planet } from "./types";
+
+export const groupList: GroupCardType[] = [
+  {
+    name: "rovers",
+    icon: "/images/groups/rover.png",
+    isActive: true,
+    image: "/images/groups/rover.jpg",
+  },
+  {
+    name: "web dev",
+    icon: "/images/groups/web.png",
+    isActive: true,
+    image: "/images/groups/web.jpg",
+  },
+  {
+    name: "astrography",
+    icon: "Telescope",
+    isActive: false,
+    image: "/images/groups/astrography.jpg",
+  },
+];
+
+export const categoryList: CategoryCardType[] = [
+  {
+    name: "planets",
+    image: "/images/categories/planets.jpg",
+  },
+  {
+    name: "galaxies",
+    image: "/images/categories/galaxies.jpg",
+  },
+  {
+    name: "sinners",
+    image: "/images/categories/sinners.jpg",
+  },
+];
 
 export const colorsClassNames = [
   "background",
@@ -20,7 +63,6 @@ export const colorsClassNames = [
   "chart-1",
   "radius",
 ];
-
 
 export const planets: Planet[] = [
   {
@@ -81,49 +123,87 @@ export const planets: Planet[] = [
   },
 ];
 
-
-export const dashboardNavs:DashboardNavType[] = [
+export const dashboardNavs: DashboardNavType[] = [
   {
     name: "profile",
-    icon: <UserIcon className="text-foreground"/>
+    icon: <UserIcon className="text-foreground" />,
   },
   {
     name: "calendar",
-    icon: <Calendar className="text-foreground"/>
+    icon: <Calendar className="text-foreground" />,
   },
   {
     name: "collaborators",
-    icon: <Users2 className="text-foreground"/>
+    icon: <Users2 className="text-foreground" />,
   },
   {
     name: "groups",
-    icon: <GitBranch className="text-foreground"/>
+    icon: <GitBranch className="text-foreground" />,
   },
   {
     name: "images",
-    icon: <Images className="text-foreground"/>
+    icon: <Images className="text-foreground" />,
   },
   {
     name: "settings",
-    icon: <Settings2 className="text-foreground"/>
+    icon: <Settings2 className="text-foreground" />,
   },
-]
+];
 
-// ! calendar data 
+// ! calendar data
 
-import type { AstronomyEvent, TeamMember, EventType, Telescope, CelestialObject, CelestialEvent } from "./types"
-import { TelescopeIcon, Users, Clock, Star, Wrench } from "lucide-react"
-import { addDays, addHours, format } from "date-fns"
+import type {
+  AstronomyEvent,
+  TeamMember,
+  EventType,
+  Telescope,
+  CelestialObject,
+  CelestialEvent,
+  GroupCardType,
+  CategoryCardType,
+} from "./types";
+import { TelescopeIcon, Users, Clock, Star, Wrench } from "lucide-react";
+import { addDays, addHours, format } from "date-fns";
 
 // Team Members Data
 export const TEAM_MEMBERS: TeamMember[] = [
-  { id: "user1", name: "Dr. Emma Chen", color: "#4f46e5", role: "Lead Astronomer" },
-  { id: "user2", name: "Prof. James Wilson", color: "#0ea5e9", role: "Research Director" },
-  { id: "user3", name: "Dr. Maya Patel", color: "#14b8a6", role: "Astrophysicist" },
-  { id: "user4", name: "Alex Rodriguez", color: "#ec4899", role: "PhD Candidate" },
-  { id: "user5", name: "Dr. Sarah Kim", color: "#f59e0b", role: "Data Scientist" },
-  { id: "user6", name: "Michael Johnson", color: "#8b5cf6", role: "Observatory Technician" },
-]
+  {
+    id: "user1",
+    name: "Dr. Emma Chen",
+    color: "#4f46e5",
+    role: "Lead Astronomer",
+  },
+  {
+    id: "user2",
+    name: "Prof. James Wilson",
+    color: "#0ea5e9",
+    role: "Research Director",
+  },
+  {
+    id: "user3",
+    name: "Dr. Maya Patel",
+    color: "#14b8a6",
+    role: "Astrophysicist",
+  },
+  {
+    id: "user4",
+    name: "Alex Rodriguez",
+    color: "#ec4899",
+    role: "PhD Candidate",
+  },
+  {
+    id: "user5",
+    name: "Dr. Sarah Kim",
+    color: "#f59e0b",
+    role: "Data Scientist",
+  },
+  {
+    id: "user6",
+    name: "Michael Johnson",
+    color: "#8b5cf6",
+    role: "Observatory Technician",
+  },
+];
 
 // Event Types
 export const EVENT_TYPES: EventType[] = [
@@ -132,32 +212,124 @@ export const EVENT_TYPES: EventType[] = [
   { id: "deadline", name: "Research Deadline", icon: Clock },
   { id: "celestial", name: "Celestial Event", icon: Star },
   { id: "maintenance", name: "Equipment Maintenance", icon: Wrench },
-]
+];
 
 // Telescopes
 export const TELESCOPES: Telescope[] = [
-  { id: "tel1", name: "Main Observatory Reflector", type: "Optical", aperture: "2.4m" },
-  { id: "tel2", name: "Radio Telescope Array", type: "Radio", aperture: "100m" },
+  {
+    id: "tel1",
+    name: "Main Observatory Reflector",
+    type: "Optical",
+    aperture: "2.4m",
+  },
+  {
+    id: "tel2",
+    name: "Radio Telescope Array",
+    type: "Radio",
+    aperture: "100m",
+  },
   { id: "tel3", name: "Schmidt Camera", type: "Optical", aperture: "0.9m" },
-  { id: "tel4", name: "Robotic Survey Telescope", type: "Optical", aperture: "1.2m" },
-  { id: "tel5", name: "Spectroscopic Instrument", type: "Optical", aperture: "0.8m" },
-]
+  {
+    id: "tel4",
+    name: "Robotic Survey Telescope",
+    type: "Optical",
+    aperture: "1.2m",
+  },
+  {
+    id: "tel5",
+    name: "Spectroscopic Instrument",
+    type: "Optical",
+    aperture: "0.8m",
+  },
+];
 
 // Celestial Objects
 export const CELESTIAL_OBJECTS: CelestialObject[] = [
-  { id: "obj1", name: "M31 Andromeda Galaxy", type: "Galaxy", distance: "2.5 million ly", magnitude: 3.4 },
-  { id: "obj2", name: "M45 Pleiades", type: "Star Cluster", constellation: "Taurus", magnitude: 1.6 },
-  { id: "obj3", name: "M57 Ring Nebula", type: "Nebula", constellation: "Lyra", magnitude: 8.8 },
-  { id: "obj4", name: "M13 Hercules Cluster", type: "Globular Cluster", constellation: "Hercules", magnitude: 5.8 },
-  { id: "obj5", name: "NGC 5139 Omega Centauri", type: "Globular Cluster", constellation: "Centaurus", magnitude: 3.9 },
-  { id: "obj6", name: "M42 Orion Nebula", type: "Nebula", constellation: "Orion", magnitude: 4.0 },
-  { id: "obj7", name: "M51 Whirlpool Galaxy", type: "Galaxy", distance: "23 million ly", magnitude: 8.4 },
-  { id: "obj8", name: "M27 Dumbbell Nebula", type: "Nebula", constellation: "Vulpecula", magnitude: 7.5 },
-  { id: "obj9", name: "M8 Lagoon Nebula", type: "Nebula", constellation: "Sagittarius", magnitude: 6.0 },
-  { id: "obj10", name: "M104 Sombrero Galaxy", type: "Galaxy", constellation: "Virgo", magnitude: 8.0 },
-  { id: "obj11", name: "M1 Crab Nebula", type: "Nebula", constellation: "Taurus", magnitude: 8.4 },
-  { id: "obj12", name: "M87 Virgo A", type: "Galaxy", constellation: "Virgo", magnitude: 8.6 },
-]
+  {
+    id: "obj1",
+    name: "M31 Andromeda Galaxy",
+    type: "Galaxy",
+    distance: "2.5 million ly",
+    magnitude: 3.4,
+  },
+  {
+    id: "obj2",
+    name: "M45 Pleiades",
+    type: "Star Cluster",
+    constellation: "Taurus",
+    magnitude: 1.6,
+  },
+  {
+    id: "obj3",
+    name: "M57 Ring Nebula",
+    type: "Nebula",
+    constellation: "Lyra",
+    magnitude: 8.8,
+  },
+  {
+    id: "obj4",
+    name: "M13 Hercules Cluster",
+    type: "Globular Cluster",
+    constellation: "Hercules",
+    magnitude: 5.8,
+  },
+  {
+    id: "obj5",
+    name: "NGC 5139 Omega Centauri",
+    type: "Globular Cluster",
+    constellation: "Centaurus",
+    magnitude: 3.9,
+  },
+  {
+    id: "obj6",
+    name: "M42 Orion Nebula",
+    type: "Nebula",
+    constellation: "Orion",
+    magnitude: 4.0,
+  },
+  {
+    id: "obj7",
+    name: "M51 Whirlpool Galaxy",
+    type: "Galaxy",
+    distance: "23 million ly",
+    magnitude: 8.4,
+  },
+  {
+    id: "obj8",
+    name: "M27 Dumbbell Nebula",
+    type: "Nebula",
+    constellation: "Vulpecula",
+    magnitude: 7.5,
+  },
+  {
+    id: "obj9",
+    name: "M8 Lagoon Nebula",
+    type: "Nebula",
+    constellation: "Sagittarius",
+    magnitude: 6.0,
+  },
+  {
+    id: "obj10",
+    name: "M104 Sombrero Galaxy",
+    type: "Galaxy",
+    constellation: "Virgo",
+    magnitude: 8.0,
+  },
+  {
+    id: "obj11",
+    name: "M1 Crab Nebula",
+    type: "Nebula",
+    constellation: "Taurus",
+    magnitude: 8.4,
+  },
+  {
+    id: "obj12",
+    name: "M87 Virgo A",
+    type: "Galaxy",
+    constellation: "Virgo",
+    magnitude: 8.6,
+  },
+];
 
 // Celestial Events
 export const CELESTIAL_EVENTS: CelestialEvent[] = [
@@ -190,10 +362,10 @@ export const CELESTIAL_EVENTS: CelestialEvent[] = [
     description: "Visible from northern hemisphere locations",
     type: "eclipse",
   },
-]
+];
 
 // Sample Astronomy Events Data
-const today = new Date()
+const today = new Date();
 
 export const SAMPLE_ASTRONOMY_EVENTS: AstronomyEvent[] = [
   {
@@ -208,7 +380,8 @@ export const SAMPLE_ASTRONOMY_EVENTS: AstronomyEvent[] = [
     teamMembers: [TEAM_MEMBERS[0], TEAM_MEMBERS[3]],
     celestialObjects: [CELESTIAL_OBJECTS[0]],
     location: "Main Observatory",
-    observationNotes: "Using narrowband filters, targeting outer regions of the galaxy",
+    observationNotes:
+      "Using narrowband filters, targeting outer regions of the galaxy",
   },
   {
     id: "event2",
@@ -217,7 +390,13 @@ export const SAMPLE_ASTRONOMY_EVENTS: AstronomyEvent[] = [
     startDate: addDays(today, 1).toISOString(),
     endDate: addDays(addHours(today, 2), 1).toISOString(),
     eventType: "meeting",
-    teamMembers: [TEAM_MEMBERS[0], TEAM_MEMBERS[1], TEAM_MEMBERS[2], TEAM_MEMBERS[3], TEAM_MEMBERS[4]],
+    teamMembers: [
+      TEAM_MEMBERS[0],
+      TEAM_MEMBERS[1],
+      TEAM_MEMBERS[2],
+      TEAM_MEMBERS[3],
+      TEAM_MEMBERS[4],
+    ],
     location: "Conference Room A",
   },
   {
@@ -290,7 +469,13 @@ export const SAMPLE_ASTRONOMY_EVENTS: AstronomyEvent[] = [
     endDate: addDays(addHours(today, 17), 6).toISOString(),
     eventType: "meeting",
     location: "Lecture Hall B",
-    teamMembers: [TEAM_MEMBERS[0], TEAM_MEMBERS[1], TEAM_MEMBERS[2], TEAM_MEMBERS[3], TEAM_MEMBERS[4]],
+    teamMembers: [
+      TEAM_MEMBERS[0],
+      TEAM_MEMBERS[1],
+      TEAM_MEMBERS[2],
+      TEAM_MEMBERS[3],
+      TEAM_MEMBERS[4],
+    ],
   },
   {
     id: "event10",
@@ -306,6 +491,4 @@ export const SAMPLE_ASTRONOMY_EVENTS: AstronomyEvent[] = [
     location: "Main Observatory",
     observationNotes: "Focus on metallicity measurements",
   },
-]
-
-
+];

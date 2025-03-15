@@ -9,7 +9,7 @@ export default function DashboardSidebar() {
   const [selectedNav, setSelectedNav] = useState<number>(() => {
     const currentNav = localStorage.getItem("selectedNav");
     if (currentNav) return parseInt(currentNav);
-    return 1;
+    return 0;
   });
 
   const isSelected = (index: number): boolean => selectedNav === index;
@@ -35,7 +35,7 @@ export default function DashboardSidebar() {
                 {nav.icon}
                 <span
                   className={cn(
-                    isSelected(index) ? "font-semibold" : "",
+                    isSelected(index) ? "font-semibold" : "font-regular",
                     "text-primary"
                   )}
                 >
