@@ -1,6 +1,7 @@
 import HoverImage from "./hover-image";
 import { EllipsisVertical } from "lucide-react";
 import { CategoryCardType } from "@/lib/types";
+import { Link } from "react-router-dom";
 
 export default function CategoryCard({ name, image }: CategoryCardType) {
   return (
@@ -12,9 +13,9 @@ export default function CategoryCard({ name, image }: CategoryCardType) {
         <span className="capitalize font-medium"> {name}</span>
         <EllipsisVertical size={24} className="transition-all duration-200 cursor-pointer hover:text-primary"/>
       </div>
-      <div className="h-[82%] w-full">
+      <Link to={`/members/images/${name}`} className="h-[82%] w-full">
         <HoverImage appearIcon={"Clapperboard"} image={image} />
-      </div>
+      </Link>
     </div>
   );
 }

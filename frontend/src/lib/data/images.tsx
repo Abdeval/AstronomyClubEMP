@@ -1,4 +1,5 @@
 import { CategoryCardType, GroupCardType } from "../types";
+import { ImageType } from "../types";
 
 export const groupList: GroupCardType[] = [
   {
@@ -35,3 +36,15 @@ export const categoryList: CategoryCardType[] = [
     image: "/images/categories/sinners.jpg",
   },
 ];
+
+
+export const planetsImages:Partial<ImageType>[] = [
+    { title: "mercury", image: "/planet-icons/earth.png" , border: "" },
+    { title: "venus", image: "/planet-icons/jupiter.png", border: ""},
+    { title: "earth", image: "/planet-icons/mars.png", border: "" },
+    { title: "mars", image: "/planet-icons/perpule.png", border: "" },
+    { title: "jupiter", image: "/planet-icons/earth.png", border: "" },
+    { title: "saturn", image: "/planet-icons/mars.png", border: "" },
+    { title: "uranus", image: "/planet-icons/jupiter.png", border: "" },
+    { title: "neptune", image: "/planet-icons/perpule.png", border: "" },
+] 

@@ -11,7 +11,7 @@ export default function Images() {
       {/* by groups */}
       <div className="space-y-4">
         <PageHeader title="Groups" className="sm:text-3xl text-2xl"/>
-        <div className="w-full flex gap-8 flex-wrap flex-1">
+        <div className="w-full flex sm:gap-8 gap-2 flex-wrap flex-1">
           {
             groupList.map((group: GroupCardType, index: number) => (
               <GroupCard key={index} {...group}/>
@@ -24,7 +24,7 @@ export default function Images() {
 
       <div className="space-y-4">
         <PageHeader title="Categories" className="sm:text-3xl text-2xl"/>
-        <div className="w-full flex gap-8 flex-wrap flex-1">
+        <div className="w-full flex sm:gap-8 gap-2 flex-wrap flex-1">
           {
             categoryList.map((category: CategoryCardType, index: number) => (
               <CategoryCard key={index} {...category}/>

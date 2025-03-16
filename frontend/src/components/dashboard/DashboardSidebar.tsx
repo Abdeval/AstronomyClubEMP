@@ -57,7 +57,7 @@ export default function DashboardSidebar() {
       {/* mobile */}
       <div className="sm:hidden block h-full bg-background w-16 space-y-2">
         {dashboardNavs.map((nav: DashboardNavType, index: number) => (
-          <Link to={`/members/${nav.name}`} key={index}>
+          <Link to={`/members/${nav.link}`} key={index}>
             <div
               onClick={() => setSelectedNav(index)}
               className={`bg-background h-14 flex items-center relative cursor-pointer`}
@@ -70,7 +70,7 @@ export default function DashboardSidebar() {
                     : "pl-4 text-primary-foreground"
                 )}
               >
-                {nav.icon}
+                <DynamicIcon name={nav.icon} className="text-foreground"/>
               </div>
               {/* the illustartif div */}
               <CurvedItem

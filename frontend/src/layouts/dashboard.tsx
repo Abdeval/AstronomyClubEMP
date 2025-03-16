@@ -1,3 +1,4 @@
+import BackButton from "@/components/buttons/back-button";
 import DashboardFooter from "@/components/dashboard/DashboardFooter";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -10,12 +11,14 @@ export default function DashboardLayout() {
       <div className="flex flex-1 overflow-hidden">
         <DashboardSidebar />
         <main className="flex-1 flex flex-col overflow-hidden bg-secondary">
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto sm:p-4 p-2">
             <Outlet />
           </div>
           <DashboardFooter />
         </main>
       </div>
+
+      <BackButton />
     </div>
   )
 }

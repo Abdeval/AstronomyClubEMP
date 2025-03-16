@@ -16,6 +16,10 @@ import Collaborators from "@/pages/members/collaborators";
 import About from "@/pages/guests/about";
 import SignIn from "@/pages/auth/sign-in";
 import SignUp from "@/pages/auth/sign-up";
+import Image from "@/pages/members/image";
+import PlanetsPage from "@/pages/members/planets/planets-page";
+import GalaxiesPage from "@/pages/members/galaxies/galaxies-page";
+import SinnersPage from "@/pages/members/sinners/sinners-page";
 
 
 export default function AppRouter() {
@@ -43,7 +47,14 @@ export default function AppRouter() {
           <Route path="calendar" element={<CalendarPage />}/>
           <Route path="settings" element={<Settings />}/>
           <Route path="profile" element={<Profile />}/>
-          <Route path="images" element={<Images />}/>
+         
+         {/* all the routes of the images parent */}
+          <Route path="images" element={<Images />} />
+          <Route path="images/:id" element={<Image />}/>
+          <Route path="images/planets" element={<PlanetsPage />}/>
+          <Route path="images/galaxies" element={<GalaxiesPage />}/>
+          <Route path="images/sinners" element={<SinnersPage />}/>
+
           <Route path="groups" element={<Groups />}/>
           <Route path="collaborators" element={<Collaborators />}/>
         </Route>

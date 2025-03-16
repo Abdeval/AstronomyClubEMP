@@ -1,4 +1,13 @@
 
+export interface ImageType {
+  id: number | string,
+  title: string,
+  description?: string,
+  image: string,
+  tags?: string[],
+  border?: string
+}
+
 export interface Planet {
   id: number;
   name: string;
