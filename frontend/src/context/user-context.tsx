@@ -56,7 +56,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logout = () => {
-    
     setToken(null);
   };
 

@@ -8,6 +8,15 @@ export interface ImageType {
   border?: string
 }
 
+export interface ArticleType {
+  id: number | string,
+  title: string,
+  description: string,
+  mainImage: string,
+  images?: string[]
+  // ! other properties will be added 
+}
+
 export interface Planet {
   id: number;
   name: string;
