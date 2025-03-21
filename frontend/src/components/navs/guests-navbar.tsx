@@ -43,10 +43,10 @@ export default function Navbar() {
           dashboard
         </Link>
         <Link
-          to="/guests/articles"
+          to="/guests/news"
           className="font-medium text-primary hover:text-foreground capitalize transition-all duration-200"
         >
-          members
+          news
         </Link>
       </div>
 
@@ -138,11 +138,11 @@ export default function Navbar() {
                 className="w-full"
               >
                 <Link
-                  to="/guests/articles"
+                  to="/guests/news"
                   className="font-medium text-2xl text-primary hover:text-muted-foreground capitalize transition-all duration-200 flex justify-center py-4 w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  members
+                  news
                 </Link>
               </motion.div>
 
