@@ -1,10 +1,8 @@
 import { ImageType } from "@/lib/types";
-// import React from "react";
-// import { useParams } from "react-router-dom";
+
 
 export default function Image() {
   // const { id } = useParams();
-
   //  todo: get the image from the db
 
   const image: ImageType = {
@@ -16,8 +14,9 @@ export default function Image() {
   };
 
   return (
-    <div className="flex flex-col items-center bg-background p-2 gap-2">
+    <div className="flex rounded-cu flex-col items-center bg-background p-2 gap-2">
       {/* the image  */}
+
       <div className="w-full h-[300px]">
         <img src={image.image} alt="image" className="w-full h-full object-cover 
         rounded-cu" />

@@ -4,7 +4,7 @@ import axios from "axios";
 // ? const AUTH_TOKEN: string = import.meta.env.VITE_AUTH_TOKEN as string
 
 const api = axios.create({
-    baseURL: 'http://localhost:4000/api',
+    baseURL: 'http://localhost:3000/api',
     // headers: {'Authorization': AUTH_TOKEN }
 });
 
@@ -60,7 +60,7 @@ api.interceptors.response.use(
 
 
 const auth = axios.create({
-    baseURL: 'http://localhost:4000/auth',
+    baseURL: 'http://localhost:3000/auth',
 });
 
 

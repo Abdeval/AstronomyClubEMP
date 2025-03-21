@@ -6,8 +6,10 @@ import { CategoryCardType, GroupCardType } from "@/lib/types";
 
 
 export default function Images() {
+
   return (
     <div className="w-full min-h-full space-y-4">
+      
       {/* by groups */}
       <div className="space-y-4">
         <PageHeader title="Groups" className="sm:text-3xl text-2xl"/>
@@ -19,7 +21,6 @@ export default function Images() {
           }
         </div>
       </div>
-
       {/* by categories */}
 
       <div className="space-y-4">
@@ -32,6 +33,7 @@ export default function Images() {
           }
         </div>
       </div>
+      
     </div>
   );
 }

@@ -96,19 +96,19 @@ export default function SignUpPage() {
   };
 
   return (
-    <Card className="lg:w-2/5 md:w-1/2 h-full border-none rounded-[0] bg-background/20">
+    <Card className="lg:w-2/5 md:w-1/2 h-full border-none rounded-[0px] dark:bg-background/30 bg-background">
       <CardHeader className="gap-4">
         <div className="flex items-center gap-4 p-2">
-          <img src="/vite.svg" className="w-12 h-12" />
+          <img src="/images/child-tele.svg" className="w-12 h-12" />
           <CardTitle className="text-2xl font-semibold">
             Sign up{" "}
-            <span className="uppercase font-bold text-secondary pl-2">
+            <span className="uppercase font-bold text-primary pl-2">
               {" "}
-              butcher
+              albattani
             </span>
           </CardTitle>
         </div>
-        <CardDescription className="bg-secondary/10 text-secondary font-regular p-4 items-center flex justify-center rounded-[16px]">
+        <CardDescription className="bg-primary/20 text-primary font-regular p-4 items-center flex justify-center rounded-[16px]">
           {step === "signup"
             ? "Enter your phone number and password"
             : "Enter the code sent to your phone"}
@@ -207,7 +207,7 @@ export default function SignUpPage() {
               />
               <Button
                 type="submit"
-                className="w-full font-medium text-white bg-secondary hover:bg-secondary/60"
+                className="w-full font-medium text-foreground bg-secondary hover:bg-secondary/60"
               >
                 Verify Code
               </Button>
@@ -216,7 +216,7 @@ export default function SignUpPage() {
         )}
       </CardContent>
       <CardFooter className="flex justify-center">
-        <p className="text-primary/60 font-regular text-sm">
+        <p className="text-foreground font-regular text-sm">
           {step === "otp" ? (
             <Button
               variant="link"
@@ -229,10 +229,10 @@ export default function SignUpPage() {
             <span>
               Already have an account ?{" "}
               <span
-                className="text-primary font-semibold underline cursor-pointer"
-                onClick={() => navigate("/auth/login")}
+                className="text-muted-foreground font-semibold underline cursor-pointer"
+                onClick={() => navigate("/auth/sign-in")}
               >
-                login
+                sign in
               </span>
             </span>
           )}

@@ -20,6 +20,7 @@ import Image from "@/pages/members/image";
 import PlanetsPage from "@/pages/members/planets/planets-page";
 import GalaxiesPage from "@/pages/members/galaxies/galaxies-page";
 import SinnersPage from "@/pages/members/sinners/sinners-page";
+import Tasks from "@/pages/members/tasks";
 
 
 export default function AppRouter() {
@@ -32,7 +33,7 @@ export default function AppRouter() {
         {/* auth routes */}
         <Route path="/auth">
           <Route path="sign-in" element={<SignIn />}/>
-          <Route path="sign-in" element={<SignUp />}/>
+          <Route path="sign-up" element={<SignUp />}/>
         </Route>
 
         <Route path="/guests" element={<GuestLayout />}>
@@ -54,7 +55,9 @@ export default function AppRouter() {
           <Route path="images/planets" element={<PlanetsPage />}/>
           <Route path="images/galaxies" element={<GalaxiesPage />}/>
           <Route path="images/sinners" element={<SinnersPage />}/>
-
+        
+        {/* other pages of the members */}
+          <Route path="tasks" element={<Tasks />} />
           <Route path="groups" element={<Groups />}/>
           <Route path="collaborators" element={<Collaborators />}/>
         </Route>

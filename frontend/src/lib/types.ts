@@ -1,4 +1,12 @@
 
+export interface UserType {
+  id: string,
+  firstName?: string,
+  lastName?: string,
+  email: string,
+  role: string
+}
+
 export interface ImageType {
   id: number | string,
   title: string,
@@ -15,6 +23,21 @@ export interface ArticleType {
   mainImage: string,
   images?: string[]
   // ! other properties will be added 
+}
+
+export interface GroupType {
+  id: string,
+  name: string,
+  description?: string,
+  members?: UserType[],
+  tasks?: Task[]
+}
+
+export interface Task {
+  id: string,
+  title: string,
+  description?: string,
+  deadline: Date,
 }
 
 export interface Planet {
@@ -47,81 +70,26 @@ export type CategoryCardType = {
 
 // ! calendar types
 
-import type { LucideIcon } from "lucide-react"
+export type AstronomyEventType = "meteor-shower" | "planet-viewing" | "moon-phase" | "eclipse" | "deadline"
 
-
-export interface Task {
-  id: string
-  title: string
-  description?: string
-  date: string
-  priority: "low" | "medium" | "high"
-  assigneeId?: string
-  assignee?: TeamMember
-  completed?: boolean
-}
-
-export interface TeamMember {
-  id: string
-  name: string
-  color: string
-  role?: string
-  avatar?: string
-}
-
-export interface EventType {
-  id: string
-  name: string
-  icon?: LucideIcon
-}
-
-export interface Telescope {
-  id: string
-  name: string
-  type: string
-  aperture?: string
-  location?: string
-}
-
-export interface CelestialObject {
-  id: string
-  name: string
-  type: string
-  constellation?: string
-  distance?: string
-  magnitude?: number
-}
+export type WeatherCondition = "clear" | "cloudy" | "rainy"
 
 export interface AstronomyEvent {
   id: string
   title: string
   description?: string
-  startDate: string
-  endDate?: string | null
-  eventType: string
-  isAllDay?: boolean
+  type: AstronomyEventType
+  start: Date | string
+  end?: Date | string
   location?: string
-  telescopeId?: string
-  telescopeName?: string | null
-  teamMemberIds?: string[] // Used in forms
-  teamMembers?: TeamMember[]
-  celestialObjectIds?: string[] // Used in forms
-  celestialObjects?: CelestialObject[]
-  observationNotes?: string
+  visibilityRequirements?: string
 }
 
-export interface CelestialEvent {
-  name: string
-  date: string
-  description?: string
-  type: string
+export interface WeatherData {
+  condition: WeatherCondition
+  visibility: number // percentage
+  isSuitable: boolean
 }
 
-export interface FilterCriteria {
-  eventTypes: string[]
-  telescopes: string[]
-  teamMembers: string[]
-  celestialObjects: string[]
-}
 
 

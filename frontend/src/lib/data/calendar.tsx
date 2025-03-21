@@ -1,339 +1,154 @@
-import type {
-    AstronomyEvent,
-    TeamMember,
-    EventType,
-    Telescope,
-    CelestialObject,
-    CelestialEvent,
-  } from "../types";
-  import { TelescopeIcon, Users, Clock, Star, Wrench } from "lucide-react";
-  import { addDays, addHours, format } from "date-fns";
-  
-  // Team Members Data
-  export const TEAM_MEMBERS: TeamMember[] = [
+import type { WeatherData } from "@/lib/types"
+import type { AstronomyEvent } from "@/lib/types"
+import { addDays,format, startOfMonth, setHours } from "date-fns"
+
+
+// ! astronomy events
+// Sample astronomy events data
+export function getAstronomyEvents(): AstronomyEvent[] {
+  const today = new Date()
+  const startOfCurrentMonth = startOfMonth(today)
+
+  return [
     {
-      id: "user1",
-      name: "Dr. Emma Chen",
-      color: "#4f46e5",
-      role: "Lead Astronomer",
+      id: "event-1",
+      title: "Perseid Meteor Shower",
+      description: "One of the best meteor showers of the year, with up to 60 meteors per hour at its peak.",
+      type: "meteor-shower",
+      start: addDays(startOfCurrentMonth, 12),
+      end: addDays(startOfCurrentMonth, 13),
+      location: "Northern Hemisphere",
+      visibilityRequirements: "Clear, dark skies away from city lights",
     },
     {
-      id: "user2",
-      name: "Prof. James Wilson",
-      color: "#0ea5e9",
-      role: "Research Director",
+      id: "event-2",
+      title: "Full Moon",
+      description:
+        "The Moon will be located on the opposite side of the Earth as the Sun and its face will be fully illuminated.",
+      type: "moon-phase",
+      start: setHours(addDays(startOfCurrentMonth, 15), 19, 0),
+      end: setHours(addDays(startOfCurrentMonth, 15), 23, 0),
+      visibilityRequirements: "Clear skies",
     },
     {
-      id: "user3",
-      name: "Dr. Maya Patel",
-      color: "#14b8a6",
-      role: "Astrophysicist",
+      id: "event-3",
+      title: "Jupiter at Opposition",
+      description:
+        "Jupiter will be at its closest approach to Earth and its face will be fully illuminated by the Sun.",
+      type: "planet-viewing",
+      start: setHours(addDays(startOfCurrentMonth, 8), 20, 0),
+      end: setHours(addDays(startOfCurrentMonth, 9), 5, 0),
+      visibilityRequirements: "Clear skies, low light pollution",
     },
     {
-      id: "user4",
-      name: "Alex Rodriguez",
-      color: "#ec4899",
-      role: "PhD Candidate",
-    },
-    {
-      id: "user5",
-      name: "Dr. Sarah Kim",
-      color: "#f59e0b",
-      role: "Data Scientist",
-    },
-    {
-      id: "user6",
-      name: "Michael Johnson",
-      color: "#8b5cf6",
-      role: "Observatory Technician",
-    },
-  ];
-  
-  // Event Types
-  export const EVENT_TYPES: EventType[] = [
-    { id: "observation", name: "Telescope Observation", icon: TelescopeIcon },
-    { id: "meeting", name: "Team Meeting", icon: Users },
-    { id: "deadline", name: "Research Deadline", icon: Clock },
-    { id: "celestial", name: "Celestial Event", icon: Star },
-    { id: "maintenance", name: "Equipment Maintenance", icon: Wrench },
-  ];
-  
-  // Telescopes
-  export const TELESCOPES: Telescope[] = [
-    {
-      id: "tel1",
-      name: "Main Observatory Reflector",
-      type: "Optical",
-      aperture: "2.4m",
-    },
-    {
-      id: "tel2",
-      name: "Radio Telescope Array",
-      type: "Radio",
-      aperture: "100m",
-    },
-    { id: "tel3", name: "Schmidt Camera", type: "Optical", aperture: "0.9m" },
-    {
-      id: "tel4",
-      name: "Robotic Survey Telescope",
-      type: "Optical",
-      aperture: "1.2m",
-    },
-    {
-      id: "tel5",
-      name: "Spectroscopic Instrument",
-      type: "Optical",
-      aperture: "0.8m",
-    },
-  ];
-  
-  // Celestial Objects
-  export const CELESTIAL_OBJECTS: CelestialObject[] = [
-    {
-      id: "obj1",
-      name: "M31 Andromeda Galaxy",
-      type: "Galaxy",
-      distance: "2.5 million ly",
-      magnitude: 3.4,
-    },
-    {
-      id: "obj2",
-      name: "M45 Pleiades",
-      type: "Star Cluster",
-      constellation: "Taurus",
-      magnitude: 1.6,
-    },
-    {
-      id: "obj3",
-      name: "M57 Ring Nebula",
-      type: "Nebula",
-      constellation: "Lyra",
-      magnitude: 8.8,
-    },
-    {
-      id: "obj4",
-      name: "M13 Hercules Cluster",
-      type: "Globular Cluster",
-      constellation: "Hercules",
-      magnitude: 5.8,
-    },
-    {
-      id: "obj5",
-      name: "NGC 5139 Omega Centauri",
-      type: "Globular Cluster",
-      constellation: "Centaurus",
-      magnitude: 3.9,
-    },
-    {
-      id: "obj6",
-      name: "M42 Orion Nebula",
-      type: "Nebula",
-      constellation: "Orion",
-      magnitude: 4.0,
-    },
-    {
-      id: "obj7",
-      name: "M51 Whirlpool Galaxy",
-      type: "Galaxy",
-      distance: "23 million ly",
-      magnitude: 8.4,
-    },
-    {
-      id: "obj8",
-      name: "M27 Dumbbell Nebula",
-      type: "Nebula",
-      constellation: "Vulpecula",
-      magnitude: 7.5,
-    },
-    {
-      id: "obj9",
-      name: "M8 Lagoon Nebula",
-      type: "Nebula",
-      constellation: "Sagittarius",
-      magnitude: 6.0,
-    },
-    {
-      id: "obj10",
-      name: "M104 Sombrero Galaxy",
-      type: "Galaxy",
-      constellation: "Virgo",
-      magnitude: 8.0,
-    },
-    {
-      id: "obj11",
-      name: "M1 Crab Nebula",
-      type: "Nebula",
-      constellation: "Taurus",
-      magnitude: 8.4,
-    },
-    {
-      id: "obj12",
-      name: "M87 Virgo A",
-      type: "Galaxy",
-      constellation: "Virgo",
-      magnitude: 8.6,
-    },
-  ];
-  
-  // Celestial Events
-  export const CELESTIAL_EVENTS: CelestialEvent[] = [
-    {
-      name: "Perseid Meteor Shower Peak",
-      date: format(addDays(new Date(), 5), "yyyy-MM-dd"),
-      description: "Up to 100 meteors per hour visible from dark sites",
-      type: "meteor",
-    },
-    {
-      name: "Full Moon",
-      date: format(addDays(new Date(), 12), "yyyy-MM-dd"),
-      type: "lunar",
-    },
-    {
-      name: "New Moon",
-      date: format(addDays(new Date(), -2), "yyyy-MM-dd"),
-      description: "Best time for deep sky observations",
-      type: "lunar",
-    },
-    {
-      name: "Jupiter Opposition",
-      date: format(addDays(new Date(), 8), "yyyy-MM-dd"),
-      description: "Jupiter at its brightest, visible all night",
-      type: "planetary",
-    },
-    {
-      name: "Partial Solar Eclipse",
-      date: format(addDays(new Date(), 18), "yyyy-MM-dd"),
-      description: "Visible from northern hemisphere locations",
+      id: "event-4",
+      title: "Partial Solar Eclipse",
+      description: "The Moon will partially cover the Sun's disk.",
       type: "eclipse",
-    },
-  ];
-  
-  // Sample Astronomy Events Data
-  const today = new Date();
-  
-  export const SAMPLE_ASTRONOMY_EVENTS: AstronomyEvent[] = [
-    {
-      id: "event1",
-      title: "Observe M31 Andromeda Galaxy",
-      description: "Detailed imaging of Andromeda's spiral structure",
-      startDate: addHours(today, 22).toISOString(), // 10 PM today
-      endDate: addHours(today, 26).toISOString(), // 2 AM tomorrow
-      eventType: "observation",
-      telescopeId: "tel1",
-      telescopeName: "Main Observatory Reflector",
-      teamMembers: [TEAM_MEMBERS[0], TEAM_MEMBERS[3]],
-      celestialObjects: [CELESTIAL_OBJECTS[0]],
-      location: "Main Observatory",
-      observationNotes:
-        "Using narrowband filters, targeting outer regions of the galaxy",
+      start: setHours(addDays(startOfCurrentMonth, 22), 10, 0),
+      end: setHours(addDays(startOfCurrentMonth, 22), 12, 0),
+      location: "South America",
+      visibilityRequirements: "Clear skies, proper eye protection required",
     },
     {
-      id: "event2",
-      title: "Weekly Research Team Meeting",
-      description: "Project updates and assignment of new observation tasks",
-      startDate: addDays(today, 1).toISOString(),
-      endDate: addDays(addHours(today, 2), 1).toISOString(),
-      eventType: "meeting",
-      teamMembers: [
-        TEAM_MEMBERS[0],
-        TEAM_MEMBERS[1],
-        TEAM_MEMBERS[2],
-        TEAM_MEMBERS[3],
-        TEAM_MEMBERS[4],
-      ],
-      location: "Conference Room A",
+      id: "event-5",
+      title: "Venus at Greatest Eastern Elongation",
+      description:
+        "The best time to view Venus as it will be at its highest point above the horizon in the evening sky.",
+      type: "planet-viewing",
+      start: setHours(addDays(startOfCurrentMonth, 5), 19, 0),
+      end: setHours(addDays(startOfCurrentMonth, 5), 21, 0),
+      visibilityRequirements: "Clear western horizon after sunset",
     },
     {
-      id: "event3",
-      title: "Grant Proposal Deadline",
-      description: "NSF Astronomy Research Grant final submission",
-      startDate: addDays(today, 7).toISOString(),
-      isAllDay: true,
-      eventType: "deadline",
-      teamMembers: [TEAM_MEMBERS[1], TEAM_MEMBERS[4]],
+      id: "event-6",
+      title: "New Moon",
+      description:
+        "The Moon will be located on the same side of the Earth as the Sun and will not be visible in the night sky.",
+      type: "moon-phase",
+      start: setHours(addDays(startOfCurrentMonth, 1), 0, 0),
+      end: setHours(addDays(startOfCurrentMonth, 1), 23, 59),
+      visibilityRequirements: "Best time for deep-sky observation",
     },
     {
-      id: "event4",
-      title: "Telescope Maintenance",
-      description: "Regular mirror cleaning and calibration",
-      startDate: addDays(today, 2).toISOString(),
-      endDate: addDays(addHours(today, 4), 2).toISOString(),
-      eventType: "maintenance",
-      telescopeId: "tel1",
-      telescopeName: "Main Observatory Reflector",
-      teamMembers: [TEAM_MEMBERS[5]],
+      id: "event-7",
+      title: "Observation Deadline: Galaxy Photography",
+      description: "Submit your galaxy photographs for the monthly competition.",
+      type: "deadline",
+      start: setHours(addDays(startOfCurrentMonth, 25), 23, 59),
+      end: setHours(addDays(startOfCurrentMonth, 25), 23, 59),
     },
     {
-      id: "event5",
-      title: "Perseid Meteor Shower Observation",
-      description: "All-night monitoring of meteor activity",
-      startDate: addDays(today, 5).toISOString(),
-      endDate: addDays(addHours(today, 8), 5).toISOString(),
-      eventType: "observation",
-      teamMembers: [TEAM_MEMBERS[0], TEAM_MEMBERS[3], TEAM_MEMBERS[5]],
-      location: "Field Station Alpha",
+      id: "event-8",
+      title: "Lyrid Meteor Shower",
+      description: "An average shower that can produce up to 20 meteors per hour at its peak.",
+      type: "meteor-shower",
+      start: setHours(addDays(startOfCurrentMonth, 18), 22, 0),
+      end: setHours(addDays(startOfCurrentMonth, 19), 4, 0),
+      location: "Northern Hemisphere",
+      visibilityRequirements: "Dark skies, minimal moonlight",
     },
     {
-      id: "event6",
-      title: "Jupiter and Saturn Imaging",
-      description: "High-resolution imaging of gas giants",
-      startDate: addDays(addHours(today, 21), 3).toISOString(),
-      endDate: addDays(addHours(today, 24), 3).toISOString(),
-      eventType: "observation",
-      telescopeId: "tel4",
-      telescopeName: "Robotic Survey Telescope",
-      teamMembers: [TEAM_MEMBERS[2]],
+      id: "event-9",
+      title: "Saturn Observation Night",
+      description: "Group observation of Saturn's rings and moons.",
+      type: "planet-viewing",
+      start: setHours(addDays(startOfCurrentMonth, 10), 21, 0),
+      end: setHours(addDays(startOfCurrentMonth, 10), 23, 30),
+      location: "Observatory Hill",
+      visibilityRequirements: "Clear skies, telescope required",
     },
     {
-      id: "event7",
-      title: "Research Paper Submission",
-      description: "Submit findings on exoplanet atmosphere analysis",
-      startDate: addDays(today, 14).toISOString(),
-      isAllDay: true,
-      eventType: "deadline",
-      teamMembers: [TEAM_MEMBERS[0], TEAM_MEMBERS[2], TEAM_MEMBERS[4]],
+      id: "event-10",
+      title: "Observation Deadline: Moon Photography",
+      description: "Submit your lunar photographs for the monthly competition.",
+      type: "deadline",
+      start: setHours(addDays(startOfCurrentMonth, 16), 23, 59),
+      end: setHours(addDays(startOfCurrentMonth, 16), 23, 59),
     },
-    {
-      id: "event8",
-      title: "Radio Telescope Array Observations",
-      description: "Pulsar timing campaign",
-      startDate: addDays(addHours(today, 18), 1).toISOString(),
-      endDate: addDays(addHours(today, 26), 1).toISOString(),
-      eventType: "observation",
-      telescopeId: "tel2",
-      telescopeName: "Radio Telescope Array",
-      teamMembers: [TEAM_MEMBERS[1], TEAM_MEMBERS[5]],
-      location: "Radio Observatory",
-    },
-    {
-      id: "event9",
-      title: "Department Colloquium",
-      description: "Guest speaker from ESO presenting on the ELT",
-      startDate: addDays(addHours(today, 15), 6).toISOString(),
-      endDate: addDays(addHours(today, 17), 6).toISOString(),
-      eventType: "meeting",
-      location: "Lecture Hall B",
-      teamMembers: [
-        TEAM_MEMBERS[0],
-        TEAM_MEMBERS[1],
-        TEAM_MEMBERS[2],
-        TEAM_MEMBERS[3],
-        TEAM_MEMBERS[4],
-      ],
-    },
-    {
-      id: "event10",
-      title: "Globular Cluster Survey",
-      description: "Spectroscopic observations of several globular clusters",
-      startDate: addDays(addHours(today, 22), 4).toISOString(),
-      endDate: addDays(addHours(today, 26), 4).toISOString(),
-      eventType: "observation",
-      telescopeId: "tel5",
-      telescopeName: "Spectroscopic Instrument",
-      teamMembers: [TEAM_MEMBERS[3]],
-      celestialObjects: [CELESTIAL_OBJECTS[3], CELESTIAL_OBJECTS[4]],
-      location: "Main Observatory",
-      observationNotes: "Focus on metallicity measurements",
-    },
-  ];
-  
+  ]
+}
+
+// ! weather data
+
+// Sample weather data for the current month
+export function getWeatherData(): Record<string, WeatherData> {
+  const today = new Date()
+  const startOfCurrentMonth = startOfMonth(today)
+  const weatherData: Record<string, WeatherData> = {}
+
+  // Generate weather data for the current month
+  for (let i = 0; i < 31; i++) {
+    const date = addDays(startOfCurrentMonth, i)
+    const dateStr = format(date, "yyyy-MM-dd")
+
+    // Randomly generate weather conditions
+    const random = Math.random()
+    let condition: "clear" | "cloudy" | "rainy"
+    let visibility: number
+
+    if (random < 0.5) {
+      condition = "clear"
+      visibility = 70 + Math.floor(Math.random() * 30) // 70-100%
+    } else if (random < 0.8) {
+      condition = "cloudy"
+      visibility = 40 + Math.floor(Math.random() * 30) // 40-70%
+    } else {
+      condition = "rainy"
+      visibility = 10 + Math.floor(Math.random() * 30) // 10-40%
+    }
+
+    // Determine if conditions are suitable for astronomy observation
+    const isSuitable = condition === "clear" && visibility > 60
+
+    weatherData[dateStr] = {
+      condition,
+      visibility,
+      isSuitable,
+    }
+  }
+
+  return weatherData
+}
+
+

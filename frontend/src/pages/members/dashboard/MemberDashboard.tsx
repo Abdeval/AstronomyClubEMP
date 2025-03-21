@@ -4,8 +4,9 @@ import PageHeader from '@/components/page-header'
 
 export default function MemberDashboard() {
   return (
-    <div className="w-full h-full">
-      <PageHeader title="Dashboard"/>
+    <div className="w-full h-full font-regular">
+      {/* <PageHeader title="Dashboard"/> */}
+      {/* <SignButton /> */}
       <BarChartComponent />
     </div>
   )

@@ -30,6 +30,12 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --color-1: 330 100% 50%; /* #FF0080 */
+    --color-2: 266 68% 47%;  /* #7928CA */
+    --color-3: 211 100% 48%; /* #0070F3 */
+    --color-4: 198 89% 62%;  /* #38bdf8 */
+    --color-5: 268 90% 58%;  /* #a855f7 */
+    --color-6: 168 72% 49%;  /* #2dd4bf */
   }
 
   .dark {
@@ -141,5 +147,9 @@
 body {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+
+
+/* calendar styles */
+
 
 

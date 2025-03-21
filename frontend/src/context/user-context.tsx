@@ -1,22 +1,16 @@
+import { UserType } from "@/lib/types";
 import { jwtDecode } from "jwt-decode";
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState , useEffect } from "react";
 
-interface User {
-  id?: string;
-  phoneNumber: string;
-  role: string;
-  email?: string;
-  address?: string;
-}
 
 interface UserContextType {
-  user: User | null;
+  user: UserType | null;
   token: string | null;
   setToken: (token: string | null) => void;
   logout: () => void;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -25,11 +19,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     return localStorage.getItem("token");
   });
 
-  const [user, setUser] = useState<User | null>(() => {
+  const [user, setUser] = useState<UserType | null>(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       try {
-        return jwtDecode(storedToken) as User;
+        return jwtDecode(storedToken) as UserType;
       } catch (error) {
         console.error("Failed to decode token:", error);
         return null;
@@ -43,7 +37,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     if (newToken) {
       localStorage.setItem("token", newToken);
       try {
-        const decoded = jwtDecode(newToken) as User;
+        const decoded = jwtDecode(newToken) as UserType;
         setUser(decoded);
       } catch (error) {
         console.error("Failed to decode token:", error);
@@ -62,7 +56,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (token) {
       try {
-        const decoded = jwtDecode(token) as User;
+        const decoded = jwtDecode(token) as UserType;
         setUser(decoded);
       } catch (error) {
         console.error("Failed to decode token:", error);
@@ -78,14 +72,4 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </UserContext.Provider>
   );
-};
-
-export const useUser = () => {
-  const context = useContext(UserContext);
-
-  if (context === undefined) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-
-  return context;
 };

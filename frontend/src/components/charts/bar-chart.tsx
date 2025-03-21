@@ -16,8 +16,11 @@ import {
 import { planetData, chartConfig } from "@/lib/data";
 
 export default function BarChartComponent() {
+
+  
   return (
-    <Card className="font-regular">
+
+    <Card className="font-regular rounded-[16px]">
       <CardHeader>
         <CardTitle className="font-medium">Planets sizes</CardTitle>
         <CardDescription className="font-regular">

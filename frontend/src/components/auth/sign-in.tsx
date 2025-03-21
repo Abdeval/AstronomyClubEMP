@@ -29,14 +29,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/lib/api";
 import SignInButton from "../buttons/sign-in-button";
-import { useUser } from "@/context/user-context";
-import { toast } from "sonner";
+// import { toast } from "sonner";
+import { useUser } from "@/hooks";
 
-const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+// const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 
 const loginSchema = z.object({
-  phoneNumber: z.string().regex(phoneRegex, "Invalid phone number"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  email: z.string().regex(emailRegex, "Invalid email"),
+  password: z.string().min(5, "Password must be at least 5 characters"),
 });
 
 const otpSchema = z.object({
@@ -45,20 +47,20 @@ const otpSchema = z.object({
 
 export default function SignInPage() {
   const [step, setStep] = useState<"login" | "otp">("login");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   // const { toast } = useToast();
   const navigate = useNavigate();
 
   // ! the token of the current user
-
-  const { setToken } = useUser();
+  const { setToken, user } = useUser({});
   
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phoneNumber: "",
+      email: "",
       password: "",
     },
   });
@@ -73,14 +75,14 @@ export default function SignInPage() {
   const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       setIsLoading(true);
-      const result = await auth.post("/verifyCode", {
-        phoneNumber: values.phoneNumber,
-      });
-      console.log(result);
-      setPhoneNumber(values.phoneNumber);
+      // const result = await auth.post("/verifyCode", {
+      //   phoneNumber: values.phoneNumber,
+      // });
+      // console.log(result);
+      setEmail(values.email);
       setPassword(values.password);
       setStep("otp");
-      // ! should be here a toast
+      // ! here should be a toast
       setIsLoading(false);
     } catch (err) {
       console.error(err);
@@ -97,13 +99,14 @@ export default function SignInPage() {
     try {
       console.log(values);
       const result = await auth.post('/login', {
-        code: values.otp,
-        phoneNumber,
+        // code: values.otp,
+        // phoneNumber,
+        email,
         password,
       });
 
       if(result.status === 200){
-        setToken(result.data.token)
+        setToken(result.data.access_token)
       }
 
       // toast({
@@ -111,12 +114,13 @@ export default function SignInPage() {
       //   description: "You have been logged in successfully.",
       // });
       // ! Navigate to the next page
-      if(result?.data.role === 'butcher' || result.data.role === 'admin'){
-        navigate('/butcher');
+      
+      if(user?.role === 'MEMBER' || user?.role === 'ADMIN'){
+        navigate('/members');
       }
       else {
-        console.log('your are a customer');
-        navigate("/customer");
+        console.log('your are a guest');
+        navigate("/guests");
       }
     } catch (err) {
       console.error(err);
@@ -130,13 +134,13 @@ export default function SignInPage() {
 
   return (
     // <div className="py-8 flex items-center justify-center min-h-screen bg-gray-100 relative bg-[url('/images/meat-login-picture.jpg')] bg-cover">
-      <Card className="backdrop-blur-sm lg:w-1/3 md:w-1/2 h-full border-none rounded-[0] bg-background/30">
+      <Card className="backdrop-blur-sm lg:w-1/3 md:w-1/2 h-full rounded-[0px] border-none dark:bg-background/30 bg-background">
         <CardHeader className="gap-4">
           <div className="flex items-center gap-4 p-2">
             <img src="/images/child-tele.svg" alt="Logo" className="w-12 h-12" />
             <CardTitle className="text-2xl font-semibold">
-              Login{" "}
-              <span className="uppercase font-italic text-primary pl-2">
+              Login to{" "}
+              <span className="uppercase font-bold text-primary pl-2">
                  Albattani
               </span>
             </CardTitle>
@@ -156,12 +160,12 @@ export default function SignInPage() {
               >
                 <FormField
                   control={loginForm.control}
-                  name="phoneNumber"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white">Phone Number</FormLabel>
+                      <FormLabel className="text-foreground">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="+1234567890" {...field} />
+                        <Input placeholder="abdou@gmail.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -172,7 +176,7 @@ export default function SignInPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white">Password</FormLabel>
+                      <FormLabel className="text-foreground">Password</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
@@ -198,7 +202,7 @@ export default function SignInPage() {
                   name="otp"
                   render={({ field }) => (
                     <FormItem className="flex flex-col items-center">
-                      <FormLabel className="font-medium text-md w-full pl-3 text-white/80">
+                      <FormLabel className="font-medium text-md w-full pl-3">
                         Confirm Code
                       </FormLabel>
                       <FormControl>
@@ -210,7 +214,7 @@ export default function SignInPage() {
                               maxLength={6}
                               value={field.value}
                               onChange={field.onChange}
-                              className="border border-white"
+                              // className=""
                             >
                               <InputOTPGroup  className="text-white">
                                 <InputOTPSlot index={0} />
@@ -230,7 +234,7 @@ export default function SignInPage() {
                 />
                 <Button
                   type="submit"
-                  className="w-full font-medium text-white bg-secondary hover:bg-secondary/60"
+                  className="w-full font-medium "
                 >
                   Verify Code
                 </Button>
@@ -249,11 +253,11 @@ export default function SignInPage() {
                 Back to Login
               </Button>
             ) : (
-              <span className='text-white'>
+              <span className='text-foreground'>
                 Don't have an account? {' '}
                 <span
-                  className="text-secondary font-semibold underline cursor-pointer"
-                  onClick={() => navigate("/auth/signUp")}
+                  className="text-muted-foreground font-semibold underline cursor-pointer"
+                  onClick={() => navigate("/auth/sign-up")}
                 >
                   Sign up
                 </span>

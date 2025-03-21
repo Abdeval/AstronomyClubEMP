@@ -2,15 +2,16 @@ import SignInPage from "@/components/auth/sign-in";
 
 import HelpButton from "@/components/buttons/help-button";
 import { BorderBeam } from "@/components/magicui/border-beam";
-import { useUser } from "@/context/user-context";
+import { useUser } from "@/hooks";
+
 import { Navigate } from "react-router-dom";
 
 function SignIn() {
-  const { user } = useUser();
+  const { user } = useUser({});
 
-  if(user && (user.role === 'admin' || user.role === 'butcher')) return <Navigate to={'/butcher'}/>
+  if(user && (user.role === 'ADMIN' || user.role === 'MEMBER')) return <Navigate to={'/members'}/>
 
-  if(user && user.role === 'customer') return <Navigate to={'/customer'}/>
+  if(user && user.role === 'GUEST') return <Navigate to={'/guests'}/>
   return (
     <div className='w-screen h-screen bg-[url("/images/telescope1.jpg")] bg-cover flex items-center justify-center'>
       <div className="bg-secondary/5 backdrop-blur w-full h-full absolute"/>
@@ -24,7 +25,7 @@ function SignIn() {
         />
         <HelpButton />
       </div>
-    </div>
+  </div>
   );
 }
 

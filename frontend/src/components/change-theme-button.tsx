@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
 
 export default function ChangeThemeButton() {
+  
   const { theme, setTheme } = useTheme();
 
   console.log("the theme is :", theme);
@@ -25,7 +26,7 @@ export default function ChangeThemeButton() {
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
       onClick={toggleTheme}
       className="ml-2 rounded-full"

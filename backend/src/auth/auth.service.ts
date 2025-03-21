@@ -5,13 +5,15 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { JwtService } from "@nestjs/jwt";
 import { AuthDto } from "./auth.dto";
+import { ConfigService } from "@nestjs/config";
+import { Role } from "@prisma/client";
+
+
 @Injectable()
-
-
 export class AuthService {
-    constructor(private prisma: PrismaService, private jwtService: JwtService) {
+    constructor(private config: ConfigService, private prisma: PrismaService, private jwtService: JwtService) {
 
-    }   
+    }
     async signup(dto: AuthDto) {
         try {
             // generate the password hash 
@@ -21,10 +23,10 @@ export class AuthService {
                 data: {
                     email: dto.email,
                     password: hash,
-                    role: 'MEMBER',
+                    role: dto.role || 'MEMBER',
                 },
             });
-            const {id, password, ...result } = user;
+            const { id, password, ...result } = user;
             return result;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
@@ -55,15 +57,30 @@ export class AuthService {
         if (!valid) {
             throw new ForbiddenException('Invalid credentials');
         }
-        return  {
-            access_token : await this.jwtService.signAsync({ sub: user.id,email: user.email }),
-            user : {
-                firstName: user.firstName,
-                lastName : user.lastName,
-                email: user.email,
-                role: user.role
-            }
+        return this.signToken(user.id, user.email, user.role);
+    }
+
+    async signToken(
+        id: string,
+        email: string,
+        role: Role
+    ): Promise<{ access_token: string }> {
+        const payload = { sub: id, email, role };
+
+        const secret = this.config.get(
+            'JWT_SECRET',
+        );
+
+        const token =
+            await this.jwtService.signAsync(
+                payload,
+                { secret },
+            );
+
+        const result = {
+            access_token: token,
         };
+        return result;
     }
 
 }

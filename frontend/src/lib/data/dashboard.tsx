@@ -32,8 +32,13 @@ export const dashboardNavs: DashboardNavType[] = [
     link: "images",
   },
   {
+    name: "tasks",
+    icon: "ListTodo",
+    link: "tasks",
+  },
+  {
     name: "settings",
-    icon: "Settings2",
+    icon: "Cog",
     link: "settings",
   },
 ];

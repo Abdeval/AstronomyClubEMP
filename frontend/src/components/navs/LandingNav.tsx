@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import HoveredButton from "../buttons/HoveredButton";
 import Logo from "../Logo";
-import { Button } from "../ui/button";
+import SignButton from "../buttons/sign-button";
 
 export default function LandingNav() {
   return (
@@ -30,9 +30,7 @@ export default function LandingNav() {
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        <Link to={"/auth/sign-in"}>
-          <Button>sign in</Button>
-        </Link>
+        <SignButton />
         <HoveredButton />
       </div>
     </div>

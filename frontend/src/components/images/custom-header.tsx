@@ -10,7 +10,9 @@ export default function CustomHeader({
   icon: string;
 }) {
   return (
-    <div className="h-[400px] w-full relative flex items-center justify-center">
+    <div className="h-[400px] w-full relative flex items-center justify-center p-2 bg-background 
+    rounded-cu
+    ">
       {/* a bit image of the component */}
       <img src={image} alt={title} className="w-full h-full object-cover rounded-cu" />
 
