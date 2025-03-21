@@ -1,5 +1,5 @@
 import DashboardFooter from "@/components/dashboard/DashboardFooter";
-import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
+import DashboardNavbar from "@/components/navs/dashboard-navbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import { useUser } from "@/hooks";
 import { Navigate, Outlet } from "react-router-dom";

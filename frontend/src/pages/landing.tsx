@@ -5,18 +5,17 @@ import Congratulation from "@/components/landing/Congratulation";
 import Earth from "@/components/landing/Earth";
 import Hero from "@/components/landing/Hero";
 import { Ripple } from "@/components/magicui/ripple";
-import LandingNav from "@/components/navs/LandingNav";
 // import { Button } from "@/components/ui/button";
 import { Brain } from "lucide-react";
 import { DotBackground } from "@/components/magicui/dot-pattern";
 
 import PlanetArticles from "@/components/articles/articles-list";
+import GuestsNavbar from "@/components/navs/guests-navbar";
 
 export default function Landing() {
   return (
-    <div className="relative bg-black flex items-center flex-col w-screen overflow-hidden">
-      <LandingNav />
-
+    <div className="relative bg-background flex items-center flex-col w-screen overflow-hidden">
+      <GuestsNavbar />
       {/* the earth view */}
       <section className="relative bg-transparent pt-40 h-screen w-full">
         <Hero />

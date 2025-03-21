@@ -4,8 +4,8 @@ import ChangeThemeButton from "../change-theme-button";
 import SearchInput from "../inputs/SearchInput";
 
 import UserInfo from "../profile/UserInfo";
-import SearchDialog from "./search-dialog";
 import { useUser } from "@/hooks";
+import SearchDialog from "../dashboard/search-dialog";
 
 export default function DashboardNavbar() {
   const path = useLocation().pathname.split("/");
