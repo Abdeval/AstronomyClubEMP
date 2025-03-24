@@ -21,6 +21,10 @@ import PlanetsPage from "@/pages/members/planets/planets-page";
 import GalaxiesPage from "@/pages/members/galaxies/galaxies-page";
 import SinnersPage from "@/pages/members/sinners/sinners-page";
 import Tasks from "@/pages/members/tasks";
+import GroupImages from "@/pages/members/group-images";
+import Equipements from "@/pages/members/equipements";
+import Observations from "@/pages/members/observations/observations";
+import Observation from "@/pages/members/observations/observation";
 
 
 export default function AppRouter() {
@@ -48,6 +52,11 @@ export default function AppRouter() {
           <Route path="calendar" element={<CalendarPage />}/>
           <Route path="settings" element={<Settings />}/>
           <Route path="profile" element={<Profile />}/>
+          <Route path="equipements" element={<Equipements />}/>
+
+          {/* observations router */}
+          <Route path="observations" element={<Observations />}/>
+          <Route path="observations/:id" element={<Observation />}/>
          
          {/* all the routes of the images parent */}
           <Route path="images" element={<Images />} />
@@ -55,6 +64,9 @@ export default function AppRouter() {
           <Route path="images/planets" element={<PlanetsPage />}/>
           <Route path="images/galaxies" element={<GalaxiesPage />}/>
           <Route path="images/sinners" element={<SinnersPage />}/>
+
+          {/* dynamic images/:groun-name */}
+          <Route path="images/groups/:groupName" element={<GroupImages />}/>
         
         {/* other pages of the members */}
           <Route path="tasks" element={<Tasks />} />

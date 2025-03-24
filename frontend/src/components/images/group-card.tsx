@@ -1,8 +1,8 @@
 import Indicator from "./indecator";
 import { DynamicIcon } from "../ui/dynamic-icon";
 import { GroupCardType } from "@/lib/types";
-import { EyeIcon, View } from "lucide-react";
 import HoverImage from "./hover-image";
+import { Link } from "react-router-dom";
 
 export default function GroupCard({
   isActive = true,
@@ -26,7 +26,9 @@ export default function GroupCard({
         flex items-center justify-center flex-col gap-3 p-2"
         >
           <header className="font-medium capitalize">{name}</header>
-          <HoverImage image={image} appearIcon="EyeIcon"/>
+          <Link to={`/members/images/groups/${name}`}>
+            <HoverImage image={image} appearIcon="EyeIcon" />
+          </Link>
         </div>
       </div>
       <div className="col-span-1 row-span-3 bg-secondary">

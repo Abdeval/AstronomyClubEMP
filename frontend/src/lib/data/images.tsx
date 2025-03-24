@@ -9,7 +9,7 @@ export const groupList: GroupCardType[] = [
     image: "/images/groups/rover.jpg",
   },
   {
-    name: "web dev",
+    name: "development",
     icon: "/images/groups/web.png",
     isActive: true,
     image: "/images/groups/web.jpg",
@@ -39,12 +39,12 @@ export const categoryList: CategoryCardType[] = [
 
 
 export const planetsImages:Partial<ImageType>[] = [
-    { title: "mercury", image: "/planet-icons/earth.png" , border: "" },
-    { title: "venus", image: "/planet-icons/jupiter.png", border: ""},
-    { title: "earth", image: "/planet-icons/mars.png", border: "" },
-    { title: "mars", image: "/planet-icons/perpule.png", border: "" },
-    { title: "jupiter", image: "/planet-icons/earth.png", border: "" },
-    { title: "saturn", image: "/planet-icons/mars.png", border: "" },
-    { title: "uranus", image: "/planet-icons/jupiter.png", border: "" },
-    { title: "neptune", image: "/planet-icons/perpule.png", border: "" },
+    { title: "mercury", url: "/planet-icons/earth.png" , border: "" },
+    { title: "venus", url: "/planet-icons/jupiter.png", border: ""},
+    { title: "earth", url: "/planet-icons/mars.png", border: "" },
+    { title: "mars", url: "/planet-icons/perpule.png", border: "" },
+    { title: "jupiter", url: "/planet-icons/earth.png", border: "" },
+    { title: "saturn", url: "/planet-icons/mars.png", border: "" },
+    { title: "uranus", url: "/planet-icons/jupiter.png", border: "" },
+    { title: "neptune", url: "/planet-icons/perpule.png", border: "" },
 ] 

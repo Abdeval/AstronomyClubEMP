@@ -1,5 +1,4 @@
 import CustomHeader from '@/components/images/custom-header'
-import React from 'react'
 
 export default function GalaxiesPage() {
   return (

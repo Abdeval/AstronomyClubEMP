@@ -18,6 +18,7 @@ export default function DashboardLayout() {
           <div className="flex-1 overflow-y-auto sm:p-4 p-2 sm:pt-8 pt-6">
             <Outlet />
           </div>
+          <div className="h-16 sm:h-10"/>
           <DashboardFooter />
         </main>
       </div>

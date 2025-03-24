@@ -14,7 +14,7 @@ export default function DashboardNavbar() {
   const { user } = useUser({});
   // const currentPatePath =
   return (
-    <div className="bg-secondary/30 backdrop-blur h-20 z-50 absolute font-regular w-full py-3 flex items-center px-3 justify-between">
+    <div className="bg-secondary/60 backdrop-blur-md h-20 z-50 absolute font-regular w-full py-3 flex items-center px-3 justify-between">
       {/* the navigated names */}
       <div className="flex gap-2 items-center">
         <BackButton />

@@ -1,17 +1,30 @@
 
+
+export interface Observation {
+  id: string
+  title: string
+  details?: string
+  location?: string
+  date: Date | string
+  userId: string
+  user: UserType
+  images?: ImageType[]
+}
+
 export interface UserType {
   id: string,
   firstName?: string,
   lastName?: string,
   email: string,
-  role: string
+  role: string,
+  image?: string,
 }
 
 export interface ImageType {
   id: number | string,
   title: string,
   description?: string,
-  image: string,
+  url: string,
   tags?: string[],
   border?: string
 }
