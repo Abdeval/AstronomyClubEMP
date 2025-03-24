@@ -4,7 +4,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { JwtService } from "@nestjs/jwt";
-import { AuthDto } from "./auth.dto";
+import { AuthDto, LoginDto } from "./auth.dto";
 import { ConfigService } from "@nestjs/config";
 import { Role } from "@prisma/client";
 
@@ -37,7 +37,7 @@ export class AuthService {
 
     }
 
-    async signin(dto: AuthDto) {
+    async login(dto: LoginDto) {
         const user = await this.prisma.user.findUnique({
             where: {
                 email: dto.email,
