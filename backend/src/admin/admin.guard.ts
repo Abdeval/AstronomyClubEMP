@@ -1,14 +1,14 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private jwtService: JwtService) { }
   async canActivate(
     context: ExecutionContext,
   ):  Promise<boolean>  {
-    console.log('Guard...');
+   
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
@@ -23,6 +23,9 @@ export class AuthGuard implements CanActivate {
           secret: new ConfigService().get<string>('JWT_SECRET'),
         }
       );
+      if (payload.role !== 'ADMIN') {
+        throw new ForbiddenException('Access denied: Admins only');
+      }
       request['user'] = payload;
 
     } catch {

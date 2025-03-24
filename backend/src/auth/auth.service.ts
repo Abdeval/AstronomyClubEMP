@@ -4,7 +4,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { JwtService } from "@nestjs/jwt";
-import { AuthDto } from "./auth.dto";
+import { AuthDto, LoginDto } from "./auth.dto";
 import { ConfigService } from "@nestjs/config";
 import { Role } from "@prisma/client";
 
@@ -16,14 +16,12 @@ export class AuthService {
     }
     async signup(dto: AuthDto) {
         try {
-            // generate the password hash 
-            const hash = await argon.hash('12345');
-            // save new user in database
+            const hash = await argon.hash(dto.password);
             const user = await this.prisma.user.create({
                 data: {
                     email: dto.email,
                     password: hash,
-                    role: dto.role || 'MEMBER',
+                    role: dto.role || 'USER',
                 },
             });
             const { id, password, ...result } = user;
@@ -39,23 +37,21 @@ export class AuthService {
 
     }
 
-    async signin(dto: AuthDto) {
-        // find the user 
+    async login(dto: LoginDto) {
         const user = await this.prisma.user.findUnique({
             where: {
                 email: dto.email,
             },
         });
         if (!user) {
-            throw new ForbiddenException('Invalid credentials');
+            throw new ForbiddenException('Email not found');
         }
-        // check the password
         if (!user.password) {
-            throw new ForbiddenException('Invalid credentials'); // that the user has signed with Oauth2.0
+            throw new ForbiddenException('Password missing'); 
         }
         const valid = await argon.verify(user.password, dto.password);
         if (!valid) {
-            throw new ForbiddenException('Invalid credentials');
+            throw new ForbiddenException('Password doesn\'t match');
         }
         return this.signToken(user.id, user.email, user.role);
     }

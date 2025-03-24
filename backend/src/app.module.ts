@@ -8,9 +8,11 @@ import { TaskModule } from './task/task.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { ObservationModule } from './observation/observation.module';
+import { EventModule } from './event/event.module';
 
 @Module({
-  imports: [UserModule, TaskModule,ConfigModule.forRoot({ isGlobal: true}), PrismaModule, ArticleModule, EventModule, AuthModule],
+  imports: [UserModule, TaskModule,ConfigModule.forRoot({ isGlobal: true}), PrismaModule, ArticleModule, EventModule, AuthModule, ObservationModule],
   controllers: [AppController],
   providers: [AppService],
 })
