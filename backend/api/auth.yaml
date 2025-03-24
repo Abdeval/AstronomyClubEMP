@@ -1,0 +1,79 @@
+openapi: 3.0.4
+info:
+  title: Astronomy website API
+  version: 1.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      description: Login to the website
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+        
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+        "401":
+          description: Unauthorized
+  /auth/signup:
+    post:
+      summary: Signup
+      description: Signup to the website
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                role: 
+                  type: string
+                  enum: [ADMIN, USER]
+              required:
+                - email
+                - password
+        
+      responses:
+        "200":
+          description: Signup successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+        "401":
+          description: Unauthorized

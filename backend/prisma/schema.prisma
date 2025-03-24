@@ -6,24 +6,26 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model User {
-  id          String   @id @default(uuid())
-  username    String?   @unique
-  email       String   @unique
-  password    String
-  role        Role     @default(USER)
-  profilePic  String?  
-  createdAt   DateTime @default(now())
 
-  groups      GroupMember[]
+model User {
+  id         String   @id @default(uuid())
+  firstName  String?
+  lastName   String?
+  email      String   @unique
+  password   String
+  role       Role     @default(USER)
+  profilePic String?
+  createdAt  DateTime @default(now())
+
+  groups       GroupMember[]
   observations Observation[]
-  events      EventParticipant[]
-  tasks       Task[]
+  events       EventParticipant[]
+  tasks        Task[]
+  Image        Image[]
+  Article      Article[]
+  Event        Event[]
 
   @@map("users")
-  Image Image[]
-  Article Article[]
-  Event Event[]
 }
 
 enum Role {
@@ -32,23 +34,23 @@ enum Role {
 }
 
 model Image {
-  id          String    @id @default(uuid())
-  url         String
-  title       String?
-  category    ImageCategory
-  createdAt   DateTime @default(now())
+  id        String        @id @default(uuid())
+  url       String
+  title     String?
+  category  ImageCategory
+  createdAt DateTime      @default(now())
 
-  userId      String?   // Uploader (optional)
-  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String? // Uploader (optional)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  groupId     String?   // Group images
-  group       Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String? // Group images
+  group   Group?  @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
-  observationId String?  // Observation images
+  observationId String? // Observation images
   observation   Observation? @relation(fields: [observationId], references: [id], onDelete: Cascade)
 
-  eventId      String?   // Event images
-  event        Event?    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId String? // Event images
+  event   Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@map("images")
 }
@@ -72,25 +74,25 @@ model Article {
 }
 
 model Group {
-  id          String         @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
-  createdAt   DateTime       @default(now())
+  createdAt   DateTime @default(now())
 
-  members     GroupMember[]
-  images      Image[]
+  members GroupMember[]
+  images  Image[]
 
   @@map("groups")
 }
 
 model GroupMember {
-  id       String  @id @default(uuid())
+  id       String    @id @default(uuid())
   userId   String
   groupId  String
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  group    Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   role     GroupRole @default(MEMBER)
-  joinedAt DateTime @default(now())
+  joinedAt DateTime  @default(now())
 
   @@map("group_members")
 }
@@ -101,50 +103,50 @@ enum GroupRole {
 }
 
 model Observation {
-  id        String   @id @default(uuid())
-  title     String
-  details   String?
-  location  String?
-  date      DateTime
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  images    Image[]
+  id       String   @id @default(uuid())
+  title    String
+  details  String?
+  location String?
+  date     DateTime
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images   Image[]
 
   @@map("observations")
 }
 
 model Event {
-  id          String   @id @default(uuid())
-  title       String
-  description String?
-  location    String?
-  date        DateTime
-  createdById String
-  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  images      Image[]
+  id           String             @id @default(uuid())
+  title        String
+  description  String?
+  location     String?
+  date         DateTime
+  createdById  String
+  createdBy    User               @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  images       Image[]
   participants EventParticipant[]
 
   @@map("events")
 }
 
 model EventParticipant {
-  id      String  @id @default(uuid())
+  id      String @id @default(uuid())
   eventId String
   userId  String
-  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("event_participants")
 }
 
 model Task {
-  id          String   @id @default(uuid())
-  title       String
-  description String?
+  id           String     @id @default(uuid())
+  title        String
+  description  String?
   assignedToId String
-  assignedTo  User     @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
-  status      TaskStatus @default(PENDING)
-  createdAt   DateTime @default(now())
+  assignedTo   User       @relation(fields: [assignedToId], references: [id], onDelete: Cascade)
+  status       TaskStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
 
   @@map("tasks")
 }
