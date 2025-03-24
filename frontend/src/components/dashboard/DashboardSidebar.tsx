@@ -13,15 +13,21 @@ import {
   TooltipTrigger,
   Tooltip,
 } from "../ui/tooltip";
-import ExploreCard from "../explore-card";
+// import ExploreCard from "../explore-card";
+import { Columns3 } from "lucide-react";
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({
+  isOpenSidebar = true,
+  setIsOpenSidebar,
+}: {
+  setIsOpenSidebar: (value: boolean) => void;
+  isOpenSidebar: boolean;
+}) {
   const [selectedNav, setSelectedNav] = useState<string>(() => {
     const currentNav = localStorage.getItem("selectedNav");
     if (currentNav) return currentNav;
     return "dashboard";
   });
-
   const path = useLocation().pathname.split("/");
   const latestNav = path[path.length - 1];
 
@@ -32,18 +38,40 @@ export default function DashboardSidebar() {
   const isSelected = (nav: string): boolean => selectedNav === nav;
 
   return (
-    <div>
+    <div className="relative">
       {/* desctop */}
-      <div className="sm:flex flex-col hidden h-full w-[190px] bg-background rounded-tr-[16px] items-center">
+      <Button
+        size={"icon"}
+        variant={"outline"}
+        onClick={() => setIsOpenSidebar(!isOpenSidebar)}
+        className={cn(
+          "rounded-[10px] absolute top-[22px] z-50 transition-all duration-200",
+          isOpenSidebar ? "right-1" : "-right-9"
+        )}
+      >
+        <Columns3 size={38} className="text-primary" />
+      </Button>
+      <div
+        className={cn(
+          "relative sm:flex flex-col hidden h-full transition-all duration-300 bg-background rounded-tr-[16px] items-center",
+          isOpenSidebar ? "w-[200px]" : "w-0"
+        )}
+      >
+        {/* hide or shown button */}
         {/* the logo image and title */}
-        <div className="flex items-center gap-3 p-2 py-4 z-50 relative w-full">
+        <div
+          className={cn(
+            "items-center flex gap-3 p-2 py-4 z-40 relative w-full",
+            // isOpenSidebar ? "flex" : "hidden"
+          )}
+        >
           <Logo type="dash" />
           <span className="font-bold text-lg text-muted-foreground">
             Albattani
           </span>
         </div>
 
-        <div className="w-full">
+        <div className={cn("w-full")}>
           {dashboardNavs.map((nav: DashboardNavType, index: number) => (
             <Link to={`/members/${nav.link}`} key={index}>
               <div
@@ -52,7 +80,8 @@ export default function DashboardSidebar() {
               >
                 <div
                   className={cn(
-                    "w-full relative transition-all duration-300 ease-in-out flex gap-2 items-center z-40",
+                    isOpenSidebar ? "flex" : "hidden",
+                    "w-full overflow-hidden  relative transition-all duration-200 ease-in-out gap-2 items-center z-40",
                     isSelected(nav.name)
                       ? "pl-6 text-primary"
                       : "pl-2 text-primary-foreground"
@@ -91,7 +120,7 @@ export default function DashboardSidebar() {
           ))}
         </div>
 
-        <ExploreCard />
+        {/* <ExploreCard /> */}
       </div>
 
       {/* mobile */}

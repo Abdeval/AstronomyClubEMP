@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Search, MoreHorizontal, UserPlus, Mail, MessageSquare, UserX, Filter } from "lucide-react"
+import AddCollaborator from "./add-collaborator-dialog"
 
 // Define collaborator types
 type Status = "online" | "offline" | "away" | "busy"
@@ -84,6 +85,7 @@ export default function CollaboratorsList() {
   const [collaborators, setCollaborators] = useState<Collaborator[]>(initialCollaborators)
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState<Role | "All">("All")
+  const [openAddDialog, setOpenAddDialog] = useState(false);
 
   // Filter collaborators based on search query and role filter
   const filteredCollaborators = collaborators.filter((collaborator) => {
@@ -150,7 +152,7 @@ export default function CollaboratorsList() {
               <DropdownMenuItem onClick={() => setRoleFilter("Guest")}>Guest</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button className="flex gap-2">
+          <Button className="flex gap-2" onClick={() => setOpenAddDialog(true)}>
             <UserPlus className="h-4 w-4" />
             <span className="hidden sm:inline">Add Collaborator</span>
           </Button>
@@ -238,6 +240,11 @@ export default function CollaboratorsList() {
           )}
         </div>
       </div>
+
+
+      {/* add collaborator dialog */}
+      {/* the the current user is an admin of the group */}
+      <AddCollaborator open={openAddDialog} onOpenChange={setOpenAddDialog} onAddMember={() => console.log('add')}/>
     </div>
   )
 }

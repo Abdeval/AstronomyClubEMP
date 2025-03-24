@@ -14,7 +14,7 @@ import GuestsNavbar from "@/components/navs/guests-navbar";
 
 export default function Landing() {
   return (
-    <div className="relative bg-background flex items-center flex-col w-screen overflow-hidden">
+    <div className="relative bg-black flex items-center flex-col w-screen overflow-hidden">
       <GuestsNavbar />
       {/* the earth view */}
       <section className="relative bg-transparent pt-40 h-screen w-full">
@@ -26,7 +26,7 @@ export default function Landing() {
 
       {/* the magic buttons view */}
 
-      <section className="relative md:h-screen h-[800px] flex md:flex-row flex-col w-full bg-cover bg-black bg-[url('/images/telescope1.jpg')] bg-no-repeat justify-between px-4 items-center">
+      <section className="relative h-[900px] md:h-screen border border-primary flex md:flex-row flex-col w-full bg-cover bg-black bg-[url('/images/telescope1.jpg')] bg-no-repeat justify-between px-4 items-center">
         <Earth />
         <MagicButtons />
         <div className="bg-black/60 w-full h-full absolute top-0 left-0" />
@@ -42,19 +42,19 @@ export default function Landing() {
           directions="md:flex-row flex-col"
         />
       </section>
-      <section className="relative px-8 pt-8 min-h-screen flex items-center justify-between w-full md:flex-row flex-col gap-8 bg-transparent">
+      <section className="relative z-50 px-8 pt-8 min-h-screen flex items-center justify-between w-full md:flex-row flex-col gap-8 bg-transparent">
         {/* <MagicButtons /> */}
         <div className="md:w-1/3 w-full pl-8 bg-transparent">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-background">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
             {" "}
-            <span className="text-yellow-400">It's all</span> about what you can
+            <span className="text-primary">It's all</span> about what you can
             you
           </h1>
         </div>
 
         <div className="flex-1 w-full relative h-[800px] flex justify-center items-center">
           <Ripple className="dark z-40" numCircles={4}/>
-          <Brain size={60} className=" text-yellow-400" />
+          <Brain size={60} className=" text-primary" />
         </div>
 
         {/* the dot background */}

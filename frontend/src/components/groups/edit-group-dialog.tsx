@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 
 import { useState, useEffect } from "react"
@@ -149,7 +147,7 @@ export default function EditGroupDialog({
             <div className="grid gap-2">
               <div className="flex justify-between items-center">
                 <Label htmlFor="edit-rating">Rating</Label>
-                <span className="text-sm font-medium">{rating.toFixed(1)}/5.0</span>
+                {/* <span className="text-sm font-medium">{rating.toFixed(1)}/5.0</span> */}
               </div>
               <Slider id="edit-rating" value={[rating]} max={5} step={0.1} onValueChange={handleRatingChange} />
             </div>

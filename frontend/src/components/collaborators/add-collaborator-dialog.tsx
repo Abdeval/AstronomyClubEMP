@@ -1,7 +1,6 @@
 import type React from "react"
-
 import { useState } from "react"
-import type { Member, MemberRole } from "./groups-management"
+// import type { Member, MemberRole } from "./groups-management"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -14,15 +13,17 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { MemberRole } from "../groups/groups-management"
+import { UserType } from "@/lib/types"
 
-interface AddMemberDialogProps {
+interface AddCollaboratorDialog {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onAddMember: (member: Omit<Member, "id">) => void
+  onAddMember: (member: Omit<UserType, "id">) => void
 }
 
-export default function AddMemberDialog({ open, onOpenChange, onAddMember }: AddMemberDialogProps) {
-  const [name, setName] = useState("")
+export default function AddCollaborator({ open, onOpenChange, onAddMember }: AddCollaboratorDialog) {
+  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [role, setRole] = useState<MemberRole>("member")
   const [nameError, setNameError] = useState("")
@@ -31,7 +32,7 @@ export default function AddMemberDialog({ open, onOpenChange, onAddMember }: Add
   const validateForm = () => {
     let isValid = true
 
-    if (!name.trim()) {
+    if (!username.trim()) {
       setNameError("Name is required")
       isValid = false
     } else {
@@ -55,14 +56,14 @@ export default function AddMemberDialog({ open, onOpenChange, onAddMember }: Add
     e.preventDefault()
 
     if (validateForm()) {
-      onAddMember({ name, email, role })
+      onAddMember({ username, email, role })
       resetForm()
       onOpenChange(false)
     }
   }
 
   const resetForm = () => {
-    setName("")
+    setUsername("")
     setEmail("")
     setRole("member")
     setNameError("")
@@ -76,16 +77,16 @@ export default function AddMemberDialog({ open, onOpenChange, onAddMember }: Add
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] rounded-cu font-regular">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Add New Member</DialogTitle>
-            <DialogDescription>Add a new member to this group. Fill in their details below.</DialogDescription>
+            <DialogTitle>Add New Collaborator</DialogTitle>
+            <DialogDescription>Add a new coll to this group. Fill in their details below.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter member name" />
+              <Input id="name" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter member name" />
               {nameError && <p className="text-sm text-destructive">{nameError}</p>}
             </div>
             <div className="grid gap-2">
@@ -107,13 +108,13 @@ export default function AddMemberDialog({ open, onOpenChange, onAddMember }: Add
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="leader">Leader</SelectItem>
+                  {/* <SelectItem value="leader">Leader</SelectItem> */}
                   <SelectItem value="member">Member</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="gap-2">
             <Button type="button" variant="outline" onClick={handleClose}>
               Cancel
             </Button>

@@ -7,11 +7,11 @@ import { DotBackground } from "./magicui/dot-pattern";
 
 export default function Footer() {
   return (
-    <section className="relative px-4 flex-col z-50 flex justify-between items-center w-full bg-background">
+    <section className="relative px-4 flex-col z-50 flex justify-between items-center w-full bg-black">
       <div className="w-full px-4 flex items-center gap-8 justify-around">
         <div className="flex items-center flex-col gap-2">
           <Logo type="d"/>
-          <span className="font-bold text-xl text-foreground ">البتاني</span>
+          <span className="font-bold text-xl text-white ">البتاني</span>
         </div>
         <div className="flex-1 border-[0.5px] border-muted-foreground/30 mb-4"/>
         <div className="w-[120px]"/>

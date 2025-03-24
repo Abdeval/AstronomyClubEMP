@@ -6,3 +6,4 @@ export * from './colors'
 export * from './dashboard'
 export * from './gallery'
 export * from './observation'
+export * from './equipments';

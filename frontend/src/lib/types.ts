@@ -1,5 +1,22 @@
 
 
+export type EquipmentGroup = "webdev" | "rovers" | "astrography" | "all"
+export type EquipmentStatus = "available" | "in-use" | "maintenance" | "broken"
+
+export interface Equipment {
+  id: string
+  name: string
+  description: string
+  group: EquipmentGroup
+  status: EquipmentStatus
+  acquisitionDate: Date | string
+  assignedTo?: string
+  cost?: number
+  manualUrl?: string
+  image?: string
+}
+
+
 export interface Observation {
   id: string
   title: string
@@ -13,8 +30,8 @@ export interface Observation {
 
 export interface UserType {
   id: string,
-  firstName?: string,
-  lastName?: string,
+  username?: string,
+  // lastName?: string,
   email: string,
   role: string,
   image?: string,

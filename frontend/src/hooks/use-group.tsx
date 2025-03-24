@@ -6,13 +6,13 @@ import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
 export const useGroup = () => {
   const { data: groups, isLoading: isGroupsLoading} = useQuery({
     queryKey: ["groups"],
-    queryFn: () => getApi("/groups"),
+    queryFn: () => getApi("/groups/all"),
   });
 
   const addGroup = async (group: GroupType) => {
     const mutation = useMutation({
       mutationKey: ["add-group"],
-      mutationFn: () => postApi("/groups/add", group),
+      mutationFn: () => postApi("/groups/create", group),
     });
 
     return mutation.mutate;

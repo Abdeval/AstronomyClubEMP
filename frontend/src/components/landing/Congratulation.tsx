@@ -25,7 +25,7 @@ export default function Congratulation({
           <h1 className="w-full pl-6 text-yellow-400 lg:text-6xl md:text-3xl text-2xl font-bold capitalize">
             {header}
           </h1>
-          <p className="text-background lg:text-3xl text-xl px-4">{content}</p>
+          <p className="text-muted-foreground lg:text-3xl text-xl px-4">{content}</p>
         </div>
         <FlickeringGrid
           className="absolute inset-0 z-0 size-full"

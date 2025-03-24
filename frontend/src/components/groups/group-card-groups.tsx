@@ -63,13 +63,13 @@ export default function GroupCard({
     navigate(`/groups/${group.id}/tasks`)
   }
 
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-  }
+  // const getInitials = (name: string) => {
+  //   return name
+  //     .split(" ")
+  //     .map((n) => n[0])
+  //     .join("")
+  //     .toUpperCase()
+  // }
 
   const getStatusColor = (status: GroupStatus) => {
     switch (status) {
@@ -86,18 +86,18 @@ export default function GroupCard({
     }
   }
 
-  const getStatusText = (status: GroupStatus) => {
-    return status.charAt(0).toUpperCase() + status.slice(1)
-  }
+  // const getStatusText = (status: GroupStatus) => {
+  //   return status.charAt(0).toUpperCase() + status.slice(1)
+  // }
 
-  // Filter members based on search and role filter
-  const filteredMembers = group.members.filter(
-    (member) =>
-      member.name.toLowerCase().includes(memberSearchQuery.toLowerCase()) &&
-      (roleFilter === "all" || member.role === roleFilter),
-  )
+  // ? Filter members based on search and role filter
+  // const filteredMembers = group.members.filter(
+  //   (member) =>
+  //     member.userId.toLowerCase().includes(memberSearchQuery.toLowerCase()) &&
+  //     (roleFilter === "all" || member.role === roleFilter),
+  // )
 
-  // Render stars for rating
+  // ? Render stars for rating
   const renderRating = (rating: number) => {
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 >= 0.5
@@ -120,7 +120,7 @@ export default function GroupCard({
   }
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col rounded-[16px] ">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
@@ -131,7 +131,10 @@ export default function GroupCard({
                 </div>
               ) : (
                 <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
-                  <span className="text-lg font-semibold text-muted-foreground">{getInitials(group.name)}</span>
+                  <span className="text-lg font-semibold text-muted-foreground">
+                    {/* {getInitials(group.name)} */}
+                    {group.id}
+                    </span>
                 </div>
               )}
               <div
@@ -142,7 +145,8 @@ export default function GroupCard({
               <CardTitle className="text-xl">{group.name}</CardTitle>
               <div className="flex items-center gap-1 mt-1">
                 <Badge variant="outline" className="text-xs">
-                  {getStatusText(group.status)}
+                  {/* {getStatusText(group.status)} */}
+                  active
                 </Badge>
                 <div className="flex items-center ml-2">{renderRating(group.rating)}</div>
               </div>
@@ -227,13 +231,16 @@ export default function GroupCard({
 
               <ScrollArea className="h-[200px]">
                 <ul className="space-y-3">
-                  {filteredMembers.length > 0 ? (
-                    filteredMembers.map((member) => (
+                  {group.members.length > 0 ? (
+                    group.members.map((member) => (
                       <li key={member.id} className="flex items-center justify-between">
                         <div className="flex items-center">
                           <Avatar className="h-8 w-8 mr-2">
                             <AvatarImage src={member.avatar} alt={member.name} />
-                            <AvatarFallback>{getInitials(member.name)}</AvatarFallback>
+                            <AvatarFallback>
+                              {/* {getInitials(member.name)} */}
+                            a
+                            </AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="text-sm font-medium">{member.name}</p>

@@ -13,7 +13,7 @@ export default function SearchInput() {
         <Search className="text-primary text-bold" size={44} />
       </Button>
       <Input
-        className="w-0 sm:w-[150px] md:w-[300px] border-none pl-10 text-white rounded-lg h-[44px]"
+        className="w-0 sm:w-[150px] md:w-[240px] border-none pl-10 text-white rounded-lg h-[44px]"
         size={40}
         placeholder="Search..."
       />

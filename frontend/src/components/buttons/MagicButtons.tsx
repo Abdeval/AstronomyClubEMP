@@ -37,34 +37,34 @@ export default function MagicButtons() {
 
   return (
     <div
-      className="relative flex w-full items-center justify-center overflow-hidden p-10"
+      className="relative flex w-full items-center justify-center overflow-hidden p-8"
       ref={containerRef}
     >
       <div className="flex size-full max-w-lg flex-col items-stretch justify-between gap-10">
         <div className="flex flex-row items-center justify-between">
-          <Circle className="border border-yellow-400 bg-background size-16" ref={div1Ref} >
+          <Circle className="border border-primary/30 bg-secondary size-16" ref={div1Ref} >
             <Icons.googleDrive />
           </Circle>
-          <Circle className="border border-yellow-400 bg-background size-16" ref={div5Ref}>
+          <Circle className="border border-primary/30 bg-secondary size-16" ref={div5Ref}>
             <Icons.googleDocs />
           </Circle>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Circle className="border border-yellow-400 bg-background size-16" ref={div2Ref}>
+          <Circle className="border border-primary/30 bg-secondary size-16" ref={div2Ref}>
             <Icons.notion />
           </Circle>
-          <Circle className="border border-yellow-400 bg-background  size-16" ref={div4Ref}>
+          <Circle className="border border-primary/30 bg-secondary  size-16" ref={div4Ref}>
             <Icons.openai />
           </Circle>
-          <Circle className="border border-yellow-400 bg-background size-16" ref={div6Ref}>
+          <Circle className="border border-primary/30 bg-secondary size-16" ref={div6Ref}>
             <Icons.zapier />
           </Circle>
         </div>
         <div className="flex flex-row items-center justify-between">
-          <Circle className="border border-yellow-400 bg-background size-16" ref={div3Ref}>
+          <Circle className="border border-primary/30 bg-secondary size-16" ref={div3Ref}>
             <Icons.whatsapp />
           </Circle>
-          <Circle className="border border-yellow-400 bg-background size-16" ref={div7Ref}>
+          <Circle className="border border-primary/30 bg-secondary size-16" ref={div7Ref}>
             <Icons.messenger />
           </Circle>
         </div>

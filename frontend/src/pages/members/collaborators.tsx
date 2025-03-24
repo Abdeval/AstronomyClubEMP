@@ -1,6 +1,8 @@
 import CollaboratorsList from "@/components/collaborators/collaborators-list";
 
 export default function Collaborators() {
+  // todo get the info of the collaborators
+
   return (
     <div
       className="grid lg:grid-rows-11 lg:grid-cols-11 grid-rows-10 grid-cols-10

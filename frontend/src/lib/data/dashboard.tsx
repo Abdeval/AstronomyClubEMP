@@ -37,6 +37,16 @@ export const dashboardNavs: DashboardNavType[] = [
     link: "tasks",
   },
   {
+    name: "observations",
+    icon: "Telescope",
+    link: "observations",
+  },
+  {
+    name: "Equipments",
+    icon: "Shapes",
+    link: "equipments",
+  },
+  {
     name: "settings",
     icon: "Cog",
     link: "settings",

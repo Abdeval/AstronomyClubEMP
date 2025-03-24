@@ -65,7 +65,7 @@ export default function PlanetCarousel() {
                     className="flex-shrink-0 mx-2"
                   >
                     <Card 
-                      className="w-64 rounded-[16px] border border-muted/30 overflow-hidden transition-all duration-300 ease-in-out hover:opacity-80 bg-foreground"
+                      className="w-64 rounded-[16px] border border-muted/30 overflow-hidden transition-all duration-300 ease-in-out hover:opacity-80 bg-secondary"
                     >
                       <CardHeader className="p-0">
                         <img src={planet.image || "/placeholder.svg"} alt={planet.name} className="w-full h-40 object-contain" />

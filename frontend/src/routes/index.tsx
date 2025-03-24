@@ -25,6 +25,8 @@ import GroupImages from "@/pages/members/group-images";
 import Equipements from "@/pages/members/equipements";
 import Observations from "@/pages/members/observations/observations";
 import Observation from "@/pages/members/observations/observation";
+import Equipments from "@/pages/members/equipments/equipments";
+import Equipment from "@/pages/members/equipments/equipment";
 
 
 export default function AppRouter() {
@@ -57,6 +59,10 @@ export default function AppRouter() {
           {/* observations router */}
           <Route path="observations" element={<Observations />}/>
           <Route path="observations/:id" element={<Observation />}/>
+
+          {/* observations router */}
+          <Route path="equipments" element={<Equipments />}/>
+          <Route path="equipments/:id" element={<Equipment />}/>
          
          {/* all the routes of the images parent */}
           <Route path="images" element={<Images />} />

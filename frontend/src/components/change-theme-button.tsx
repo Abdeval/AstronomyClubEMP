@@ -5,11 +5,8 @@ import { Button } from "./ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
 
 export default function ChangeThemeButton() {
-  
+
   const { theme, setTheme } = useTheme();
-
-  console.log("the theme is :", theme);
-
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {

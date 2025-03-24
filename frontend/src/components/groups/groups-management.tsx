@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { PlusCircle, Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -116,16 +114,16 @@ const currentUser: Member = {
   role: "admin",
 }
 
-export default function GroupsManagement() {
-  const [groups, setGroups] = useState<Group[]>(initialGroups)
+export default function GroupsManagement({ groups }: { groups: Group[]}) {
+  // const [groups, setGroups] = useState<Group[]>(initialGroups) 
   const [searchQuery, setSearchQuery] = useState("")
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [statusFilters, setStatusFilters] = useState<GroupStatus[]>(["active", "inactive", "pending", "archived"])
 
   // Filter groups based on search query and status filters
-  const filteredGroups = groups.filter(
-    (group) => group.name.toLowerCase().includes(searchQuery.toLowerCase()) && statusFilters.includes(group.status),
-  )
+  // const filteredGroups = groups.filter(
+  //   (group) => group.name.toLowerCase().includes(searchQuery.toLowerCase()) && statusFilters.includes(group.status),
+  // )
 
   // Add a new group
   const handleAddGroup = (newGroup: Omit<Group, "id" | "members" | "createdAt">) => {
@@ -135,62 +133,62 @@ export default function GroupsManagement() {
       members: [{ ...currentUser, id: currentUser.id, role: "leader" }],
       createdAt: new Date(),
     }
-    setGroups([...groups, group])
+    // setGroups([...groups, group])
   }
 
   // Update a group
   const handleUpdateGroup = (updatedGroup: Group) => {
-    setGroups(groups.map((group) => (group.id === updatedGroup.id ? updatedGroup : group)))
+    // setGroups(groups.map((group) => (group.id === updatedGroup.id ? updatedGroup : group)))
   }
 
   // Add a member to a group
   const handleAddMember = (groupId: string, newMember: Omit<Member, "id">) => {
-    setGroups(
-      groups.map((group) => {
-        if (group.id === groupId) {
-          return {
-            ...group,
-            members: [...group.members, { id: `m${Date.now()}`, ...newMember }],
-          }
-        }
-        return group
-      }),
-    )
+    // setGroups(
+    //   groups.map((group) => {
+    //     if (group.id === groupId) {
+    //       return {
+    //         ...group,
+    //         members: [...group.members, { id: `m${Date.now()}`, ...newMember }],
+    //       }
+    //     }
+    //     return group
+    //   }),
+    // )
   }
 
   // Delete a member from a group
   const handleDeleteMember = (groupId: string, memberId: string) => {
-    setGroups(
-      groups.map((group) => {
-        if (group.id === groupId) {
-          return {
-            ...group,
-            members: group.members.filter((member) => member.id !== memberId),
-          }
-        }
-        return group
-      }),
-    )
+    // setGroups(
+    //   groups.map((group) => {
+    //     if (group.id === groupId) {
+    //       return {
+    //         ...group,
+    //         members: group.members.filter((member) => member.id !== memberId),
+    //       }
+    //     }
+    //     return group
+    //   }),
+    // )
   }
 
   // Delete a group
   const handleDeleteGroup = (groupId: string) => {
-    setGroups(groups.filter((group) => group.id !== groupId))
+    // setGroups(groups.filter((group) => group.id !== groupId))
   }
 
   // Update group rating
   const handleUpdateRating = (groupId: string, rating: number) => {
-    setGroups(
-      groups.map((group) => {
-        if (group.id === groupId) {
-          return {
-            ...group,
-            rating,
-          }
-        }
-        return group
-      }),
-    )
+    // setGroups(
+    //   groups.map((group) => {
+    //     if (group.id === groupId) {
+    //       return {
+    //         ...group,
+    //         rating,
+    //       }
+    //     }
+    //     return group
+    //   }),
+    // )
   }
 
   // Toggle status filter
@@ -252,7 +250,7 @@ export default function GroupsManagement() {
         </Button>
       </div>
 
-      {filteredGroups.length === 0 ? (
+      {groups.length === 0 ? (
         <div className="text-center p-8 border rounded-lg bg-muted/20">
           <p className="text-muted-foreground">
             {searchQuery || statusFilters.length < 4
@@ -262,7 +260,7 @@ export default function GroupsManagement() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGroups.map((group) => (
+          {groups.map((group) => (
             <GroupCard
               key={group.id}
               group={group}
