@@ -10,6 +10,7 @@ export class ArticleController {
     
     // @HttpCode(HttpStatus.ACCEPTED)
     @Get(":id")
+    @HttpCode(HttpStatus.OK)
     getArticleById(@Param("id") articleId: string) {
         return this.articleServie.getArticleById(articleId);
     }

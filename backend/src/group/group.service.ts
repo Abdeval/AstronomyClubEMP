@@ -12,7 +12,6 @@ export class GroupService {
         return await this.prisma.group.findMany({ include: { members: true }});
     }
 
-    // ! get group info by admin id because it is unique
     async getGroupInfo(adminId: string) {
         try {
             const adminGroups = await this.prisma.group.findFirst({
@@ -36,7 +35,6 @@ export class GroupService {
         }
     }
 
-    // ! add a group 
     async addGroup(dto: GroupDto): Promise<Group> {
         const res = await this.prisma.group.create({
             data: {
