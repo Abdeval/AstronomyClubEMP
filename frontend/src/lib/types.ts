@@ -2,6 +2,7 @@
 
 export type EquipmentGroup = "webdev" | "rovers" | "astrography" | "all"
 export type EquipmentStatus = "available" | "in-use" | "maintenance" | "broken"
+export type GroupStatus = "active" | "inactive" | "archived" | "pending"
 
 export interface Equipment {
   id: string
@@ -27,6 +28,7 @@ export interface Observation {
   user: UserType
   images?: ImageType[]
 }
+
 
 export interface UserType {
   id: string,

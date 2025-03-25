@@ -60,7 +60,7 @@ api.interceptors.response.use(
 
 
 const auth = axios.create({
-    baseURL: 'http://localhost:3000/auth',
+    baseURL: 'http://localhost:3000/api/auth',
 });
 
 

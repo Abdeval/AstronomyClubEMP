@@ -1,7 +1,7 @@
 
 import { deleteApi, getApi, postApi } from "@/lib/api";
-import { GroupType } from "@/lib/types";
 import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
+import { Group } from "shared-types";
 
 export const useGroup = () => {
   const { data: groups, isLoading: isGroupsLoading} = useQuery({
@@ -9,7 +9,7 @@ export const useGroup = () => {
     queryFn: () => getApi("/groups/all"),
   });
 
-  const addGroup = async (group: GroupType) => {
+  const addGroup = async (group: Omit<Group, "id" | "members" | "createdAt">) => {
     const mutation = useMutation({
       mutationKey: ["add-group"],
       mutationFn: () => postApi("/groups/create", group),
