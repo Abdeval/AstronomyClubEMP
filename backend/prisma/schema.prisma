@@ -120,7 +120,9 @@ model Event {
   title        String
   description  String?
   location     String?
+  requirements String?
   date         DateTime
+  type         EventType         @default(MEETING)
   createdById  String
   createdBy    User               @relation(fields: [createdById], references: [id], onDelete: Cascade)
   images       Image[]
@@ -155,4 +157,26 @@ enum TaskStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
+}
+
+enum EventType {
+  ECLIPSE          // Solar or lunar eclipse
+  MOON            // Full moon new moon supermoon etc.
+  METEOR_SHOWER   // Meteor showers like Perseids Geminids etc.
+  PLANETARY       // Planet conjunctions oppositions transits
+  COMET           // Comet appearances
+  STAR            // Supernova nova variable star events
+  SOLSTICE        // Summer and winter solstices
+  EQUINOX         // Spring and autumn equinoxes
+  AURORA          // Aurora borealis (Northern Lights) and aurora australis
+  OCCULTATION     // One celestial object passing in front of another
+  CONJUNCTION     // Close apparent approach of two or more celestial bodies
+  TRANSIT         // A planet passing in front of a star or the Sun
+  BLUE_MOON      // Second full moon in a calendar month
+  BLOOD_MOON     // Total lunar eclipse
+  HARVEST_MOON   // Full moon closest to the autumn equinox
+  SUPERMOON      // Full moon at perigee
+  MICROMOON      // Full moon at apogee
+  MEETING        // Regular meetings
+  WORKSHOP       // Workshops
 }
