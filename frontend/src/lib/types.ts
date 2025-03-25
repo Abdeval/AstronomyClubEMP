@@ -30,8 +30,8 @@ export interface Observation {
 
 export interface UserType {
   id: string,
-  username?: string,
-  // lastName?: string,
+  firstName?: string,
+  lastName?: string,
   email: string,
   role: string,
   image?: string,

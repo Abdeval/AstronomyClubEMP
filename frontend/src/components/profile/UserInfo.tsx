@@ -10,11 +10,11 @@ import { Link } from "react-router-dom";
 import { useUser } from "@/hooks";
 
 export default function UserInfo({ firstName, role }: Partial<UserType>) {
-  const { logout } = useUser({});
+const { logout } = useUser({});
   return (
     <Popover>
       <div className="flex gap-2 cursor-pointer">
-        <div className="flex-col items-start pt-1 hidden sm:flex">
+        <div className="flex-col items-start pt-1 hidden md:flex">
           <h1 className="font-medium text-foreground">{firstName}</h1>
           <span className="font-bold text-sm text-muted-foreground">
             {role}

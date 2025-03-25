@@ -37,7 +37,7 @@ export default function DashboardNavbar({
 
       {/* the profile trigger */}
       <UserInfo
-        firstName={user?.firstName || "abdelatif"}
+        firstName={user?.firstName as string|| "abdelatif"}
         role={user?.role || "member"}
         email={user?.email || "abdou@gmail.com"}
       />

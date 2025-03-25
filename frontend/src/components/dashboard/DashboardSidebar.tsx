@@ -45,7 +45,7 @@ export default function DashboardSidebar({
         variant={"outline"}
         onClick={() => setIsOpenSidebar(!isOpenSidebar)}
         className={cn(
-          "rounded-[10px] absolute top-[22px] z-50 transition-all duration-200",
+          "rounded-[10px] absolute top-[22px] z-50",
           isOpenSidebar ? "right-1" : "-right-9"
         )}
       >
@@ -53,7 +53,7 @@ export default function DashboardSidebar({
       </Button>
       <div
         className={cn(
-          "relative sm:flex flex-col hidden h-full transition-all duration-300 bg-background rounded-tr-[16px] items-center",
+          "transition-all relative sm:flex flex-col hidden bg-white items-center",
           isOpenSidebar ? "w-[200px]" : "w-0"
         )}
       >
@@ -61,7 +61,7 @@ export default function DashboardSidebar({
         {/* the logo image and title */}
         <div
           className={cn(
-            "items-center flex gap-3 p-2 py-4 z-40 relative w-full",
+            "items-center flex gap-3 p-2 py-4 z-40 relative w-full bg-background",
             // isOpenSidebar ? "flex" : "hidden"
           )}
         >
@@ -71,7 +71,7 @@ export default function DashboardSidebar({
           </span>
         </div>
 
-        <div className={cn("w-full")}>
+        <div className={cn("w-full h-full")}>
           {dashboardNavs.map((nav: DashboardNavType, index: number) => (
             <Link to={`/members/${nav.link}`} key={index}>
               <div
@@ -81,7 +81,7 @@ export default function DashboardSidebar({
                 <div
                   className={cn(
                     isOpenSidebar ? "flex" : "hidden",
-                    "w-full overflow-hidden  relative transition-all duration-200 ease-in-out gap-2 items-center z-40",
+                    "w-full overflow-hidden  relative duration-200 ease-in-out gap-2 items-center z-40",
                     isSelected(nav.name)
                       ? "pl-6 text-primary"
                       : "pl-2 text-primary-foreground"
