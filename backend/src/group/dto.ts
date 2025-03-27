@@ -8,6 +8,9 @@ export class GroupDto {
     @IsString()
     @IsOptional()
     description?: string 
-
+    
+    @IsString()
+    @IsOptional()
+    image?: string 
     // Todo: there is more to add
 }

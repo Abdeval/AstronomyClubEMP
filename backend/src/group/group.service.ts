@@ -6,30 +6,53 @@ import { Group } from '@prisma/client';
 @Injectable()
 export class GroupService {
     constructor(private prisma: PrismaService) { };
-    
+
     // ! get all the groups
     async getAllGroups() {
-        return await this.prisma.group.findMany({ include: { members: true }});
+        return await this.prisma.group.findMany({ include: { members: true } });
     }
 
-    async getGroupInfo(adminId: string) {
+    async getGroupInfo({ adminId, groupId }: { adminId?: string, groupId?: string }) {
         try {
-            const adminGroups = await this.prisma.group.findFirst({
-                where: {
-                    members: {
-                        some: {
-                            userId: adminId,
-                            role: 'ADMIN',
+            let groupInfo: any;
+            if (adminId) {
+                groupInfo = await this.prisma.group.findFirst({
+                    where: {
+                        members: {
+                            some: {
+                                userId: adminId,
+                                role: 'ADMIN',
+                            },
                         },
                     },
-                },
-                include: {
-                    members: true,
-                },
-            });
+                    include: {
+                        members: true,
+                    },
+                });
+            } else if (groupId) {
+                groupInfo = await this.prisma.group.findFirst({
+                    where: {
+                        id: groupId
+                    },
+                    include: {
+                        members: {
+                            select: {
+                                user: {
+                                    select: {
+                                        firstName: true,
+                                        email: true,
+                                        avatar: true,
+                                        role: true
+                                    }
+                                }
+                            }
+                        },
+                    },
+                });
+            }
 
-            console.log(adminGroups);
-            return adminGroups;
+            console.log(groupInfo);
+            return groupInfo;
         } catch (err: any) {
             console.error(err);
         }
@@ -39,7 +62,8 @@ export class GroupService {
         const res = await this.prisma.group.create({
             data: {
                 name: dto.name,
-                description: dto.description
+                description: dto.description,
+                image: dto.image
             }
         });
         console.log(res);

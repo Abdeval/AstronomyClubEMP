@@ -7,3 +7,4 @@ export * from './dashboard'
 export * from './gallery'
 export * from './observation'
 export * from './equipments';
+export * from './groups';

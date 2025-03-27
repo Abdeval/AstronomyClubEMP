@@ -3,7 +3,6 @@ import { useGroup } from "@/hooks";
 
 export default function Groups() {
   const { groups, isGroupsLoading } = useGroup();
-  console.log(groups);
 
   return (
     <div className="container mx-auto py-2 px-4">

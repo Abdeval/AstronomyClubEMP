@@ -1,7 +1,6 @@
 
 import { useState } from "react"
 import { MoreVertical, UserPlus, Trash2, Users, Edit, Star, StarHalf, ListTodo, Search } from "lucide-react"
-import type { Group, Member, MemberRole, GroupStatus } from "./groups-management"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -14,11 +13,14 @@ import EditGroupDialog from "./edit-group-dialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useNavigate } from "react-router-dom"
+import { Group, GroupMember, GroupRole, GroupStatus, User } from "shared-types"
+import { getGroupInfo } from "@/hooks/use-group-info"
+// import { getGroupInfo } from "@/hooks/use-group-info"
 
 interface GroupCardProps {
   group: Group
-  currentUser: Member
-  onAddMember: (groupId: string, member: Omit<Member, "id">) => void
+  currentUser: User
+  onAddMember: (groupId: string, member: Omit<GroupMember, "id">) => void
   onDeleteMember: (groupId: string, memberId: string) => void
   onDeleteGroup: (groupId: string) => void
   onUpdateGroup: (group: Group) => void
@@ -39,14 +41,17 @@ export default function GroupCard({
   const [isEditGroupOpen, setIsEditGroupOpen] = useState(false)
   const [isMembersOpen, setIsMembersOpen] = useState(false)
   const [memberSearchQuery, setMemberSearchQuery] = useState("")
-  const [roleFilter, setRoleFilter] = useState<MemberRole | "all">("all")
+  const [roleFilter, setRoleFilter] = useState<GroupRole | "all">("all")
+  const groupInfo = getGroupInfo(group.id);
+
+  console.log(groupInfo);
 
   // Check if current user is admin or leader of this group
-  const isAdminOrLeader =
-    currentUser.role === "admin" ||
-    group.members.some((m) => m.id === currentUser.id && (m.role === "leader" || m.role === "admin"))
+  const isAdminOrLeader = 
+    currentUser.role === "ADMIN" ||
+    group.members.some((m:GroupMember) => m.userId === currentUser.id && (m.role === "ADMIN"))
 
-  const handleAddMember = (member: Omit<Member, "id">) => {
+  const handleAddMember = (member: Omit<GroupMember, "id">) => {
     if (isAdminOrLeader) {
       onAddMember(group.id, member)
     }
@@ -63,23 +68,25 @@ export default function GroupCard({
     navigate(`/groups/${group.id}/tasks`)
   }
 
-  // const getInitials = (name: string) => {
-  //   return name
-  //     .split(" ")
-  //     .map((n) => n[0])
-  //     .join("")
-  //     .toUpperCase()
-  // }
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+  }
+
+  console.log(group);
 
   const getStatusColor = (status: GroupStatus) => {
     switch (status) {
-      case "active":
+      case "ACTIVE":
         return "bg-green-500"
-      case "inactive":
+      case "INACTIVE":
         return "bg-yellow-500"
-      case "archived":
+      case "ARCHIVED":
         return "bg-gray-500"
-      case "pending":
+      case "PENDING":
         return "bg-blue-500"
       default:
         return "bg-gray-500"
@@ -127,13 +134,12 @@ export default function GroupCard({
             <div className="relative">
               {group.image ? (
                 <div className="relative w-10 h-10 rounded-md overflow-hidden">
-                  <img src={group.image || "/images/groups/rover.jpg"} alt={group.name} className="object-cover" />
+                  <img src={group.image} alt={group.name} className="object-cover" />
                 </div>
               ) : (
                 <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
                   <span className="text-lg font-semibold text-muted-foreground">
-                    {/* {getInitials(group.name)} */}
-                    {group.id}
+                    {getInitials(group.name)}
                     </span>
                 </div>
               )}
@@ -216,7 +222,7 @@ export default function GroupCard({
                     className="pl-8"
                   />
                 </div>
-                <Select value={roleFilter} onValueChange={(value) => setRoleFilter(value as MemberRole | "all")}>
+                <Select value={roleFilter} onValueChange={(value) => setRoleFilter(value as GroupRole | "all")}>
                   <SelectTrigger className="w-[110px]">
                     <SelectValue placeholder="Filter role" />
                   </SelectTrigger>
@@ -232,7 +238,7 @@ export default function GroupCard({
               <ScrollArea className="h-[200px]">
                 <ul className="space-y-3">
                   {group.members.length > 0 ? (
-                    group.members.map((member) => (
+                    group.members.map((member: any) => (
                       <li key={member.id} className="flex items-center justify-between">
                         <div className="flex items-center">
                           <Avatar className="h-8 w-8 mr-2">

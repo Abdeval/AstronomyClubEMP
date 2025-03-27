@@ -17,6 +17,7 @@ model User {
   role       Role     @default(USER)
   profilePic String?
   createdAt  DateTime @default(now())
+  avatar String @default("/avatars/1.png")
 
   groups       GroupMember[]
   observations Observation[]

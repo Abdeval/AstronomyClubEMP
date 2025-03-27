@@ -15,7 +15,13 @@ export class GroupController {
 
     @Get("admin/:id")
     getGroupInfo(@Param("id") adminId: string) {
-        return this.groupService.getGroupInfo(adminId);
+        return this.groupService.getGroupInfo({ adminId });
+    }
+
+
+    @Get(":id")
+    getGroupById(@Param("id") groupId: string) {
+        return this.groupService.getGroupInfo({ groupId });
     }
 
 

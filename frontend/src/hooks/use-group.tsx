@@ -1,41 +1,31 @@
 
 import { deleteApi, getApi, postApi } from "@/lib/api";
-import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
+import { useMutation, useMutationState, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Group } from "shared-types";
 
 export const useGroup = () => {
+
+  const queryClient = useQueryClient();
+
   const { data: groups, isLoading: isGroupsLoading} = useQuery({
     queryKey: ["groups"],
     queryFn: () => getApi("/groups/all"),
   });
 
-  const addGroup = async (group: Omit<Group, "id" | "members" | "createdAt">) => {
-    const mutation = useMutation({
-      mutationKey: ["add-group"],
-      mutationFn: () => postApi("/groups/create", group),
-    });
+  const addGroupMutation = useMutation({
+    mutationKey: ["add-group"],
+    mutationFn: (group:Omit<Group, "id" | "members" | "createdAt">) => postApi("/groups/create", group),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["groups"]
+      })
+    }
+  });
 
-    return mutation.mutate;
-  };
-
-  const deleteGroup = async (groupId: string) => {
-    const mutation = useMutation({
-      mutationKey: ["delete-group"],
-      mutationFn: () => deleteApi(`/groups/delete/${groupId}`),
-    });
-
-    return mutation.mutate;
-  };
-
-  const getGroupInfo = (groupId: string) => {
-    const { data: groupInfo } = useQuery({
-        queryKey: ["group-by-id", groupId],
-        queryFn: () => getApi(`/groups/${groupId}`),
-        enabled: !!groupId
-      });
-
-    return groupInfo
-  }
+  const deleteGroupMutation = useMutation({
+    mutationKey: ["delete-group"],
+    mutationFn: (groupId: string) => deleteApi(`/groups/delete/${groupId}`),
+  });
 
 
   // ? this a kind of all the history mutation (insertion, deletion , update ...)
@@ -48,5 +38,5 @@ export const useGroup = () => {
     return data;
   };
 
-  return { groups, isGroupsLoading, addGroup, deleteGroup, getImageDataHistory, getGroupInfo };
+  return { groups, isGroupsLoading, addGroup: addGroupMutation.mutate, deleteGroup: deleteGroupMutation.mutate, getImageDataHistory };
 };
