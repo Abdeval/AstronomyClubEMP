@@ -6,7 +6,7 @@ import { UserProvider } from "./context/user-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 function App() {
   const queryClient = new QueryClient();
-
+  
   return (
     <div className="overflow-x-hidden">
       <QueryClientProvider client={queryClient}>

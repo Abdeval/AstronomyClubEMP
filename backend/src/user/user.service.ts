@@ -3,14 +3,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-    constructor(private prismaService: PrismaService) {}
-    getMyProfile(){
-        
-    }
+  constructor(private prismaService: PrismaService) {}
+  getMyProfile() {}
 
-    getUsers()
-    {
-
-    }
-    
+  getUsers() {}
 }

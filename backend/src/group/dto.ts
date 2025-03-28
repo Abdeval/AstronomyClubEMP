@@ -1,16 +1,16 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class GroupDto {
-    @IsString()
-    @IsNotEmpty()
-    name: string;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
-    @IsString()
-    @IsOptional()
-    description?: string 
-    
-    @IsString()
-    @IsOptional()
-    image?: string 
-    // Todo: there is more to add
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsString()
+  @IsOptional()
+  image?: string;
+  // Todo: there is more to add
 }

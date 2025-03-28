@@ -1,7 +1,7 @@
-import { GroupRole } from "@prisma/client";
+import { GroupRole } from '@prisma/client';
 
 export class CreateMemberDto {
-    userId: string;
-    groupId: string;
-    role: GroupRole
+  userId: string;
+  groupId: string;
+  role: GroupRole;
 }

@@ -1,34 +1,33 @@
-import { Role } from "@prisma/client";
-import { IsEmail, IsNotEmpty, IsOptional , IsString } from "class-validator";
+import { Role } from '@prisma/client';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class AuthDto {
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
-    @IsString()
-    @IsOptional()
-    firstName: string;
+  @IsString()
+  @IsOptional()
+  firstName: string;
 
-    @IsString()
-    @IsOptional()
-    lastName: string;
+  @IsString()
+  @IsOptional()
+  lastName: string;
 
-    @IsString()
-    @IsOptional()
-    role: Role
+  @IsString()
+  @IsOptional()
+  role: Role;
 }
-export class LoginDto{
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+export class LoginDto {
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 
-    @IsString()
-    @IsNotEmpty()
-    password: string;
-
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 }

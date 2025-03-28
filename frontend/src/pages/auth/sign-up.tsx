@@ -7,7 +7,7 @@ function SignUp() {
   return (
     <div className='w-screen h-screen bg-[url("/images/albattani-3.jpg")] bg-cover flex items-center justify-center'>
       <div className="bg-secondary/5 backdrop-blur w-full h-full absolute"/>
-      <div className="relative z-50 md:w-[70%] flex md:h-[85%] rounded-[20px] items-center justify-center overflow-hidden">
+      <div className="relative z-50 md:w-[70%] flex md:h-[90%] rounded-[20px] items-center justify-center overflow-hidden">
         <BorderBeam />
         <SignUpPage />
         {/* background image */}

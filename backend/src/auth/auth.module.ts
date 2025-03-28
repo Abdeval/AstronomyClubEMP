@@ -5,14 +5,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from 'src/user/user.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './strategy';
 
 @Module({
-  imports: [ConfigModule,UserModule, PrismaModule, JwtModule.register({
-    secret: new ConfigService().get<string>('JWT_SECRET'),
-     global: true,
-     signOptions: { expiresIn: '100d' }
-  })],
+  imports: [
+    // ConfigModule,
+    // UserModule,
+    // PrismaModule,
+    JwtModule.register({
+      // global: true,
+    }),
+  ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

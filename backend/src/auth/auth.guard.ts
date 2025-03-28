@@ -1,39 +1,51 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import { ConfigService } from '@nestjs/config';
-@Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) { }
-  async canActivate(
-    context: ExecutionContext,
-  ):  Promise<boolean>  {
-    console.log('Guard...');
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
-    if (!token) {
-      console.log('no token');
+// import {
+//   CanActivate,
+//   ExecutionContext,
+//   Injectable,
+//   UnauthorizedException,
+// } from '@nestjs/common';
+// import { JwtService } from '@nestjs/jwt';
+// import { Request } from 'express';
+// import { ConfigService } from '@nestjs/config';
 
-      throw new UnauthorizedException();
-    }
-    try {
-      const payload = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: new ConfigService().get<string>('JWT_SECRET'),
-        }
-      );
-      request['user'] = payload;
+import { AuthGuard } from "@nestjs/passport";
 
-    } catch {
-      throw new UnauthorizedException();
-    }
-    console.log('Active');
 
-    return true;
-  }
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+export class JwtGuard extends AuthGuard("jwt") {
+  constructor() {
+    console.log('jwt guard');
+    super();
   }
 }
+
+// @Injectable()
+
+// export class AuthGuard implements CanActivate {
+//   constructor(private jwtService: JwtService) {}
+//   async canActivate(context: ExecutionContext): Promise<boolean> {
+//     console.log('Guard...');
+//     const request = context.switchToHttp().getRequest();
+//     const token = this.extractTokenFromHeader(request);
+
+//     if (!token) {
+//       console.log('no token');
+
+//       throw new UnauthorizedException();
+//     }
+//     try {
+//       const payload = await this.jwtService.verifyAsync(token, {
+//         secret: new ConfigService().get<string>('JWT_SECRET'),
+//       });
+//       request['user'] = payload;
+//     } catch {
+//       throw new UnauthorizedException();
+//     }
+//     console.log('Active');
+
+//     return true;
+//   }
+//   private extractTokenFromHeader(request: Request): string | undefined {
+//     const [type, token] = request.headers.authorization?.split(' ') ?? [];
+//     return type === 'Bearer' ? token : undefined;
+//   }
+// }

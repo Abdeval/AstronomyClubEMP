@@ -4,8 +4,8 @@ import { ObservationService } from './observation.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-    imports: [PrismaModule],
+  imports: [PrismaModule],
   controllers: [ObservationController],
-  providers: [ObservationService]
+  providers: [ObservationService],
 })
 export class ObservationModule {}

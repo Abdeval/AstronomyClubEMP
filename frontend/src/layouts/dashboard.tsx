@@ -9,7 +9,9 @@ export default function DashboardLayout() {
   const [isOpenSidebar, setIsOpenSidebar] = useState(true);
 
   const { user } = useUser({});
+  console.log("dashboard layout: ", user);
   if (!user) return <Navigate to={"/auth/sign-in"} />;
+
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-1 overflow-hidden relative">
@@ -23,6 +25,8 @@ export default function DashboardLayout() {
           <div className="h-16 sm:h-10" />
           <DashboardFooter />
         </main>
+        {/* the toaster */}
+        {/* <Toaster /> */}
       </div>
     </div>
   );

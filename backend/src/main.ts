@@ -5,9 +5,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], 
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, 
+    credentials: true,
   });
 
   const config = new DocumentBuilder()
@@ -20,7 +20,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory, {
     jsonDocumentUrl: 'swagger/yamal',
   });
-
 
   app.setGlobalPrefix('api');
 

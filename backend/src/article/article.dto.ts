@@ -8,5 +8,4 @@ export class ArticleDto {
   @IsNotEmpty()
   @IsString()
   content: string;
-
 }

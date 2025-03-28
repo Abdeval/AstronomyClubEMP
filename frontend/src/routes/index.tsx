@@ -28,8 +28,8 @@ import Observation from "@/pages/members/observations/observation";
 import Equipments from "@/pages/members/equipments/equipments";
 import Equipment from "@/pages/members/equipments/equipment";
 
-
 export default function AppRouter() {
+  
   return (
     <Suspense>
       <Routes>

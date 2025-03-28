@@ -5,35 +5,36 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MemberService {
-  constructor(private prisma: PrismaService) {};
+  constructor(private prisma: PrismaService) {}
 
   async create(createMemberDto: CreateMemberDto) {
-      // todo check the user
-      const isUser = await this.prisma.user.findUnique({
-        where: {
-          id: createMemberDto.userId
-        }
-      }) ;
+    // todo check the user
+    const isUser = await this.prisma.user.findUnique({
+      where: {
+        id: createMemberDto.userId,
+      },
+    });
 
-      // todo check the group
-      const isGroup = await this.prisma.user.findUnique({
-        where: {
-          id: createMemberDto.userId
-        }
-      }) ;
-      
-      if(!isGroup || !isUser) throw new ForbiddenException("user or group not found");
+    // todo check the group
+    const isGroup = await this.prisma.user.findUnique({
+      where: {
+        id: createMemberDto.userId,
+      },
+    });
 
-      const member = await this.prisma.groupMember.create({
-        data: {
-          userId: createMemberDto.userId,
-          groupId: createMemberDto.groupId,
-          role: createMemberDto.role
-        }
-      });
+    if (!isGroup || !isUser)
+      throw new ForbiddenException('user or group not found');
 
-      return member;
-  };
+    const member = await this.prisma.groupMember.create({
+      data: {
+        userId: createMemberDto.userId,
+        groupId: createMemberDto.groupId,
+        role: createMemberDto.role,
+      },
+    });
+
+    return member;
+  }
 
   findAll() {
     return `This action returns all member`;

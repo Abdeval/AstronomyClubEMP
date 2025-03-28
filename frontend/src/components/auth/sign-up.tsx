@@ -28,13 +28,17 @@ import {
 } from "@/components/ui/input-otp";
 import { auth } from "@/lib/api";
 import SignInButton from "../buttons/sign-in-button";
+import { emailRegex, firstNameRegex, lastNameRegex, passwordRegex
+ } from "@/lib/regex";
+import { toast } from "sonner";
 
-const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 
 const signupSchema = z.object({
-  phoneNumber: z.string().regex(phoneRegex, "Invalid phone number"),
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  firstName: z.string().regex(firstNameRegex, "first name must be at least 2 characters"),
+  // phoneNumber: z.string().regex(phoneRegex, "Invalid phone number"),
+  lastName: z.string().regex(lastNameRegex, "Last name must be at least 2 characters"),
+  password: z.string().regex(passwordRegex, "Password must be at least 5 characters"),
+  email: z.string().regex(emailRegex, "Not a valid email")
 });
 
 const otpSchema = z.object({
@@ -43,8 +47,9 @@ const otpSchema = z.object({
 
 export default function SignUpPage() {
   const [step, setStep] = useState<"signup" | "otp">("signup");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -52,8 +57,10 @@ export default function SignUpPage() {
   const signupForm = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      phoneNumber: "",
+      email: "",
       password: "",
+      lastName: "",
+      firstName: ""
     },
   });
 
@@ -69,16 +76,19 @@ export default function SignUpPage() {
     //   phoneNumber: values.phoneNumber,
     // });
     // console.log(result);
-    setName(values.name);
+    setFirstName(values.firstName);
     setPassword(values.password);
-    setPhoneNumber(values.phoneNumber);
+    setLastName(values.lastName);
+    setEmail(values.email);
     setIsLoading(true);
-    setPhoneNumber(values.phoneNumber);
     setStep("otp");
-    // toast({
-    //   title: "OTP Sent",
-    //   description: "Please check your phone for the OTP.",
-    // });
+    toast("OTP Sent", {
+      description: "Please check your phone for the OTP.",
+      action: {
+        label: "Undo",
+        onClick: () => console.log("Undo"),
+      },
+    })
     setIsLoading(false);
   };
 
@@ -86,13 +96,16 @@ export default function SignUpPage() {
     // Here you would typically send a request to your backend to verify the OTP
     console.log("OTP submitted", values);
 
-    const result = await auth.post('/register', { name, phoneNumber, password, accessCode: values.otp, address: "", code: '' });
+    const result = await auth.post('/signup', { firstName, lastName, email, password });
     console.log(result);
-    // toast({
-    //   title: `signup Successful ${result.data}`,
-    //   description: "You have been logged in successfully.",
-    // });
-    navigate("/auth/login");
+    toast(`signup Successful ${result.data}`, {
+       description: "You have been logged in successfully.",
+       action: {
+        label: "Undo",
+        onClick: () => console.log("undo")
+       }
+    })
+    navigate("/auth/sign-in");
   };
 
   return (
@@ -123,12 +136,12 @@ export default function SignUpPage() {
             >
               <FormField
                 control={signupForm.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Abdou" {...field} />
+                      <Input placeholder="REZIGA" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,12 +149,25 @@ export default function SignUpPage() {
               />
               <FormField
                 control={signupForm.control}
-                name="phoneNumber"
+                name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="+1234567890" {...field} />
+                      <Input placeholder="Abdelatif" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={signupForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="abdou@gmail.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -193,7 +219,7 @@ export default function SignUpPage() {
                                 <InputOTPSlot
                                   key={index}
                                   index={index}
-                                  className="rounded-md border border-input bg-background text-primary"
+                                  className="rounded-md mx-1 border border-input bg-background text-foreground"
                                 />
                               ))}
                             </InputOTPGroup>
@@ -207,7 +233,7 @@ export default function SignUpPage() {
               />
               <Button
                 type="submit"
-                className="w-full font-medium text-foreground bg-secondary hover:bg-secondary/60"
+                className="w-full font-medium text-foreground bg-primary"
               >
                 Verify Code
               </Button>

@@ -11,23 +11,21 @@
 }
 */
 
-import { IsEnum, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 enum TaskStatus {
-    PENDING = "PENDING",
-    IN_PROGRESS = "IN_PROGRESS",
-    COMPLETED = "COMPLETED"
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
 }
 
-export class CreateTaskDto
-{
-    @IsString()
-    title: String
+export class CreateTaskDto {
+  @IsString()
+  title: String;
 
-    @IsString()
-    @IsOptional()
-    description: String
+  @IsString()
+  @IsOptional()
+  description: String;
 
-
-    @IsEnum(TaskStatus)
-    status: TaskStatus
+  @IsEnum(TaskStatus)
+  status: TaskStatus;
 }
