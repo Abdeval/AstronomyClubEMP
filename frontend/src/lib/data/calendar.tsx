@@ -1,6 +1,5 @@
-import type { WeatherData } from "@/lib/types"
 import type { AstronomyEvent } from "@/lib/types"
-import { addDays,format, startOfMonth, setHours } from "date-fns"
+import { addDays, startOfMonth, setHours } from "date-fns"
 
 
 // ! astronomy events
@@ -26,8 +25,8 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       description:
         "The Moon will be located on the opposite side of the Earth as the Sun and its face will be fully illuminated.",
       type: "moon-phase",
-      start: setHours(addDays(startOfCurrentMonth, 15), 19, 0),
-      end: setHours(addDays(startOfCurrentMonth, 15), 23, 0),
+      start: setHours(addDays(startOfCurrentMonth, 15), 19),
+      end: setHours(addDays(startOfCurrentMonth, 15), 23),
       visibilityRequirements: "Clear skies",
     },
     {
@@ -36,8 +35,8 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       description:
         "Jupiter will be at its closest approach to Earth and its face will be fully illuminated by the Sun.",
       type: "planet-viewing",
-      start: setHours(addDays(startOfCurrentMonth, 8), 20, 0),
-      end: setHours(addDays(startOfCurrentMonth, 9), 5, 0),
+      start: setHours(addDays(startOfCurrentMonth, 8), 20),
+      end: setHours(addDays(startOfCurrentMonth, 9), 5),
       visibilityRequirements: "Clear skies, low light pollution",
     },
     {
@@ -45,8 +44,8 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       title: "Partial Solar Eclipse",
       description: "The Moon will partially cover the Sun's disk.",
       type: "eclipse",
-      start: setHours(addDays(startOfCurrentMonth, 22), 10, 0),
-      end: setHours(addDays(startOfCurrentMonth, 22), 12, 0),
+      start: setHours(addDays(startOfCurrentMonth, 22), 10),
+      end: setHours(addDays(startOfCurrentMonth, 22), 12),
       location: "South America",
       visibilityRequirements: "Clear skies, proper eye protection required",
     },
@@ -56,8 +55,8 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       description:
         "The best time to view Venus as it will be at its highest point above the horizon in the evening sky.",
       type: "planet-viewing",
-      start: setHours(addDays(startOfCurrentMonth, 5), 19, 0),
-      end: setHours(addDays(startOfCurrentMonth, 5), 21, 0),
+      start: setHours(addDays(startOfCurrentMonth, 5), 19),
+      end: setHours(addDays(startOfCurrentMonth, 5), 21),
       visibilityRequirements: "Clear western horizon after sunset",
     },
     {
@@ -66,8 +65,8 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       description:
         "The Moon will be located on the same side of the Earth as the Sun and will not be visible in the night sky.",
       type: "moon-phase",
-      start: setHours(addDays(startOfCurrentMonth, 1), 0, 0),
-      end: setHours(addDays(startOfCurrentMonth, 1), 23, 59),
+      start: setHours(addDays(startOfCurrentMonth, 1), 0),
+      end: setHours(addDays(startOfCurrentMonth, 1), 23),
       visibilityRequirements: "Best time for deep-sky observation",
     },
     {
@@ -75,16 +74,16 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       title: "Observation Deadline: Galaxy Photography",
       description: "Submit your galaxy photographs for the monthly competition.",
       type: "deadline",
-      start: setHours(addDays(startOfCurrentMonth, 25), 23, 59),
-      end: setHours(addDays(startOfCurrentMonth, 25), 23, 59),
+      start: setHours(addDays(startOfCurrentMonth, 25), 23),
+      end: setHours(addDays(startOfCurrentMonth, 25), 23),
     },
     {
       id: "event-8",
       title: "Lyrid Meteor Shower",
       description: "An average shower that can produce up to 20 meteors per hour at its peak.",
       type: "meteor-shower",
-      start: setHours(addDays(startOfCurrentMonth, 18), 22, 0),
-      end: setHours(addDays(startOfCurrentMonth, 19), 4, 0),
+      start: setHours(addDays(startOfCurrentMonth, 18), 22),
+      end: setHours(addDays(startOfCurrentMonth, 19), 4),
       location: "Northern Hemisphere",
       visibilityRequirements: "Dark skies, minimal moonlight",
     },
@@ -93,8 +92,8 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       title: "Saturn Observation Night",
       description: "Group observation of Saturn's rings and moons.",
       type: "planet-viewing",
-      start: setHours(addDays(startOfCurrentMonth, 10), 21, 0),
-      end: setHours(addDays(startOfCurrentMonth, 10), 23, 30),
+      start: setHours(addDays(startOfCurrentMonth, 10), 21),
+      end: setHours(addDays(startOfCurrentMonth, 10), 23),
       location: "Observatory Hill",
       visibilityRequirements: "Clear skies, telescope required",
     },
@@ -103,52 +102,25 @@ export function getAstronomyEvents(): AstronomyEvent[] {
       title: "Observation Deadline: Moon Photography",
       description: "Submit your lunar photographs for the monthly competition.",
       type: "deadline",
-      start: setHours(addDays(startOfCurrentMonth, 16), 23, 59),
-      end: setHours(addDays(startOfCurrentMonth, 16), 23, 59),
+      start: setHours(addDays(startOfCurrentMonth, 16), 23),
+      end: setHours(addDays(startOfCurrentMonth, 16), 23),
     },
   ]
 }
 
-// ! weather data
+// ! the weather locations
 
-// Sample weather data for the current month
-export function getWeatherData(): Record<string, WeatherData> {
-  const today = new Date()
-  const startOfCurrentMonth = startOfMonth(today)
-  const weatherData: Record<string, WeatherData> = {}
-
-  // Generate weather data for the current month
-  for (let i = 0; i < 31; i++) {
-    const date = addDays(startOfCurrentMonth, i)
-    const dateStr = format(date, "yyyy-MM-dd")
-
-    // Randomly generate weather conditions
-    const random = Math.random()
-    let condition: "clear" | "cloudy" | "rainy"
-    let visibility: number
-
-    if (random < 0.5) {
-      condition = "clear"
-      visibility = 70 + Math.floor(Math.random() * 30) // 70-100%
-    } else if (random < 0.8) {
-      condition = "cloudy"
-      visibility = 40 + Math.floor(Math.random() * 30) // 40-70%
-    } else {
-      condition = "rainy"
-      visibility = 10 + Math.floor(Math.random() * 30) // 10-40%
-    }
-
-    // Determine if conditions are suitable for astronomy observation
-    const isSuitable = condition === "clear" && visibility > 60
-
-    weatherData[dateStr] = {
-      condition,
-      visibility,
-      isSuitable,
-    }
-  }
-
-  return weatherData
-}
-
-
+export const LOCATIONS = [
+  { name: "New York, USA", latitude: 40.7128, longitude: -74.006 },
+  // { name: "London, UK", latitude: 51.5074, longitude: -0.1278 },
+  // { name: "Tokyo, Japan", latitude: 35.6762, longitude: 139.6503 },
+  // { name: "Sydney, Australia", latitude: -33.8688, longitude: 151.2093 },
+  // { name: "Cape Town, South Africa", latitude: -33.9249, longitude: 18.4241 },
+  // { name: "Atacama Desert, Chile", latitude: -24.5, longitude: -69.25 }, // Great for stargazing
+  // { name: "Mauna Kea, Hawaii", latitude: 19.8207, longitude: -155.4681 }, // Famous observatory
+  // { name: "La Palma, Canary Islands", latitude: 28.7136, longitude: -17.8834 }, // Home to many telescopes
+  // { name: "Namibian Desert, Namibia", latitude: -24.7255, longitude: 15.2717 }, // Dark skies
+  // { name: "Aoraki Mackenzie, New Zealand", latitude: -43.734, longitude: 170.0966 }, // Dark sky reserve
+  { name: "Mostaganem, Kheir Eddine", latitude: 35.980821, longitude: 0.169862 },
+  { name: "Alger, Borj El Bahri", latitude: 36.803050, longitude: 3.250674 },
+]

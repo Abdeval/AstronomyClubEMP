@@ -1,23 +1,28 @@
-import { useState, useEffect, SetStateAction } from "react"
-import { Calendar, dateFnsLocalizer, DayPropGetter } from "react-big-calendar"
+"use client"
+
+import { useState, type SetStateAction } from "react"
+import { Calendar, dateFnsLocalizer, type DayPropGetter } from "react-big-calendar"
 import { format, parse, startOfWeek, getDay } from "date-fns"
-import { enUS } from "date-fns/locale"
+import { arDZ } from "date-fns/locale"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { PlusCircle } from "lucide-react"
+import { PlusCircle, Loader2 } from "lucide-react"
 import AddEventDialog from "./add-event-dialog"
-import { getAstronomyEvents } from "@/lib/data"
-import { getWeatherData } from "@/lib/data"
-import type { AstronomyEvent, WeatherData } from "@/lib/types"
+import type { AstronomyEvent } from "@/lib/types"
+import { useWeather } from "@/hooks/use-weather"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import "./calendar-styles.css"
 import CalendarToolbar from "./calendar-toolbar"
 import EventDetailsDialog from "./event-details-dialog"
+import { useUser } from "@/hooks"
+import { useAstronomyCalendarEvents } from "@/hooks"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 // Setup localizer for react-big-calendar
 const locales = {
-  "en-US": enUS,
+  // "en-US": enUS,
+  "ar-DZ": arDZ,
 }
 
 const localizer = dateFnsLocalizer({
@@ -29,22 +34,38 @@ const localizer = dateFnsLocalizer({
 })
 
 export default function AstronomyCalendar() {
-  const [events, setEvents] = useState<AstronomyEvent[]>([])
-  const [weatherData, setWeatherData] = useState<Record<string, WeatherData>>({})
   const [selectedEvent, setSelectedEvent] = useState<AstronomyEvent | null>(null)
   const [isAddEventOpen, setIsAddEventOpen] = useState(false)
   const [view, setView] = useState("month")
   const [date, setDate] = useState(new Date())
-  const [isAdmin, setIsAdmin] = useState(true) // In a real app, this would come from auth
+  const { isAdmin } = useUser({})
+  const [customEvents, setCustomEvents] = useState<AstronomyEvent[]>([])
 
-  // Fetch astronomy events and weather data
-  useEffect(() => {
-    const astronomyEvents = getAstronomyEvents()
-    setEvents(astronomyEvents)
+  const [location, setLocation] = useState({
+    latitude: 35.980821, // Kheir Eddine by default
+    longitude: 0.169862,
+  })
 
-    const weather = getWeatherData()
-    setWeatherData(weather)
-  }, [])
+  // Fetch weather data
+  const { data: weatherData } = useWeather({
+    latitude: location.latitude,
+    longitude: location.longitude,
+  })
+
+  // Fetch astronomy events from API
+  const {
+    events: apiEvents,
+    isLoading: isLoadingEvents,
+    error: eventsError,
+  } = useAstronomyCalendarEvents({
+    latitude: location.latitude,
+    longitude: location.longitude,
+    startDate: new Date(),
+    includeStaticEvents: false
+  })
+
+  // Combine API events with custom events
+  const allEvents = [...(apiEvents || []), ...customEvents]
 
   // Handle event selection
   const handleSelectEvent = (event: AstronomyEvent) => {
@@ -54,23 +75,32 @@ export default function AstronomyCalendar() {
   // Add a new event (admin only)
   const handleAddEvent = (newEvent: Omit<AstronomyEvent, "id">) => {
     const event: AstronomyEvent = {
-      id: `event-${Date.now()}`,
+      id: `custom-event-${Date.now()}`,
       ...newEvent,
     }
-    setEvents([...events, event])
+    setCustomEvents([...customEvents, event])
   }
 
   // Delete an event (admin only)
   const handleDeleteEvent = (eventId: string) => {
-    setEvents(events.filter((event) => event.id !== eventId))
+    // Only delete custom events, not API-generated ones
+    if (eventId.startsWith("custom-event-")) {
+      setCustomEvents(customEvents.filter((event) => event.id !== eventId))
+    }
     setSelectedEvent(null)
+  }
+
+  // Handle location change
+  const handleLocationChange = (latitude: number, longitude: number) => {
+    setLocation({ latitude, longitude })
   }
 
   // Custom event styling based on type and weather
   const eventPropGetter = (event: AstronomyEvent) => {
     const eventDate = new Date(event.start)
     const dateStr = format(eventDate, "yyyy-MM-dd")
-    const weather = weatherData[dateStr]
+    const weather = weatherData?.[dateStr]
+    const isSuitable = event.isSuitable !== undefined ? event.isSuitable : (weather?.isSuitable ?? true)
 
     let className = ""
 
@@ -91,12 +121,15 @@ export default function AstronomyCalendar() {
       case "deadline":
         className = "event-deadline"
         break
+      case "sun-event":
+        className = "event-sun"
+        break
       default:
         className = "event-default"
     }
 
     // Add weather-based class
-    if (weather && !weather.isSuitable) {
+    if (!isSuitable) {
       className += " event-weather-unsuitable"
     }
 
@@ -104,9 +137,9 @@ export default function AstronomyCalendar() {
   }
 
   // Custom day styling based on weather
-  const dayPropGetter = (date: Date) => {
+  const dayPropGetter: DayPropGetter = (date: Date) => {
     const dateStr = format(date, "yyyy-MM-dd")
-    const weather = weatherData[dateStr]
+    const weather = weatherData?.[dateStr]
 
     if (weather) {
       return {
@@ -123,7 +156,7 @@ export default function AstronomyCalendar() {
   // Custom slot styling (time slots in week/day view)
   const slotPropGetter = (date: Date) => {
     const dateStr = format(date, "yyyy-MM-dd")
-    const weather = weatherData[dateStr]
+    const weather = weatherData?.[dateStr]
 
     if (weather) {
       return {
@@ -137,7 +170,7 @@ export default function AstronomyCalendar() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <Tabs value={view} onValueChange={setView} className="w-full">
+        <Tabs value={view} onValueChange={setView as any} className="w-full">
           <div className="flex justify-between items-center mb-4">
             <TabsList>
               <TabsTrigger value="month">Month</TabsTrigger>
@@ -146,6 +179,12 @@ export default function AstronomyCalendar() {
               <TabsTrigger value="agenda">Agenda</TabsTrigger>
             </TabsList>
             <div className="flex items-center gap-2">
+              {isLoadingEvents && (
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Loading celestial events...
+                </div>
+              )}
               {isAdmin && (
                 <Button onClick={() => setIsAddEventOpen(true)} className="flex items-center gap-1">
                   <PlusCircle className="h-4 w-4" />
@@ -157,10 +196,16 @@ export default function AstronomyCalendar() {
         </Tabs>
       </div>
 
+      {eventsError && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription>Error loading astronomy events: {eventsError.message}</AlertDescription>
+        </Alert>
+      )}
+
       <Card className="p-4 overflow-hidden rounded-[16px]">
         <Calendar
           localizer={localizer}
-          events={events}
+          events={allEvents}
           startAccessor="start"
           endAccessor="end"
           style={{ height: 700 }}
@@ -171,10 +216,12 @@ export default function AstronomyCalendar() {
           onView={(newView: SetStateAction<string>) => setView(newView)}
           onSelectEvent={handleSelectEvent}
           eventPropGetter={eventPropGetter}
-          dayPropGetter={dayPropGetter as DayPropGetter}
+          dayPropGetter={dayPropGetter}
           slotPropGetter={slotPropGetter}
           components={{
-            toolbar: (props:any) => <CalendarToolbar {...props} weatherData={weatherData} />,
+            toolbar: (props) => (
+              <CalendarToolbar {...props} weatherData={weatherData} onLocationChange={handleLocationChange} />
+            ),
           }}
           popup
         />
@@ -214,13 +261,17 @@ export default function AstronomyCalendar() {
           <div className="w-4 h-4 bg-red-500 rounded-full mr-2"></div>
           <span>Deadline</span>
         </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 bg-orange-500 rounded-full mr-2"></div>
+          <span>Sun Events</span>
+        </div>
       </div>
 
       {/* Event details dialog */}
       {selectedEvent && (
         <EventDetailsDialog
           event={selectedEvent}
-          weatherData={weatherData}
+          weatherData={weatherData || {}}
           isAdmin={isAdmin}
           onClose={() => setSelectedEvent(null)}
           onDelete={handleDeleteEvent}

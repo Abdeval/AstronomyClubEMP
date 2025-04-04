@@ -40,7 +40,7 @@ export default function EquipmentList({ equipment, onUpdate, onDelete }: Equipme
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
+        <div className="relative flex-1 bg-background rounded-md">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search equipment..."
@@ -52,7 +52,7 @@ export default function EquipmentList({ equipment, onUpdate, onDelete }: Equipme
 
         <Select 
         value={statusFilter} onValueChange={(value) => setStatusFilter(value as EquipmentStatus | "all")}>
-          <SelectTrigger className="w-[180px] bg-background/30" >
+          <SelectTrigger className="w-[180px] bg-background" >
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>

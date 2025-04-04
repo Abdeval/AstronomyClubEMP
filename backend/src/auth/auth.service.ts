@@ -1,10 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
-import { AuthDto, LoginDto } from './auth.dto';
+import { SignUpDto, SignInDto, ChangePasswordDto } from './auth.dto';
 import { ConfigService } from '@nestjs/config';
 import { Role } from '@prisma/client';
 
@@ -14,8 +14,8 @@ export class AuthService {
     private config: ConfigService,
     private prisma: PrismaService,
     private jwtService: JwtService,
-  ) {}
-  async signup(dto: AuthDto) {
+  ) { }
+  async signup(dto: SignUpDto) {
     try {
       const hash = await argon.hash(dto.password);
 
@@ -41,7 +41,7 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: SignInDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
@@ -63,6 +63,38 @@ export class AuthService {
       role: user.role,
       access_token: token
     }
+  }
+
+  // ! change password 
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    if (!userId) throw new ForbiddenException("Not authorized..!");
+
+    if (dto.newPassword !== dto.confirmNewPassword) throw new NotFoundException("passwords are not valid");
+    
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if(!user) throw new NotFoundException("user not found");
+
+    const valid = await argon.verify(user?.password, dto.currentPassword);
+
+    if (!valid) {
+      throw new ForbiddenException("Password doesn't match");
+    }
+
+    const newHasedPassword = await argon.hash(dto.newPassword);
+
+    return await this.prisma.user.update({
+      where: {
+          id: userId
+      },
+      data: {
+        password: newHasedPassword
+      }
+    })
   }
 
   async signToken(

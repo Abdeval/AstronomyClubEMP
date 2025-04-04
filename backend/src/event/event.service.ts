@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import axios from 'axios';
+import { ConfigService } from '@nestjs/config';
+
 
 @Injectable()
 export class EventService {
-  create(createEventDto: CreateEventDto) {
-    return 'This action adds a new event';
-  }
+  constructor(private config: ConfigService) { }
 
-  findAll() {
-    return `This action returns all event`;
-  }
+  async getEventsFromApi() {
+    const API_ID = process.env.ASTRO_API_ID;
+    const API_SECRET = process.env.ASTRO_API_SECRET;
 
-  findOne(id: number) {
-    return `This action returns a #${id} event`;
-  }
+    const getAuthHeader = () => {
+      const credentials = Buffer.from(`${API_ID}:${API_SECRET}`).toString("base64")
+      return `Basic ${credentials}`
+    }
 
-  update(id: number, updateEventDto: UpdateEventDto) {
-    return `This action updates a #${id} event`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} event`;
+    try {
+     
+    } catch (error) {
+      console.error("Astronomy API error:", error.response?.data || error.message)
+    }
   }
 }

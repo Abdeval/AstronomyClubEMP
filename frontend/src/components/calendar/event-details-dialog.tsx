@@ -1,13 +1,14 @@
-import { format } from "date-fns"
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import type { AstronomyEvent, WeatherData } from "@/lib/types"
-import { Cloud, Sun, CloudRain, AlertTriangle, Calendar, Clock, MapPin } from "lucide-react"
+import { format } from "date-fns"
+import { Calendar, MapPin, Cloud, Sun, Moon, Star, Trash2, Clock, Tag } from "lucide-react"
+import type { AstronomyEvent } from "@/lib/types"
 
 interface EventDetailsDialogProps {
   event: AstronomyEvent
-  weatherData: Record<string, WeatherData>
+  weatherData: Record<string, any>
   isAdmin: boolean
   onClose: () => void
   onDelete: (eventId: string) => void
@@ -20,146 +21,175 @@ export default function EventDetailsDialog({
   onClose,
   onDelete,
 }: EventDetailsDialogProps) {
-  const eventDate = new Date(event.start)
-  const dateStr = format(eventDate, "yyyy-MM-dd")
-  const weather = weatherData[dateStr]
+  const eventDate = format(new Date(event.start), "yyyy-MM-dd")
+  const weather = weatherData[eventDate]
 
-  const getEventTypeLabel = (type: string) => {
-    switch (type) {
+  // Determine if event is suitable for viewing
+  const isSuitable = event.isSuitable !== undefined ? event.isSuitable : (weather?.isSuitable ?? true)
+
+  // Format dates
+  const startTime = format(new Date(event.start), "h:mm a")
+  const endTime = format(new Date(event.end), "h:mm a")
+  const dateFormatted = format(new Date(event.start), "EEEE, MMMM d, yyyy")
+
+  // Get icon based on event type
+  const getEventIcon = () => {
+    switch (event.type) {
       case "meteor-shower":
-        return "Meteor Shower"
+        return <Star className="h-5 w-5 text-blue-500" />
       case "planet-viewing":
-        return "Planet Viewing"
+        return <Star className="h-5 w-5 text-purple-500" />
       case "moon-phase":
-        return "Moon Phase"
+        return <Moon className="h-5 w-5 text-yellow-500" />
       case "eclipse":
-        return "Eclipse"
+        return <Sun className="h-5 w-5 text-gray-500" />
+      case "sun-event":
+        return <Sun className="h-5 w-5 text-orange-500" />
       case "deadline":
-        return "Deadline"
+        return <Calendar className="h-5 w-5 text-red-500" />
       default:
-        return "Event"
+        return <Calendar className="h-5 w-5" />
     }
   }
 
-  const getEventTypeBadgeVariant = (type: string) => {
-    switch (type) {
-      case "meteor-shower":
-        return "blue"
-      case "planet-viewing":
-        return "purple"
-      case "moon-phase":
-        return "yellow"
-      case "eclipse":
-        return "gray"
-      case "deadline":
-        return "red"
-      default:
-        return "default"
-    }
-  }
-
-  const renderWeatherIcon = () => {
+  // Get weather icon
+  const getWeatherIcon = () => {
     if (!weather) return null
 
-    if (weather.condition === "clear") {
-      return <Sun className="h-5 w-5 text-yellow-500" />
-    } else if (weather.condition === "cloudy") {
-      return <Cloud className="h-5 w-5 text-gray-500" />
-    } else if (weather.condition === "rainy") {
-      return <CloudRain className="h-5 w-5 text-blue-500" />
+    switch (weather.condition) {
+      case "clear":
+        return <Sun className="h-5 w-5 text-yellow-500" />
+      case "cloudy":
+        return <Cloud className="h-5 w-5 text-gray-400" />
+      default:
+        return <Cloud className="h-5 w-5 text-gray-400" />
     }
+  }
 
-    return null
+  // Format event type for display
+  const formatEventType = (type: string) => {
+    return type
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
   }
 
   return (
-    <Dialog open={!!event} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+    <Dialog open={true} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl">{event.title}</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            {getEventIcon()}
+            {event.title}
+          </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Badge variant={getEventTypeBadgeVariant(event.type) as any} className="text-xs">
-              {getEventTypeLabel(event.type)}
+            <div className="flex items-center gap-2 text-sm">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <span>{dateFormatted}</span>
+            </div>
+            <Badge variant={isSuitable ? "default" : "outline"}>
+              {isSuitable ? "Good viewing conditions" : "Poor viewing conditions"}
             </Badge>
+          </div>
 
-            {weather && !weather.isSuitable && (
-              <div className="flex items-center text-amber-500">
-                <AlertTriangle className="h-4 w-4 mr-1" />
-                <span className="text-sm">Poor viewing conditions</span>
+          <div className="flex items-center gap-2 text-sm">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <span>
+              {startTime} - {endTime}
+            </span>
+          </div>
+
+          {event.location && (
+            <div className="flex items-center gap-2 text-sm">
+              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <span>{event.location}</span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 text-sm">
+            <Tag className="h-4 w-4 text-muted-foreground" />
+            <span>{formatEventType(event.type)}</span>
+          </div>
+
+          {event.body && (
+            <div className="mt-4 space-y-2 text-sm">
+              <h4 className="font-medium">Celestial Body Details:</h4>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Body:</div>
+                <div>{event.body.name}</div>
+
+                <div>Altitude:</div>
+                <div>{event.body.altitude.toFixed(1)}°</div>
+
+                <div>Azimuth:</div>
+                <div>{event.body.azimuth.toFixed(1)}°</div>
+
+                {event.body.magnitude !== undefined && (
+                  <>
+                    <div>Magnitude:</div>
+                    <div>{event.body.magnitude.toFixed(2)}</div>
+                  </>
+                )}
               </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-[20px_1fr] gap-x-2 gap-y-3 items-start">
-            <Calendar className="h-4 w-4 text-muted-foreground mt-0.5" />
-            <div>
-              <p className="font-medium">{format(new Date(event.start), "EEEE, MMMM d, yyyy")}</p>
-              {event.end && event.start !== event.end && (
-                <p className="text-sm text-muted-foreground">to {format(new Date(event.end), "EEEE, MMMM d, yyyy")}</p>
-              )}
-            </div>
-
-            <Clock className="h-4 w-4 text-muted-foreground mt-0.5" />
-            <div>
-              <p className="font-medium">{format(new Date(event.start), "h:mm a")}</p>
-              {event.end && <p className="text-sm text-muted-foreground">to {format(new Date(event.end), "h:mm a")}</p>}
-            </div>
-
-            {event.location && (
-              <>
-                <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                <p>{event.location}</p>
-              </>
-            )}
-          </div>
-
-          {event.description && (
-            <div className="mt-4">
-              <h4 className="text-sm font-medium mb-1">Description</h4>
-              <p className="text-sm text-muted-foreground">{event.description}</p>
             </div>
           )}
 
           {weather && (
-            <div className="mt-4 p-3 bg-muted rounded-md">
-              <h4 className="text-sm font-medium mb-2">Weather Conditions</h4>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  {renderWeatherIcon()}
-                  <span className="ml-1 capitalize">{weather.condition}</span>
-                </div>
-                <div className="text-sm">
-                  <span>Visibility: {weather.visibility}%</span>
-                </div>
-              </div>
-              <div className="mt-2 text-sm">
-                <span className={weather.isSuitable ? "text-green-500" : "text-red-500"}>
-                  {weather.isSuitable ? "Good conditions for observation" : "Poor conditions for observation"}
-                </span>
+            <div className="mt-4 space-y-2 text-sm">
+              <h4 className="font-medium flex items-center gap-2">
+                {getWeatherIcon()}
+                Weather Conditions:
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Condition:</div>
+                <div className="capitalize">{weather.condition}</div>
+
+                <div>Visibility:</div>
+                <div>{weather.visibility}%</div>
+
+                {weather.cloudCover !== undefined && (
+                  <>
+                    <div>Cloud Cover:</div>
+                    <div>{weather.cloudCover}%</div>
+                  </>
+                )}
+
+                {weather.temperature !== undefined && (
+                  <>
+                    <div>Temperature:</div>
+                    <div>{weather.temperature}°C</div>
+                  </>
+                )}
               </div>
             </div>
           )}
 
+          <div className="mt-2">
+            <p className="text-sm">{event.description}</p>
+          </div>
+
           {event.visibilityRequirements && (
             <div className="mt-2">
-              <h4 className="text-sm font-medium mb-1">Visibility Requirements</h4>
-              <p className="text-sm text-muted-foreground">{event.visibilityRequirements}</p>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium">Visibility Requirements:</span> {event.visibilityRequirements}
+              </p>
             </div>
           )}
         </div>
 
         <DialogFooter className="flex justify-between">
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
-          {isAdmin && event.type === "deadline" && (
-            <Button variant="destructive" onClick={() => onDelete(event.id)}>
-              Delete
-            </Button>
-          )}
+          <div>
+            {isAdmin && !event.id.startsWith("sun-") && !event.id.startsWith("planet-") && (
+              <Button variant="destructive" size="sm" onClick={() => onDelete(event.id)}>
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
+            )}
+          </div>
+          <Button onClick={onClose}>Close</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

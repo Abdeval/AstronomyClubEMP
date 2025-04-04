@@ -31,7 +31,6 @@ import { auth } from "@/lib/api";
 import SignInButton from "../buttons/sign-in-button";
 import { useUser } from "@/hooks";
 import { toast } from "sonner";
-// import { useToast } from "@/hooks/use-toast";
 
 // const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -47,11 +46,9 @@ const otpSchema = z.object({
 
 export default function SignInPage() {
   const [step, setStep] = useState<"login" | "otp">("login");
-  // const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const { toast } = useToast();
   const navigate = useNavigate();
 
   // ! the token of the current user
@@ -96,7 +93,6 @@ export default function SignInPage() {
       setIsLoading(false);
       toast("Error", {
         description: "Failed to send verification code. Please try again.",
-        // variant: "destructive",
         action: {
           label: "Undo",
           onClick: () => console.log("undo"),
@@ -107,16 +103,13 @@ export default function SignInPage() {
 
   const onOtpSubmit = async (values: z.infer<typeof otpSchema>) => {
     try {
-      console.log(values);
       const result = await auth.post("/login", {
         email,
         password,
       });
 
       if (result.status === 200) {
-        console.log("setting the token...", result.data.access_token);
         setToken(result.data.access_token);
-        // ! Navigate to the next page
         if (result.data?.role === "USER" || user?.role === "ADMIN") {
           navigate("/members");
         } else {
@@ -125,7 +118,6 @@ export default function SignInPage() {
         }
         toast("Login Successful", {
           description: "You have been logged in successfully.",
-          // variant: "destructive",
           action: {
             label: "Undo",
             onClick: () => console.log("undo"),
@@ -298,3 +290,4 @@ export default function SignInPage() {
     // </div>
   );
 }
+

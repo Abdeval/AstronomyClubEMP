@@ -9,19 +9,32 @@ import NotificationSettings from "./notification-settings"
 import AccountSettings from "./account-settings"
 import DataSettings from "./data-settings"
 import AccessibilitySettings from "./accessibility-settings"
-// import { Button } from "@/components/ui/button"
+import { useUser, useUserInfo } from "@/hooks"
+
 
 export default function SettingsLayout() {
-  const [activeTab, setActiveTab] = useState("display")
-//   const navigate = useNavigation();
+  const [activeTab, setActiveTab] = useState(() => {
+    const currentTab = localStorage.getItem("currentTab");
+    if(!currentTab) return "display";
+    return currentTab;
+  });
 
+  const { user, updateUser, updateUserPassword } = useUser({});
+  // Todo: adding the error handling if the user is not defined..
+  const { data: userInfo, isLoading } = useUserInfo(user);
+  
+  const changeCurrentTab = (value: string) => {
+      setActiveTab(value);
+      localStorage.setItem("currentTab", value);
+  }
+  
   return (
     <div className="container mx-auto py-4 space-y-6">
       <div className="flex flex-col md:flex-row gap-6 font-regular">
         <Tabs
           defaultValue="display"
           value={activeTab}
-          onValueChange={setActiveTab}
+          onValueChange={changeCurrentTab}
           className="w-full space-y-6"
           orientation="vertical"
         >
@@ -66,7 +79,12 @@ export default function SettingsLayout() {
                 <NotificationSettings />
               </TabsContent>
               <TabsContent value="account" className="m-0">
-                <AccountSettings />
+                {
+                  isLoading ?
+                  <div>loading...</div>
+                  :
+                  <AccountSettings currentUser={userInfo} updateUser={updateUser} updateUserPassword={updateUserPassword}/>
+                }
               </TabsContent>
               <TabsContent value="data" className="m-0">
                 <DataSettings />

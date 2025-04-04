@@ -9,7 +9,7 @@ import ChangeThemeButton from "../change-theme-button"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }

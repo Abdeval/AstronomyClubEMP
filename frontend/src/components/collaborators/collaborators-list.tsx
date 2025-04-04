@@ -1,10 +1,8 @@
-"use client"
-
-import { useState } from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,115 +10,95 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Search, MoreHorizontal, UserPlus, Mail, MessageSquare, UserX, Filter } from "lucide-react"
-import AddCollaborator from "./add-collaborator-dialog"
+} from "@/components/ui/dropdown-menu";
+import {
+  Search,
+  MoreHorizontal,
+  UserPlus,
+  Mail,
+  MessageSquare,
+  UserX,
+  Filter,
+} from "lucide-react";
+import { GroupMember, GroupRole, MemberStatus, Role, User } from "shared-types";
+import AddMemberDialog from "../groups/add-member-dialog";
+import { useUser } from "@/hooks";
+import { MemberType } from "@/lib/types";
+import ConfirmDeletionDialog from "../confirm-deletion-dialog";
 
-// Define collaborator types
-type Status = "online" | "offline" | "away" | "busy"
-type Role = "Admin" | "Editor" | "Viewer" | "Guest"
-
-interface Collaborator {
-  id: string
-  name: string
-  email: string
-  role: Role
-  status: Status
-  imageUrl: string
-}
-
-// Sample data
-const initialCollaborators: Collaborator[] = [
-  {
-    id: "1",
-    name: "Olivia Martin",
-    email: "olivia.martin@email.com",
-    role: "Admin",
-    status: "online",
-    imageUrl: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "2",
-    name: "Jackson Lee",
-    email: "jackson.lee@email.com",
-    role: "Editor",
-    status: "busy",
-    imageUrl: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "3",
-    name: "Isabella Nguyen",
-    email: "isabella.nguyen@email.com",
-    role: "Viewer",
-    status: "away",
-    imageUrl: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "4",
-    name: "William Kim",
-    email: "william.kim@email.com",
-    role: "Editor",
-    status: "offline",
-    imageUrl: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "5",
-    name: "Sofia Davis",
-    email: "sofia.davis@email.com",
-    role: "Admin",
-    status: "online",
-    imageUrl: "/placeholder.svg?height=40&width=40",
-  },
-  {
-    id: "6",
-    name: "Ethan Johnson",
-    email: "ethan.johnson@email.com",
-    role: "Guest",
-    status: "offline",
-    imageUrl: "/placeholder.svg?height=40&width=40",
-  },
-]
-
-export default function CollaboratorsList() {
-  const [collaborators, setCollaborators] = useState<Collaborator[]>(initialCollaborators)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [roleFilter, setRoleFilter] = useState<Role | "All">("All")
+export default function CollaboratorsList({
+  collaborators,
+  groupId,
+}: {
+  collaborators: MemberType[];
+  groupId: string;
+}) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState<GroupRole | "All">("All");
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const { addMember, user, deleteMember } = useUser({});
+  const [collaboratorToDelete, setCollaboratorToDelete] = useState<MemberType | null>(null);
+  const [isDeletelDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  // Filter collaborators based on search query and role filter
   const filteredCollaborators = collaborators.filter((collaborator) => {
     const matchesSearch =
-      collaborator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      collaborator.email.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesRole = roleFilter === "All" || collaborator.role === roleFilter
-    return matchesSearch && matchesRole
-  })
+      collaborator.firstName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      collaborator.lastName
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      collaborator.email?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole =
+      roleFilter === "All" || (collaborator.role as Role) === roleFilter;
+    return matchesSearch && matchesRole;
+  });
 
   // Get status color based on status
-  const getStatusColor = (status: Status) => {
+  const getStatusColor = (status: MemberStatus) => {
     switch (status) {
-      case "online":
-        return "bg-green-500"
-      case "offline":
-        return "bg-gray-400"
-      case "away":
-        return "bg-yellow-500"
-      case "busy":
-        return "bg-red-500"
+      case "ONLINE":
+        return "bg-green-500";
+      case "OFFLINE":
+        return "bg-gray-400";
+      case "AWAY":
+        return "bg-yellow-500";
+      case "BUSY":
+        return "bg-red-500";
       default:
-        return "bg-gray-400"
+        return "bg-gray-400";
     }
-  }
+  };
 
-  // Get status text
-  const getStatusText = (status: Status) => {
-    return status.charAt(0).toUpperCase() + status.slice(1)
-  }
+  const getStatusText = (status: MemberStatus) => {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  };
 
-  // Handle removing a collaborator
-  const handleRemoveCollaborator = (id: string) => {
-    setCollaborators(collaborators.filter((c) => c.id !== id))
-  }
+  const handleRemoveCollaborator = () => {
+    deleteMember(collaboratorToDelete?.memberId as string);
+  };
+
+  const isAdminOrLeader =
+    user?.role === "ADMIN" ||
+    collaborators?.some(
+      (m: Partial<User>) => m.id === user?.id && m.role === "ADMIN"
+    );
+
+  const handleAddMember = (member: Partial<GroupMember>) => {
+    if (isAdminOrLeader) {
+      console.log("adding a member");
+      addMember({
+        groupId,
+        ...member,
+      });
+      setOpenAddDialog(false);
+    }
+  };
+
+  // ? this will disable if the user is already a member in the group
+  const isCollaborator = (collaboratorId: string) =>
+    collaborators.some((c) => c.id === collaboratorId);
+
 
   return (
     <div className="w-full space-y-4">
@@ -145,11 +123,15 @@ export default function CollaboratorsList() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Filter by role</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setRoleFilter("All")}>All</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setRoleFilter("Admin")}>Admin</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setRoleFilter("Editor")}>Editor</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setRoleFilter("Viewer")}>Viewer</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setRoleFilter("Guest")}>Guest</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRoleFilter("All")}>
+                All
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRoleFilter("ADMIN")}>
+                Admin
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRoleFilter("MEMBER")}>
+                Member
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Button className="flex gap-2" onClick={() => setOpenAddDialog(true)}>
@@ -169,39 +151,53 @@ export default function CollaboratorsList() {
 
         <div className="divide-y">
           {filteredCollaborators.length > 0 ? (
-            filteredCollaborators.map((collaborator) => (
+            filteredCollaborators.map((collaborator, index) => (
               <div
-                key={collaborator.id}
+                key={index}
                 className="grid grid-cols-12 p-4 items-center hover:bg-muted/50 transition-colors"
               >
                 <div className="col-span-6 sm:col-span-5 flex items-center gap-3">
                   <Avatar className="rounded-cu h-10 w-10">
-                    <AvatarImage src={collaborator.imageUrl} alt={collaborator.name} />
+                    <AvatarImage
+                      src={collaborator.avatar}
+                      alt={collaborator.firstName as string}
+                    />
                     <AvatarFallback className="rounded-cu">
-                      {collaborator.name
-                        .split(" ")
+                      {collaborator.firstName
+                        ?.split(" ")
                         .map((n) => n[0])
                         .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium">{collaborator.name}</div>
-                    <div className="text-sm text-muted-foreground hidden sm:block">{collaborator.email}</div>
+                    <div className="font-medium">{collaborator.firstName}</div>
+                    <div className="text-sm text-muted-foreground hidden sm:block">
+                      {collaborator.email}
+                    </div>
                   </div>
                 </div>
 
                 <div className="col-span-3 hidden sm:block">
-                  <Badge variant={collaborator.role === "Admin" ? "default" : "secondary"} className="rounded-cu">
+                  <Badge
+                    variant={
+                      collaborator.role === "ADMIN" ? "default" : "secondary"
+                    }
+                    className="rounded-cu"
+                  >
                     {collaborator.role}
                   </Badge>
                 </div>
 
                 <div className="col-span-4 sm:col-span-3 flex items-center gap-2">
-                  <div className={`h-2.5 w-2.5 rounded-full ${getStatusColor(collaborator.status)}`}></div>
-                  <span>{getStatusText(collaborator.status)}</span>
+                  <div
+                    className={`h-2.5 w-2.5 rounded-full ${getStatusColor(
+                      collaborator.status
+                    )}`}
+                  ></div>
+                  <span className="lowercase">{getStatusText(collaborator.status)}</span>
                 </div>
 
-                <div className="col-span-2 sm:col-span-1 text-right">
+                <div className="col-span-2 sm:col-span-1 text-right ">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -212,18 +208,21 @@ export default function CollaboratorsList() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer font-regular">
                         <Mail className="mr-2 h-4 w-4" />
                         <span>Email</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer font-regular">
                         <MessageSquare className="mr-2 h-4 w-4" />
                         <span>Message</span>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        className="cursor-pointer text-destructive focus:text-destructive"
-                        onClick={() => handleRemoveCollaborator(collaborator.id)}
+                        className="cursor-pointer text-destructive focus:text-destructive font-regular"
+                        onClick={() => {
+                          setCollaboratorToDelete(collaborator)
+                          setIsDeleteDialogOpen(true)
+                        }}
                       >
                         <UserX className="mr-2 h-4 w-4" />
                         <span>Remove</span>
@@ -241,11 +240,21 @@ export default function CollaboratorsList() {
         </div>
       </div>
 
+      {/* delete member dialog */}
+      <ConfirmDeletionDialog 
+        isDeleteDialogOpen={isDeletelDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onDelete={handleRemoveCollaborator}
+        item="member"
+      />
 
-      {/* add collaborator dialog */}
       {/* the the current user is an admin of the group */}
-      <AddCollaborator open={openAddDialog} onOpenChange={setOpenAddDialog} onAddMember={() => console.log('add')}/>
+      <AddMemberDialog
+        open={openAddDialog}
+        onOpenChange={setOpenAddDialog}
+        onAddMember={handleAddMember}
+        isExist={isCollaborator}
+      />
     </div>
-  )
+  );
 }
-

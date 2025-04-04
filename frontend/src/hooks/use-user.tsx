@@ -1,8 +1,8 @@
-import { deleteApi, getApi, updateApi } from "@/lib/api";
+import { deleteApi, getApi, patchApi, postApi } from "@/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { UserContext } from "@/context/user-context";
-import { UserType } from "@/lib/types";
+import { GroupMember, User } from "shared-types";
 
 
 export const useUser = ({
@@ -17,58 +17,110 @@ export const useUser = ({
     throw new Error("useUser must be used within a UserProvider");
   }
 
-  // todo: fetch users as members of a target group
+  // ! fetch users as members of a target group
   const { data: members, isLoading: isMembersLoading } = useQuery({
-    queryKey: ["members"],
+    queryKey: ["members", groupName],
     queryFn: () => getApi(`/members/${groupName}`),
     enabled: !!groupName,
   });
 
-  // todo: update a user
-  const updateUser = (userId: string, userBody: UserType) => {
-    const mutation = useMutation({
-      mutationKey: ["update-user"],
-      mutationFn: () => updateApi(`/users/update/${userId}`, userBody),
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["users", "members"],
-        });
-      },
-    });
+  // ! fetch users
+  const { data: users, isLoading: isUsersLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getApi(`/users`),
+  });
 
-    return mutation.mutate;
-  };
+  // ! update a user
+  const updateUserMutation = useMutation({
+    mutationKey: ["update-user"],
+    mutationFn: (formData: FormData) => patchApi(`/users/update`, formData),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["members"],
+      });
 
-  // todo: delete a member(user)
-  const deleteUser = (userId: string) => {
-    const mutation = useMutation({
-      mutationKey: ["delete-user"],
-      mutationFn: () => deleteApi(`/users/delete/${userId}`),
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["users", "members"],
-        });
-      },
-    });
+      queryClient.invalidateQueries({
+        queryKey: ["user-by-id", variables.get('id')],
+      });
+    },
+  });
 
-    return mutation.mutate;
-  };
+  // ! add a member 
+  const addMemberMutation = useMutation({
+    mutationKey: ["add-member"],
+    mutationFn: (memberBody: Partial<GroupMember>) => postApi(`/members/create`, memberBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["members"],
+      });
 
-  // todo: get a user by id
-  const getUserById = (userId: string) => {
-    const { data: userInfo } = useQuery({
-      queryKey: ["user-by-id"],
-      queryFn: () => getApi(`/users/${userId}`),
-      enabled: !!userId,
-    });
-    return userInfo;
-  };
+      queryClient.invalidateQueries({
+        queryKey: ["groups"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["group-by-id"],
+      });
+    },
+  });
+
+  // ! delete a member from a group
+  const deleteMemberMutation = useMutation({
+    mutationKey: ["delete-member"],
+    mutationFn: (userId: string) => deleteApi(`/members/delete/${userId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["members"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["groups"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["group-by-id"],
+      });
+    },
+  });
+
+  // ! update user password
+  const updatePasswordMuation = useMutation({
+     mutationKey: ["update-password"],
+     mutationFn: (newPasswords: {
+      newPassword: string,
+      confirmNewPassword: string,
+      currentPassword: string
+     }) => patchApi("/auth/updatePassword", newPasswords),
+     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
+    },
+  })
+
+
+
   return {
     ...context,
+    users,
+    addMember: addMemberMutation.mutate,
+    updateUserPassword: updatePasswordMuation.mutate,
+    isUsersLoading,
     members,
     isMembersLoading,
-    updateUser,
-    deleteUser,
-    getUserById,
+    updateUser: updateUserMutation.mutate,
+    deleteMember: deleteMemberMutation.mutate,
   };
+};
+
+
+// todo: get a user by id
+export const useUserInfo = (user: any) => {
+  const res = useQuery({
+    queryKey: ["user-by-id", user.id],
+    queryFn: () => getApi(`/users/me`),
+    enabled: !!user,
+  });
+  return res;
 };

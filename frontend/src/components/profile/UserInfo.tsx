@@ -1,4 +1,3 @@
-import type { UserType } from "@/lib/types";
 import {
   Popover,
   PopoverContent,
@@ -8,22 +7,24 @@ import { LogOut, Settings, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { useUser } from "@/hooks";
+import { User as UserType } from "shared-types";
 
-export default function UserInfo({ firstName, role }: Partial<UserType>) {
+export default function UserInfo({ user }: { user: UserType }) {
 const { logout } = useUser({});
+
   return (
     <Popover>
       <div className="flex gap-2 cursor-pointer">
         <div className="flex-col items-start pt-1 hidden md:flex">
-          <h1 className="font-medium text-foreground">{firstName}</h1>
+          <h1 className="font-medium text-foreground">{user.firstName}</h1>
           <span className="font-bold text-sm text-muted-foreground">
-            {role}
+            {user.role}
           </span>
         </div>
         <PopoverTrigger asChild>
           <div className="relative flex items-center flex-col bg-yellow-500 p-[3px] rounded-full w-12 h-12 hover:ring-2 hover:ring-yellow-300 transition-all duration-200">
             <img
-              src="/avatars/1.png"
+              src={user.avatar}
               className="rounded-full h-full w-full"
               width={100}
               height={100}
@@ -39,7 +40,7 @@ const { logout } = useUser({});
           <div className="flex items-center gap-3">
             <div className="relative flex items-center flex-col bg-yellow-500 p-[2px] rounded-full w-10 h-10">
               <img
-                src="/avatars/1.png"
+                src={user.avatar || "/avatars/1.png"}
                 className="rounded-full h-full w-full"
                 width={40}
                 height={40}
@@ -47,8 +48,8 @@ const { logout } = useUser({});
               />
             </div>
             <div>
-              <p className="font-medium text-sm">{firstName}</p>
-              <p className="text-xs text-muted-foreground">{role}</p>
+              <p className="font-medium text-sm">{user.firstName}</p>
+              <p className="text-xs text-muted-foreground">{user.role}</p>
             </div>
           </div>
         </div>

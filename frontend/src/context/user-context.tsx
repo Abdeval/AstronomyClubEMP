@@ -8,6 +8,8 @@ interface UserContextType {
   token: string | null;
   setToken: (token: string | null) => void;
   logout: () => void;
+  isAdmin: boolean;
+  isGroupAdminOf: (groupId: string) => boolean
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -67,8 +69,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [token]);
 
+  const isAdmin = user?.role === 'ADMIN';
+  const isGroupAdminOf = () => true;
+
   return (
-    <UserContext.Provider value={{ user, setToken, token, logout }}>
+    <UserContext.Provider value={{ user, setToken, token, logout, isAdmin, isGroupAdminOf }}>
       {children}
     </UserContext.Provider>
   );

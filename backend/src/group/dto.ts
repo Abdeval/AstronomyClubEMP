@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { GroupStatus } from '@prisma/client';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class GroupDto {
   @IsString()
@@ -12,5 +13,13 @@ export class GroupDto {
   @IsString()
   @IsOptional()
   image?: string;
+
+  @IsString()
+  @IsOptional()
+  status?: GroupStatus
+
+  @IsNumber()
+  @IsOptional()
+  rating?: number
   // Todo: there is more to add
 }

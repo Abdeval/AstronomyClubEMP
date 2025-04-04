@@ -1,4 +1,4 @@
-import { Group } from "shared-types";
+import { Group, GroupStatus } from "shared-types";
 
 // Sample data
 export const initialGroups: Group[] = [
@@ -70,4 +70,27 @@ export const initialGroups: Group[] = [
     //   { id: "m13", name: "Jamie Garcia", email: "jamie@example.com", role: "member" },
     // ],
   },
-]
+];
+
+export const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+};
+
+export const getStatusColor = (status: GroupStatus) => {
+  switch (status) {
+    case "ACTIVE":
+      return "bg-green-500";
+    case "INACTIVE":
+      return "bg-yellow-500";
+    case "ARCHIVED":
+      return "bg-gray-500";
+    case "PENDING":
+      return "bg-blue-500";
+    default:
+      return "bg-gray-500";
+  }
+};

@@ -62,7 +62,7 @@ export function DotBackground({ directions }: { directions: string }) {
     cy={1}
     cr={1}
     className={cn("z-0",
-      `[mask-image:linear-gradient(${directions},white,transparent,transparent)]`
+      `[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)]`
     )}
   />)
 }

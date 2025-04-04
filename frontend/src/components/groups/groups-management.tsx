@@ -1,92 +1,104 @@
-import { useState } from "react"
-import { PlusCircle, Filter } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import GroupCard from "./group-card-groups"
-import CreateGroupDialog from "./create-group-dialog"
+import { useState } from "react";
+import { PlusCircle, Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import GroupCard from "./group-card-groups";
+import CreateGroupDialog from "./create-group-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Group, GroupMember, GroupStatus, User } from 'shared-types';
-import { useGroup } from "@/hooks"
-
-// export interface Member {
-//   id: string
-//   name: string
-//   email: string
-//   role: MemberRole
-//   avatar?: string
-// }
+} from "@/components/ui/dropdown-menu";
+import { Group, GroupMember, GroupStatus } from "shared-types";
+import { useGroup, useUser } from "@/hooks";
+import { GroupType } from "@/lib/types";
+import { toast } from "sonner";
 
 
-
-// Current user (for permission checks)
-const currentUser: User = {
-  id: "admin1",
-  firstName: "Admin User",
-  email: "admin@example.com",
-  role: "ADMIN",
-  createdAt: new Date(),
-  lastName: null,
-  password: "",
-  profilePic: null
-}
-
-export default function GroupsManagement({ groups }: { groups: Group[]}) {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-  const [statusFilters, setStatusFilters] = useState<GroupStatus[]>(["ACTIVE", "INACTIVE", "PENDING", "ARCHIVED"])
+export default function GroupsManagement({ groups }: { groups: GroupType[] }) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [statusFilters, setStatusFilters] = useState<GroupStatus[]>([
+    "ACTIVE",
+    "INACTIVE",
+    "PENDING",
+    "ARCHIVED",
+  ]);
   console.log(groups);
-  
-  const { addGroup } = useGroup();
+  const { user, addMember, deleteMember } = useUser({});
 
-  // Filter groups based on search query and status filters
+  const { addGroup, deleteGroup, updateGroup } = useGroup();
+
   const filteredGroups = groups.filter(
-    (group) => group.name.toLowerCase().includes(searchQuery.toLowerCase()) && statusFilters.includes(group.status),
-  )
-
-  // Add a new group
-  const handleAddGroup = (newGroup: Omit<Group, "id" | "members" | "createdAt">) => {
+    (group) =>
+      group.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      statusFilters.includes(group.status)
+  );
+  
+  // ! add
+  const handleAddGroup = (
+    newGroup: Omit<GroupType, "id" | "members" | "createdAt">
+  ) => {
     addGroup(newGroup);
-    // setGroups([...groups, group])
-  }
+    toast(`${newGroup.name} added with success`);
+    setIsCreateDialogOpen(false);
+  };
+  
+  // ! update
+  const handleUpdateGroup = (updatedGroup: Partial<Group>) => {
+    const data = {
+      groupId: updatedGroup.id as string,
+      body: {
+        name: updatedGroup.name,
+        description: updatedGroup.description,
+        image: updatedGroup.image,
+        status: updatedGroup.status,
+        rating: updatedGroup.rating,
+      },
+    };
+    updateGroup(data);
+    toast(`${updatedGroup.name} updated with success`);
+  };
 
-  // Update a group
-  const handleUpdateGroup = (updatedGroup: Group) => {
-    // setGroups(groups.map((group) => (group.id === updatedGroup.id ? updatedGroup : group)))
-  }
+  // ! Add a member to a group by the leader of the group or the admin of the website
+  const handleAddMember = (
+    groupId: string,
+    newMember: Partial<GroupMember>
+  ) => {
+    const member: Partial<GroupMember> = {
+      groupId,
+      ...newMember
+    }
+    addMember(member);
+    toast("member added with success");
+  };
 
-  // Add a member to a group
-  const handleAddMember = (groupId: string, newMember: Omit<GroupMember, "id">) => {
-   
-  }
+  // todo: Delete a member from a group 
+  const handleDeleteMember = (memberId: string) => {
+    try{
+      deleteMember(memberId);
+    }catch(err: any){
+      console.log(err);
+      toast("Failed to delete member..");
+    }
+  
+  };
 
-  // Delete a member from a group
-  const handleDeleteMember = (groupId: string, memberId: string) => {
-   
-  }
-
-  // Delete a group
+  // ! Delete a group
   const handleDeleteGroup = (groupId: string) => {
-    // setGroups(groups.filter((group) => group.id !== groupId))
-  }
-
-  // Update group rating
-  const handleUpdateRating = (groupId: string, rating: number) => {
-   
-  }
+    deleteGroup(groupId);
+    toast(`Group deleted with success`);
+  };
 
   // Toggle status filter
   const toggleStatusFilter = (status: GroupStatus) => {
     if (statusFilters.includes(status)) {
-      setStatusFilters(statusFilters.filter((s) => s !== status))
+      setStatusFilters(statusFilters.filter((s) => s !== status));
     } else {
-      setStatusFilters([...statusFilters, status])
+      setStatusFilters([...statusFilters, status]);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -100,7 +112,11 @@ export default function GroupsManagement({ groups }: { groups: Group[]}) {
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="h-[40px] w-[40px]">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-[40px] w-[40px]"
+              >
                 <Filter className="" />
               </Button>
             </DropdownMenuTrigger>
@@ -138,7 +154,7 @@ export default function GroupsManagement({ groups }: { groups: Group[]}) {
         </Button>
       </div>
 
-      {groups.length === 0 ? (
+      {filteredGroups.length === 0 ? (
         <div className="text-center p-8 border rounded-lg bg-muted/20">
           <p className="text-muted-foreground">
             {searchQuery || statusFilters.length < 4
@@ -148,16 +164,15 @@ export default function GroupsManagement({ groups }: { groups: Group[]}) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {groups.map((group) => (
+          {filteredGroups.map((group) => (
             <GroupCard
               key={group.id}
               group={group}
-              currentUser={currentUser}
+              currentUser={user}
               onAddMember={handleAddMember}
               onDeleteMember={handleDeleteMember}
               onDeleteGroup={handleDeleteGroup}
               onUpdateGroup={handleUpdateGroup}
-              onUpdateRating={handleUpdateRating}
             />
           ))}
         </div>
@@ -169,6 +184,5 @@ export default function GroupsManagement({ groups }: { groups: Group[]}) {
         onCreateGroup={handleAddGroup}
       />
     </div>
-  )
+  );
 }
-

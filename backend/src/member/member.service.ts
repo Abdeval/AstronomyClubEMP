@@ -1,14 +1,15 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MemberService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createMemberDto: CreateMemberDto) {
     // todo check the user
+    // console.log('before the creation...');
     const isUser = await this.prisma.user.findUnique({
       where: {
         id: createMemberDto.userId,
@@ -33,22 +34,31 @@ export class MemberService {
       },
     });
 
+    console.log(member, "created");
+
     return member;
   }
 
-  findAll() {
+  getAllMembers() {
     return `This action returns all member`;
   }
 
-  findOne(id: number) {
+  getMemberById(id: string) {
     return `This action returns a #${id} member`;
   }
 
-  update(id: number, updateMemberDto: UpdateMemberDto) {
+  updateMember(id: string, updateMemberDto: UpdateMemberDto) {
     return `This action updates a #${id} member`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} member`;
+  async deleteMember(id: string) {
+    const res = await this.prisma.groupMember.delete({
+      where: {
+        id
+      }
+    });
+
+    if(!res) throw new NotFoundException("No member to delete!");
+    return res;
   }
 }

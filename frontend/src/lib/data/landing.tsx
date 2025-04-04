@@ -27,7 +27,7 @@ export const planets: Planet[] = [
     name: "Mars",
     description: "Known as the Red Planet due to its reddish appearance.",
     image:
-      "https://solarsystem.nasa.gov/system/resources/detail_files/2534_mars.jpg",
+      "/planet-icons/mars.png",
   },
   {
     id: 5,

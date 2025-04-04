@@ -9,7 +9,7 @@ import { Ripple } from "@/components/magicui/ripple";
 import { Brain } from "lucide-react";
 import { DotBackground } from "@/components/magicui/dot-pattern";
 
-import PlanetArticles from "@/components/articles/articles-list";
+import PlanetArticles from "@/components/articles/articles-cards";
 import GuestsNavbar from "@/components/navs/guests-navbar";
 
 export default function Landing() {
@@ -26,7 +26,7 @@ export default function Landing() {
 
       {/* the magic buttons view */}
 
-      <section className="relative h-[900px] md:h-screen border border-primary flex md:flex-row flex-col w-full bg-cover bg-black bg-[url('/images/telescope1.jpg')] bg-no-repeat justify-between px-4 items-center">
+      <section className="relative h-[900px] md:h-screen border-t border-primary flex md:flex-row flex-col w-full bg-cover bg-black bg-[url('/images/telescope1.jpg')] bg-no-repeat justify-between px-4 items-center">
         <Earth />
         <MagicButtons />
         <div className="bg-black/60 w-full h-full absolute top-0 left-0" />

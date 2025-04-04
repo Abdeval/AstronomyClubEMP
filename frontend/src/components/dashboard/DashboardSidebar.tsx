@@ -15,6 +15,7 @@ import {
 } from "../ui/tooltip";
 // import ExploreCard from "../explore-card";
 import { Columns3 } from "lucide-react";
+import ExploreCard from "../explore-card";
 
 export default function DashboardSidebar({
   isOpenSidebar = true,
@@ -28,6 +29,7 @@ export default function DashboardSidebar({
     if (currentNav) return currentNav;
     return "dashboard";
   });
+
   const path = useLocation().pathname.split("/");
   const latestNav = path[path.length - 1];
 
@@ -38,22 +40,23 @@ export default function DashboardSidebar({
   const isSelected = (nav: string): boolean => selectedNav === nav;
 
   return (
-    <div className="relative">
-      {/* desctop */}
+    <div className="relative ">
       <Button
         size={"icon"}
         variant={"outline"}
         onClick={() => setIsOpenSidebar(!isOpenSidebar)}
         className={cn(
-          "rounded-[10px] absolute top-[22px] z-50",
+          "rounded-[10px] absolute top-[22px] z-50 hidden sm:flex",
           isOpenSidebar ? "right-1" : "-right-9"
         )}
       >
         <Columns3 size={38} className="text-primary" />
       </Button>
+      {/* desctop */}
       <div
         className={cn(
-          "transition-all relative sm:flex flex-col hidden bg-white items-center",
+          `transition-all relative sm:flex flex-col hidden items-center overflow-y-auto 
+          overflow-x-hidden h-full hidden-scrollbar`,
           isOpenSidebar ? "w-[200px]" : "w-0"
         )}
       >
@@ -61,7 +64,7 @@ export default function DashboardSidebar({
         {/* the logo image and title */}
         <div
           className={cn(
-            "items-center flex gap-3 p-2 py-4 z-40 relative w-full bg-background",
+            "items-center flex gap-3 p-2 py-4 z-40 relative w-full bg-transparent"
             // isOpenSidebar ? "flex" : "hidden"
           )}
         >
@@ -92,12 +95,12 @@ export default function DashboardSidebar({
                     variant={"outline"}
                     className="rounded-[10px]"
                   >
-                    <DynamicIcon name={nav.icon} className="text-foreground" />
+                    <DynamicIcon name={nav.icon} className="text-primary" />
                   </Button>
                   <span
                     className={cn(
                       isSelected(nav.name) ? "font-semibold" : "font-regular",
-                      "text-primary"
+                      "text-foreground"
                     )}
                   >
                     {nav.name}
@@ -120,11 +123,12 @@ export default function DashboardSidebar({
           ))}
         </div>
 
-        {/* <ExploreCard /> */}
+        <ExploreCard />
       </div>
 
       {/* mobile */}
-      <div className="sm:hidden block h-full bg-background w-16 space-y-2">
+      <div className="sm:hidden block h-full bg-background w-16 space-y-2 overflow-y-auto 
+          overflow-x-hidden h-full hidden-scrollbar">
         {/* the logo image and title */}
         <div className="flex items-center gap-3 p-2 py-4 z-50 relative">
           <Logo type="dash" />

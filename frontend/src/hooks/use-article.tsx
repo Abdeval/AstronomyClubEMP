@@ -1,30 +1,59 @@
-import { deleteApi, getApi, postApi } from "@/lib/api";
+import { deleteApi, getApi, patchApi, postApi } from "@/lib/api";
 import { ArticleType } from "@/lib/types";
-import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useMutationState,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { Article } from "shared-types";
 
 export const useArticle = () => {
-  const response = useQuery({
+  const queryClient = useQueryClient();
+
+  const { data: articles, isLoading, error } = useQuery<ArticleType[]>({
     queryKey: ["articles"],
     queryFn: () => getApi("/articles"),
   });
 
-  const addArticle = async (article: ArticleType) => {
-    const mutation = useMutation({
-      mutationKey: ["add-article"],
-      mutationFn: () => postApi("/articles/add", article),
-    });
+  const addArticleMutation = useMutation({
+    mutationKey: ["add-article"],
+    mutationFn: (formData: FormData) =>
+      postApi("/articles/create", formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["articles"],
+      });
+    },
+  });
 
-    return mutation.mutate;
-  };
+  const deleteArticleMutation = useMutation({
+    mutationKey: ["delete-article"],
+    mutationFn: (articleId: string) =>
+      deleteApi(`/articles/delete/${articleId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["articles"],
+      });
+    },
+  });
 
-  const deleteArticle = async (articleId: string | number) => {
-    const mutation = useMutation({
-      mutationKey: ["delete-article"],
-      mutationFn: () => deleteApi(`/articles/delete/${articleId}`),
-    });
+  const updateArticleMutation = useMutation({
+    mutationKey: ["update-article"],
+    mutationFn: (formData: FormData) =>
+      patchApi(`/articles/update/${formData.get("articleId")}`, formData),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["articles"],
+      });
 
-    return mutation.mutate;
-  };
+      queryClient.invalidateQueries({
+        queryKey: ["article-by-id", variables.get("articleId")],
+      });
+    },
+  });
+
+
 
   const getArticleDataHistory = (mutationKey: unknown[]) => {
     const data = useMutationState({
@@ -35,5 +64,23 @@ export const useArticle = () => {
     return data;
   };
 
-  return { ...response, addArticle, deleteArticle, getArticleDataHistory };
+  return {
+    articles,
+    isLoading,
+    error,
+    addArticle: addArticleMutation.mutate,
+    deleteArticle: deleteArticleMutation.mutate,
+    updateArticle: updateArticleMutation.mutate,
+    getArticleDataHistory,
+  };
 };
+
+export const useArticleInfo = (articleId: string) => {
+  const { data: article, isLoading, error } = useQuery({
+    queryKey: ["article-by-id", articleId],
+    queryFn: () => getApi(`/articles/${articleId}`),
+    enabled: !!articleId,
+  });
+
+  return { article, isLoading, error }
+}

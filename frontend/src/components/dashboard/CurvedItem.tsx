@@ -25,15 +25,15 @@ export default function CurvedItem({
       <div
         className={cn(
           // selectedNav === "dashboard" ? "hidden" : "block",
-        "h-14 w-full bg-secondary") }
+        "h-14 w-full bg-secondary/50") }
       >
         <div className="w-full h-full bg-background rounded-br-3xl" />
       </div>
-      <div className="h-14 w-full bg-secondary rounded-l-3xl ml-2" />
+      <div className="h-14 w-full bg-secondary/50 rounded-l-3xl ml-2" />
       <div
         className={cn(
           // selectedNav === "settings" ? "hidden" : "block",
-        "h-14 w-full bg-secondary") }
+        "h-14 w-full bg-secondary/50") }
       >
         <div className="w-full h-full bg-background rounded-tr-3xl" />
       </div>

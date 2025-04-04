@@ -1,8 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Article } from '@prisma/client';
+// import { Article } from 'shared-types';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ArticleDto } from './article.dto';
+import { AddArticleDto, UpdateArticleDto } from './article.dto';
 import { UserDecorator } from 'src/user/user.decorator';
+import { Article } from '@prisma/client';
 
 @Injectable()
 export class ArticleService {
@@ -14,6 +15,9 @@ export class ArticleService {
         where: {
           id: articleId,
         },
+        include: {
+          author: true
+        }
       });
 
       if (!article) throw new ForbiddenException('No article with this id');
@@ -24,21 +28,41 @@ export class ArticleService {
     }
   }
 
-  async addArticle(user: any, dto: ArticleDto): Promise<any> {
+  async getAllArticles(): Promise<Article[] | undefined> {
+    try {
+      const articles = await this.prisma.article.findMany({
+        include: {
+          author: true
+        }
+      });
+
+      if (!articles) throw new ForbiddenException('No article with this id');
+      return articles;
+    } catch (err: any) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async addArticle(dto: AddArticleDto, file: Express.Multer.File, userId?: string): Promise<any> {
     try {
       const isRealAuthor = await this.prisma.user.findUnique({
         where: {
-          id: user.sub,
+          id: userId,
         },
       });
 
       if (!isRealAuthor) throw new ForbiddenException('author not found');
-
+      const filename = file.filename;
+      const baseUrl = process.env.API_URL || "http://localhost:3000";
+      const url = `${baseUrl}/uploads/${filename}`;
       const res = await this.prisma.article.create({
         data: {
           title: dto.title,
           content: dto.content as string,
-          authorId: user.sub,
+          authorId: userId as string,
+          image: url,
+          category: dto.category
         },
       });
       const { id, authorId, ...result } = res;
@@ -64,7 +88,9 @@ export class ArticleService {
       console.error(err);
     }
   }
-  async editArticle(user: UserDecorator, articleId: string, dto: ArticleDto) {
+
+  
+  async updateArticle(user: UserDecorator, articleId: string, dto: UpdateArticleDto) {
     try {
       const res = await this.prisma.article.update({
         where: {

@@ -1,7 +1,6 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import type { Group, GroupStatus } from "./groups-management"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -16,14 +15,14 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
-import ImageUpload from "../images/image-upload"
+import { Group, GroupStatus } from "shared-types"
+import ImageUpload from "../ui/image-upload"
 
 interface EditGroupDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   group: Group
-  onUpdateGroup: (group: Group) => void
-  onUpdateRating: (groupId: string, rating: number) => void
+  onUpdateGroup: (group: Partial<Group>) => void
 }
 
 export default function EditGroupDialog({
@@ -31,7 +30,6 @@ export default function EditGroupDialog({
   onOpenChange,
   group,
   onUpdateGroup,
-  onUpdateRating,
 }: EditGroupDialogProps) {
   const [name, setName] = useState(group.name)
   const [description, setDescription] = useState(group.description)
@@ -68,7 +66,7 @@ export default function EditGroupDialog({
     e.preventDefault()
 
     if (validateForm()) {
-      const updatedGroup: Group = {
+      const updatedGroup: Partial<Group> = {
         ...group,
         name,
         description,
@@ -78,13 +76,16 @@ export default function EditGroupDialog({
       }
 
       onUpdateGroup(updatedGroup)
+      // console.log(updatedGroup);
+      console.log("submiting the form...");
       onOpenChange(false)
     }
   }
 
   const handleRatingChange = (value: number[]) => {
     const newRating = value[0]
-    setRating(newRating)
+    setRating(newRating);
+    // onUpdateRating(group.id, newRating);
   }
 
   const handleClose = () => {
@@ -121,7 +122,7 @@ export default function EditGroupDialog({
               <Label htmlFor="edit-description">Description</Label>
               <Textarea
                 id="edit-description"
-                value={description}
+                value={description as string}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Enter group description"
                 rows={3}
@@ -134,15 +135,17 @@ export default function EditGroupDialog({
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Inactive</SelectItem>
+                  <SelectItem value="PENDING">Pending</SelectItem>
+                  <SelectItem value="ARCHIVED">Archived</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <ImageUpload initialImage={image} onImageChange={setImage} />
+            <ImageUpload initialImage={image} onImageChange={(file, imagePreview)=> {
+                setImage(imagePreview as string);
+            }} />
 
             <div className="grid gap-2">
               <div className="flex justify-between items-center">

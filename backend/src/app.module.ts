@@ -13,6 +13,12 @@ import { ObservationModule } from './observation/observation.module';
 
 import { GroupModule } from './group/group.module';
 import { MemberModule } from './member/member.module';
+import { ImageModule } from './image/image.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import { extname, join } from 'path';
 
 @Module({
   imports: [
@@ -26,6 +32,21 @@ import { MemberModule } from './member/member.module';
     AuthModule,
     GroupModule,
     MemberModule,
+    ImageModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'), 
+      serveRoot: '/uploads', 
+      serveStaticOptions: { index: false },
+    }),
+    MulterModule.register({
+      storage: diskStorage({
+        destination: join(__dirname,'..', 'uploads'),
+        filename: (req, file, cb) => {
+          const uniqueFilename = `${uuidv4()}${extname(file.originalname)}`;
+          cb(null, uniqueFilename);
+        },
+      }),
+    }),
   ],
 
   controllers: [AppController],

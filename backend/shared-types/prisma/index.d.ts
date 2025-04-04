@@ -81,6 +81,29 @@ export const ImageCategory: {
 export type ImageCategory = (typeof ImageCategory)[keyof typeof ImageCategory]
 
 
+export const Status: {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+};
+
+export type Status = (typeof Status)[keyof typeof Status]
+
+
+export const Category: {
+  SOLAR_SYSTEM: 'SOLAR_SYSTEM',
+  GALAXIES: 'GALAXIES',
+  STARS: 'STARS',
+  EXOPLANETS: 'EXOPLANETS',
+  BLACK_HOLES: 'BLACK_HOLES',
+  COSMOLOGY: 'COSMOLOGY',
+  ASTROBIOLOGY: 'ASTROBIOLOGY',
+  TELESCOPES: 'TELESCOPES',
+  SPACE_MISSIONS: 'SPACE_MISSIONS'
+};
+
+export type Category = (typeof Category)[keyof typeof Category]
+
+
 export const GroupStatus: {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -89,6 +112,16 @@ export const GroupStatus: {
 };
 
 export type GroupStatus = (typeof GroupStatus)[keyof typeof GroupStatus]
+
+
+export const MemberStatus: {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
+  AWAY: 'AWAY',
+  BUSY: 'BUSY'
+};
+
+export type MemberStatus = (typeof MemberStatus)[keyof typeof MemberStatus]
 
 
 export const GroupRole: {
@@ -142,9 +175,21 @@ export type ImageCategory = $Enums.ImageCategory
 
 export const ImageCategory: typeof $Enums.ImageCategory
 
+export type Status = $Enums.Status
+
+export const Status: typeof $Enums.Status
+
+export type Category = $Enums.Category
+
+export const Category: typeof $Enums.Category
+
 export type GroupStatus = $Enums.GroupStatus
 
 export const GroupStatus: typeof $Enums.GroupStatus
+
+export type MemberStatus = $Enums.MemberStatus
+
+export const MemberStatus: typeof $Enums.MemberStatus
 
 export type GroupRole = $Enums.GroupRole
 
@@ -4407,6 +4452,9 @@ export namespace Prisma {
     content: string | null
     authorId: string | null
     createdAt: Date | null
+    category: $Enums.Category | null
+    status: $Enums.Status | null
+    image: string | null
   }
 
   export type ArticleMaxAggregateOutputType = {
@@ -4415,6 +4463,9 @@ export namespace Prisma {
     content: string | null
     authorId: string | null
     createdAt: Date | null
+    category: $Enums.Category | null
+    status: $Enums.Status | null
+    image: string | null
   }
 
   export type ArticleCountAggregateOutputType = {
@@ -4423,6 +4474,10 @@ export namespace Prisma {
     content: number
     authorId: number
     createdAt: number
+    category: number
+    tags: number
+    status: number
+    image: number
     _all: number
   }
 
@@ -4433,6 +4488,9 @@ export namespace Prisma {
     content?: true
     authorId?: true
     createdAt?: true
+    category?: true
+    status?: true
+    image?: true
   }
 
   export type ArticleMaxAggregateInputType = {
@@ -4441,6 +4499,9 @@ export namespace Prisma {
     content?: true
     authorId?: true
     createdAt?: true
+    category?: true
+    status?: true
+    image?: true
   }
 
   export type ArticleCountAggregateInputType = {
@@ -4449,6 +4510,10 @@ export namespace Prisma {
     content?: true
     authorId?: true
     createdAt?: true
+    category?: true
+    tags?: true
+    status?: true
+    image?: true
     _all?: true
   }
 
@@ -4530,6 +4595,10 @@ export namespace Prisma {
     content: string
     authorId: string
     createdAt: Date
+    category: $Enums.Category
+    tags: JsonValue | null
+    status: $Enums.Status
+    image: string
     _count: ArticleCountAggregateOutputType | null
     _min: ArticleMinAggregateOutputType | null
     _max: ArticleMaxAggregateOutputType | null
@@ -4555,6 +4624,10 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     createdAt?: boolean
+    category?: boolean
+    tags?: boolean
+    status?: boolean
+    image?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["article"]>
 
@@ -4564,6 +4637,10 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     createdAt?: boolean
+    category?: boolean
+    tags?: boolean
+    status?: boolean
+    image?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["article"]>
 
@@ -4573,6 +4650,10 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     createdAt?: boolean
+    category?: boolean
+    tags?: boolean
+    status?: boolean
+    image?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["article"]>
 
@@ -4582,9 +4663,13 @@ export namespace Prisma {
     content?: boolean
     authorId?: boolean
     createdAt?: boolean
+    category?: boolean
+    tags?: boolean
+    status?: boolean
+    image?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "authorId" | "createdAt", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "authorId" | "createdAt" | "category" | "tags" | "status" | "image", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -4606,6 +4691,10 @@ export namespace Prisma {
       content: string
       authorId: string
       createdAt: Date
+      category: $Enums.Category
+      tags: Prisma.JsonValue | null
+      status: $Enums.Status
+      image: string
     }, ExtArgs["result"]["article"]>
     composites: {}
   }
@@ -5035,6 +5124,10 @@ export namespace Prisma {
     readonly content: FieldRef<"Article", 'String'>
     readonly authorId: FieldRef<"Article", 'String'>
     readonly createdAt: FieldRef<"Article", 'DateTime'>
+    readonly category: FieldRef<"Article", 'Category'>
+    readonly tags: FieldRef<"Article", 'Json'>
+    readonly status: FieldRef<"Article", 'Status'>
+    readonly image: FieldRef<"Article", 'String'>
   }
     
 
@@ -6623,6 +6716,7 @@ export namespace Prisma {
     groupId: string | null
     role: $Enums.GroupRole | null
     joinedAt: Date | null
+    status: $Enums.MemberStatus | null
   }
 
   export type GroupMemberMaxAggregateOutputType = {
@@ -6631,6 +6725,7 @@ export namespace Prisma {
     groupId: string | null
     role: $Enums.GroupRole | null
     joinedAt: Date | null
+    status: $Enums.MemberStatus | null
   }
 
   export type GroupMemberCountAggregateOutputType = {
@@ -6639,6 +6734,7 @@ export namespace Prisma {
     groupId: number
     role: number
     joinedAt: number
+    status: number
     _all: number
   }
 
@@ -6649,6 +6745,7 @@ export namespace Prisma {
     groupId?: true
     role?: true
     joinedAt?: true
+    status?: true
   }
 
   export type GroupMemberMaxAggregateInputType = {
@@ -6657,6 +6754,7 @@ export namespace Prisma {
     groupId?: true
     role?: true
     joinedAt?: true
+    status?: true
   }
 
   export type GroupMemberCountAggregateInputType = {
@@ -6665,6 +6763,7 @@ export namespace Prisma {
     groupId?: true
     role?: true
     joinedAt?: true
+    status?: true
     _all?: true
   }
 
@@ -6746,6 +6845,7 @@ export namespace Prisma {
     groupId: string
     role: $Enums.GroupRole
     joinedAt: Date
+    status: $Enums.MemberStatus
     _count: GroupMemberCountAggregateOutputType | null
     _min: GroupMemberMinAggregateOutputType | null
     _max: GroupMemberMaxAggregateOutputType | null
@@ -6771,6 +6871,7 @@ export namespace Prisma {
     groupId?: boolean
     role?: boolean
     joinedAt?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["groupMember"]>
@@ -6781,6 +6882,7 @@ export namespace Prisma {
     groupId?: boolean
     role?: boolean
     joinedAt?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["groupMember"]>
@@ -6791,6 +6893,7 @@ export namespace Prisma {
     groupId?: boolean
     role?: boolean
     joinedAt?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["groupMember"]>
@@ -6801,9 +6904,10 @@ export namespace Prisma {
     groupId?: boolean
     role?: boolean
     joinedAt?: boolean
+    status?: boolean
   }
 
-  export type GroupMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "groupId" | "role" | "joinedAt", ExtArgs["result"]["groupMember"]>
+  export type GroupMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "groupId" | "role" | "joinedAt" | "status", ExtArgs["result"]["groupMember"]>
   export type GroupMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     group?: boolean | GroupDefaultArgs<ExtArgs>
@@ -6829,6 +6933,7 @@ export namespace Prisma {
       groupId: string
       role: $Enums.GroupRole
       joinedAt: Date
+      status: $Enums.MemberStatus
     }, ExtArgs["result"]["groupMember"]>
     composites: {}
   }
@@ -7259,6 +7364,7 @@ export namespace Prisma {
     readonly groupId: FieldRef<"GroupMember", 'String'>
     readonly role: FieldRef<"GroupMember", 'GroupRole'>
     readonly joinedAt: FieldRef<"GroupMember", 'DateTime'>
+    readonly status: FieldRef<"GroupMember", 'MemberStatus'>
   }
     
 
@@ -12089,7 +12195,11 @@ export namespace Prisma {
     title: 'title',
     content: 'content',
     authorId: 'authorId',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    category: 'category',
+    tags: 'tags',
+    status: 'status',
+    image: 'image'
   };
 
   export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
@@ -12113,7 +12223,8 @@ export namespace Prisma {
     userId: 'userId',
     groupId: 'groupId',
     role: 'role',
-    joinedAt: 'joinedAt'
+    joinedAt: 'joinedAt',
+    status: 'status'
   };
 
   export type GroupMemberScalarFieldEnum = (typeof GroupMemberScalarFieldEnum)[keyof typeof GroupMemberScalarFieldEnum]
@@ -12174,6 +12285,14 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -12188,6 +12307,15 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -12252,6 +12380,48 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Category'
+   */
+  export type EnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category'>
+    
+
+
+  /**
+   * Reference to a field of type 'Category[]'
+   */
+  export type ListEnumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Category[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status'
+   */
+  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status[]'
+   */
+  export type ListEnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status[]'>
+    
+
+
+  /**
    * Reference to a field of type 'GroupStatus'
    */
   export type EnumGroupStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GroupStatus'>
@@ -12290,6 +12460,20 @@ export namespace Prisma {
    * Reference to a field of type 'GroupRole[]'
    */
   export type ListEnumGroupRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GroupRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MemberStatus'
+   */
+  export type EnumMemberStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MemberStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MemberStatus[]'
+   */
+  export type ListEnumMemberStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MemberStatus[]'>
     
 
 
@@ -12524,6 +12708,10 @@ export namespace Prisma {
     content?: StringFilter<"Article"> | string
     authorId?: StringFilter<"Article"> | string
     createdAt?: DateTimeFilter<"Article"> | Date | string
+    category?: EnumCategoryFilter<"Article"> | $Enums.Category
+    tags?: JsonNullableFilter<"Article">
+    status?: EnumStatusFilter<"Article"> | $Enums.Status
+    image?: StringFilter<"Article"> | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -12533,6 +12721,10 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    tags?: SortOrderInput | SortOrder
+    status?: SortOrder
+    image?: SortOrder
     author?: UserOrderByWithRelationInput
   }
 
@@ -12545,6 +12737,10 @@ export namespace Prisma {
     content?: StringFilter<"Article"> | string
     authorId?: StringFilter<"Article"> | string
     createdAt?: DateTimeFilter<"Article"> | Date | string
+    category?: EnumCategoryFilter<"Article"> | $Enums.Category
+    tags?: JsonNullableFilter<"Article">
+    status?: EnumStatusFilter<"Article"> | $Enums.Status
+    image?: StringFilter<"Article"> | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -12554,6 +12750,10 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    tags?: SortOrderInput | SortOrder
+    status?: SortOrder
+    image?: SortOrder
     _count?: ArticleCountOrderByAggregateInput
     _max?: ArticleMaxOrderByAggregateInput
     _min?: ArticleMinOrderByAggregateInput
@@ -12568,6 +12768,10 @@ export namespace Prisma {
     content?: StringWithAggregatesFilter<"Article"> | string
     authorId?: StringWithAggregatesFilter<"Article"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Article"> | Date | string
+    category?: EnumCategoryWithAggregatesFilter<"Article"> | $Enums.Category
+    tags?: JsonNullableWithAggregatesFilter<"Article">
+    status?: EnumStatusWithAggregatesFilter<"Article"> | $Enums.Status
+    image?: StringWithAggregatesFilter<"Article"> | string
   }
 
   export type GroupWhereInput = {
@@ -12649,6 +12853,7 @@ export namespace Prisma {
     groupId?: StringFilter<"GroupMember"> | string
     role?: EnumGroupRoleFilter<"GroupMember"> | $Enums.GroupRole
     joinedAt?: DateTimeFilter<"GroupMember"> | Date | string
+    status?: EnumMemberStatusFilter<"GroupMember"> | $Enums.MemberStatus
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
   }
@@ -12659,6 +12864,7 @@ export namespace Prisma {
     groupId?: SortOrder
     role?: SortOrder
     joinedAt?: SortOrder
+    status?: SortOrder
     user?: UserOrderByWithRelationInput
     group?: GroupOrderByWithRelationInput
   }
@@ -12672,6 +12878,7 @@ export namespace Prisma {
     groupId?: StringFilter<"GroupMember"> | string
     role?: EnumGroupRoleFilter<"GroupMember"> | $Enums.GroupRole
     joinedAt?: DateTimeFilter<"GroupMember"> | Date | string
+    status?: EnumMemberStatusFilter<"GroupMember"> | $Enums.MemberStatus
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     group?: XOR<GroupScalarRelationFilter, GroupWhereInput>
   }, "id">
@@ -12682,6 +12889,7 @@ export namespace Prisma {
     groupId?: SortOrder
     role?: SortOrder
     joinedAt?: SortOrder
+    status?: SortOrder
     _count?: GroupMemberCountOrderByAggregateInput
     _max?: GroupMemberMaxOrderByAggregateInput
     _min?: GroupMemberMinOrderByAggregateInput
@@ -12696,6 +12904,7 @@ export namespace Prisma {
     groupId?: StringWithAggregatesFilter<"GroupMember"> | string
     role?: EnumGroupRoleWithAggregatesFilter<"GroupMember"> | $Enums.GroupRole
     joinedAt?: DateTimeWithAggregatesFilter<"GroupMember"> | Date | string
+    status?: EnumMemberStatusWithAggregatesFilter<"GroupMember"> | $Enums.MemberStatus
   }
 
   export type ObservationWhereInput = {
@@ -13142,6 +13351,10 @@ export namespace Prisma {
     title: string
     content: string
     createdAt?: Date | string
+    category: $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.Status
+    image: string
     author: UserCreateNestedOneWithoutArticleInput
   }
 
@@ -13151,6 +13364,10 @@ export namespace Prisma {
     content: string
     authorId: string
     createdAt?: Date | string
+    category: $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.Status
+    image: string
   }
 
   export type ArticleUpdateInput = {
@@ -13158,6 +13375,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutArticleNestedInput
   }
 
@@ -13167,6 +13388,10 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
   }
 
   export type ArticleCreateManyInput = {
@@ -13175,6 +13400,10 @@ export namespace Prisma {
     content: string
     authorId: string
     createdAt?: Date | string
+    category: $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.Status
+    image: string
   }
 
   export type ArticleUpdateManyMutationInput = {
@@ -13182,6 +13411,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
   }
 
   export type ArticleUncheckedUpdateManyInput = {
@@ -13190,6 +13423,10 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
   }
 
   export type GroupCreateInput = {
@@ -13274,6 +13511,7 @@ export namespace Prisma {
     id?: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
     user: UserCreateNestedOneWithoutGroupsInput
     group: GroupCreateNestedOneWithoutMembersInput
   }
@@ -13284,12 +13522,14 @@ export namespace Prisma {
     groupId: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
   }
 
   export type GroupMemberUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
     user?: UserUpdateOneRequiredWithoutGroupsNestedInput
     group?: GroupUpdateOneRequiredWithoutMembersNestedInput
   }
@@ -13300,6 +13540,7 @@ export namespace Prisma {
     groupId?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type GroupMemberCreateManyInput = {
@@ -13308,12 +13549,14 @@ export namespace Prisma {
     groupId: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
   }
 
   export type GroupMemberUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type GroupMemberUncheckedUpdateManyInput = {
@@ -13322,6 +13565,7 @@ export namespace Prisma {
     groupId?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type ObservationCreateInput = {
@@ -13868,6 +14112,43 @@ export namespace Prisma {
     _max?: NestedEnumImageCategoryFilter<$PrismaModel>
   }
 
+  export type EnumCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.Category | EnumCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCategoryFilter<$PrismaModel> | $Enums.Category
+  }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type EnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -13879,6 +14160,10 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    tags?: SortOrder
+    status?: SortOrder
+    image?: SortOrder
   }
 
   export type ArticleMaxOrderByAggregateInput = {
@@ -13887,6 +14172,9 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    image?: SortOrder
   }
 
   export type ArticleMinOrderByAggregateInput = {
@@ -13895,6 +14183,55 @@ export namespace Prisma {
     content?: SortOrder
     authorId?: SortOrder
     createdAt?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    image?: SortOrder
+  }
+
+  export type EnumCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Category | EnumCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCategoryWithAggregatesFilter<$PrismaModel> | $Enums.Category
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCategoryFilter<$PrismaModel>
+    _max?: NestedEnumCategoryFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type EnumGroupStatusFilter<$PrismaModel = never> = {
@@ -13986,6 +14323,13 @@ export namespace Prisma {
     not?: NestedEnumGroupRoleFilter<$PrismaModel> | $Enums.GroupRole
   }
 
+  export type EnumMemberStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MemberStatus | EnumMemberStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMemberStatusFilter<$PrismaModel> | $Enums.MemberStatus
+  }
+
   export type GroupScalarRelationFilter = {
     is?: GroupWhereInput
     isNot?: GroupWhereInput
@@ -13997,6 +14341,7 @@ export namespace Prisma {
     groupId?: SortOrder
     role?: SortOrder
     joinedAt?: SortOrder
+    status?: SortOrder
   }
 
   export type GroupMemberMaxOrderByAggregateInput = {
@@ -14005,6 +14350,7 @@ export namespace Prisma {
     groupId?: SortOrder
     role?: SortOrder
     joinedAt?: SortOrder
+    status?: SortOrder
   }
 
   export type GroupMemberMinOrderByAggregateInput = {
@@ -14013,6 +14359,7 @@ export namespace Prisma {
     groupId?: SortOrder
     role?: SortOrder
     joinedAt?: SortOrder
+    status?: SortOrder
   }
 
   export type EnumGroupRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -14023,6 +14370,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGroupRoleFilter<$PrismaModel>
     _max?: NestedEnumGroupRoleFilter<$PrismaModel>
+  }
+
+  export type EnumMemberStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MemberStatus | EnumMemberStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMemberStatusWithAggregatesFilter<$PrismaModel> | $Enums.MemberStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMemberStatusFilter<$PrismaModel>
+    _max?: NestedEnumMemberStatusFilter<$PrismaModel>
   }
 
   export type ObservationCountOrderByAggregateInput = {
@@ -14553,6 +14910,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type EnumCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.Category
+  }
+
+  export type EnumStatusFieldUpdateOperationsInput = {
+    set?: $Enums.Status
+  }
+
   export type UserUpdateOneRequiredWithoutArticleNestedInput = {
     create?: XOR<UserCreateWithoutArticleInput, UserUncheckedCreateWithoutArticleInput>
     connectOrCreate?: UserCreateOrConnectWithoutArticleInput
@@ -14671,6 +15036,10 @@ export namespace Prisma {
 
   export type EnumGroupRoleFieldUpdateOperationsInput = {
     set?: $Enums.GroupRole
+  }
+
+  export type EnumMemberStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MemberStatus
   }
 
   export type UserUpdateOneRequiredWithoutGroupsNestedInput = {
@@ -15036,6 +15405,63 @@ export namespace Prisma {
     _max?: NestedEnumImageCategoryFilter<$PrismaModel>
   }
 
+  export type NestedEnumCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.Category | EnumCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCategoryFilter<$PrismaModel> | $Enums.Category
+  }
+
+  export type NestedEnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
+  export type NestedEnumCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Category | EnumCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Category[] | ListEnumCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumCategoryWithAggregatesFilter<$PrismaModel> | $Enums.Category
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCategoryFilter<$PrismaModel>
+    _max?: NestedEnumCategoryFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumGroupStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.GroupStatus | EnumGroupStatusFieldRefInput<$PrismaModel>
     in?: $Enums.GroupStatus[] | ListEnumGroupStatusFieldRefInput<$PrismaModel>
@@ -15087,6 +15513,13 @@ export namespace Prisma {
     not?: NestedEnumGroupRoleFilter<$PrismaModel> | $Enums.GroupRole
   }
 
+  export type NestedEnumMemberStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MemberStatus | EnumMemberStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMemberStatusFilter<$PrismaModel> | $Enums.MemberStatus
+  }
+
   export type NestedEnumGroupRoleWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.GroupRole | EnumGroupRoleFieldRefInput<$PrismaModel>
     in?: $Enums.GroupRole[] | ListEnumGroupRoleFieldRefInput<$PrismaModel>
@@ -15095,6 +15528,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGroupRoleFilter<$PrismaModel>
     _max?: NestedEnumGroupRoleFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMemberStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MemberStatus | EnumMemberStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MemberStatus[] | ListEnumMemberStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMemberStatusWithAggregatesFilter<$PrismaModel> | $Enums.MemberStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMemberStatusFilter<$PrismaModel>
+    _max?: NestedEnumMemberStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumEventTypeFilter<$PrismaModel = never> = {
@@ -15135,6 +15578,7 @@ export namespace Prisma {
     id?: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
     group: GroupCreateNestedOneWithoutMembersInput
   }
 
@@ -15143,6 +15587,7 @@ export namespace Prisma {
     groupId: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
   }
 
   export type GroupMemberCreateOrConnectWithoutUserInput = {
@@ -15266,6 +15711,10 @@ export namespace Prisma {
     title: string
     content: string
     createdAt?: Date | string
+    category: $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.Status
+    image: string
   }
 
   export type ArticleUncheckedCreateWithoutAuthorInput = {
@@ -15273,6 +15722,10 @@ export namespace Prisma {
     title: string
     content: string
     createdAt?: Date | string
+    category: $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.Status
+    image: string
   }
 
   export type ArticleCreateOrConnectWithoutAuthorInput = {
@@ -15344,6 +15797,7 @@ export namespace Prisma {
     groupId?: StringFilter<"GroupMember"> | string
     role?: EnumGroupRoleFilter<"GroupMember"> | $Enums.GroupRole
     joinedAt?: DateTimeFilter<"GroupMember"> | Date | string
+    status?: EnumMemberStatusFilter<"GroupMember"> | $Enums.MemberStatus
   }
 
   export type ObservationUpsertWithWhereUniqueWithoutUserInput = {
@@ -15483,6 +15937,10 @@ export namespace Prisma {
     content?: StringFilter<"Article"> | string
     authorId?: StringFilter<"Article"> | string
     createdAt?: DateTimeFilter<"Article"> | Date | string
+    category?: EnumCategoryFilter<"Article"> | $Enums.Category
+    tags?: JsonNullableFilter<"Article">
+    status?: EnumStatusFilter<"Article"> | $Enums.Status
+    image?: StringFilter<"Article"> | string
   }
 
   export type EventUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -15871,6 +16329,7 @@ export namespace Prisma {
     id?: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
     user: UserCreateNestedOneWithoutGroupsInput
   }
 
@@ -15879,6 +16338,7 @@ export namespace Prisma {
     userId: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
   }
 
   export type GroupMemberCreateOrConnectWithoutGroupInput = {
@@ -16656,6 +17116,7 @@ export namespace Prisma {
     groupId: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
   }
 
   export type ObservationCreateManyUserInput = {
@@ -16695,6 +17156,10 @@ export namespace Prisma {
     title: string
     content: string
     createdAt?: Date | string
+    category: $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: $Enums.Status
+    image: string
   }
 
   export type EventCreateManyCreatedByInput = {
@@ -16711,6 +17176,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
     group?: GroupUpdateOneRequiredWithoutMembersNestedInput
   }
 
@@ -16719,6 +17185,7 @@ export namespace Prisma {
     groupId?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type GroupMemberUncheckedUpdateManyWithoutUserInput = {
@@ -16726,6 +17193,7 @@ export namespace Prisma {
     groupId?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type ObservationUpdateWithoutUserInput = {
@@ -16831,6 +17299,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
   }
 
   export type ArticleUncheckedUpdateWithoutAuthorInput = {
@@ -16838,6 +17310,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
   }
 
   export type ArticleUncheckedUpdateManyWithoutAuthorInput = {
@@ -16845,6 +17321,10 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: EnumCategoryFieldUpdateOperationsInput | $Enums.Category
+    tags?: NullableJsonNullValueInput | InputJsonValue
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    image?: StringFieldUpdateOperationsInput | string
   }
 
   export type EventUpdateWithoutCreatedByInput = {
@@ -16886,6 +17366,7 @@ export namespace Prisma {
     userId: string
     role?: $Enums.GroupRole
     joinedAt?: Date | string
+    status?: $Enums.MemberStatus
   }
 
   export type ImageCreateManyGroupInput = {
@@ -16903,6 +17384,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
     user?: UserUpdateOneRequiredWithoutGroupsNestedInput
   }
 
@@ -16911,6 +17393,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type GroupMemberUncheckedUpdateManyWithoutGroupInput = {
@@ -16918,6 +17401,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     role?: EnumGroupRoleFieldUpdateOperationsInput | $Enums.GroupRole
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumMemberStatusFieldUpdateOperationsInput | $Enums.MemberStatus
   }
 
   export type ImageUpdateWithoutGroupInput = {

@@ -1,7 +1,8 @@
+"use client"
+
 import type React from "react"
 
 import { useState } from "react"
-import type { Group, GroupStatus } from "./groups-management"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,7 +16,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import ImageUpload from "../images/image-upload"
+import type { Group, GroupStatus } from "shared-types"
+import ImageUpload from "../ui/image-upload"
 
 interface CreateGroupDialogProps {
   open: boolean
@@ -26,8 +28,9 @@ interface CreateGroupDialogProps {
 export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }: CreateGroupDialogProps) {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
-  const [status, setStatus] = useState<GroupStatus>("active")
-  const [image, setImage] = useState("")
+  const [status, setStatus] = useState<GroupStatus>("ACTIVE")
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [nameError, setNameError] = useState("")
 
   const validateForm = () => {
@@ -51,7 +54,8 @@ export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }:
         name,
         description,
         status,
-        image,
+        image: imagePreview || "", // Use the preview URL for display
+        // imageFile: imageFile, // Add the actual file for upload
         rating: 0, // New groups start with 0 rating
       })
       resetForm()
@@ -62,8 +66,9 @@ export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }:
   const resetForm = () => {
     setName("")
     setDescription("")
-    setStatus("active")
-    setImage("")
+    setStatus("ACTIVE")
+    setImageFile(null)
+    setImagePreview(null)
     setNameError("")
   }
 
@@ -108,15 +113,26 @@ export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }:
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Inactive</SelectItem>
+                  <SelectItem value="PENDING">Pending</SelectItem>
+                  <SelectItem value="ARCHIVED">Archived</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <ImageUpload onImageChange={setImage} />
+            <ImageUpload
+              label="Group Image"
+              initialImage={imagePreview || undefined}
+              onImageChange={(file: File | null, preview?: string | undefined) => {
+                setImageFile(file)
+                setImagePreview(preview || null)
+              }}
+              previewWidth="w-32"
+              previewHeight="h-32"
+              // aspectRatio="square"
+              description="Recommended: Square image for group avatar, max 5MB"
+            />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={handleClose}>

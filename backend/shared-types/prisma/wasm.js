@@ -146,7 +146,11 @@ exports.Prisma.ArticleScalarFieldEnum = {
   title: 'title',
   content: 'content',
   authorId: 'authorId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  category: 'category',
+  tags: 'tags',
+  status: 'status',
+  image: 'image'
 };
 
 exports.Prisma.GroupScalarFieldEnum = {
@@ -164,7 +168,8 @@ exports.Prisma.GroupMemberScalarFieldEnum = {
   userId: 'userId',
   groupId: 'groupId',
   role: 'role',
-  joinedAt: 'joinedAt'
+  joinedAt: 'joinedAt',
+  status: 'status'
 };
 
 exports.Prisma.ObservationScalarFieldEnum = {
@@ -207,6 +212,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -215,6 +225,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.Role = exports.$Enums.Role = {
   USER: 'USER',
@@ -228,6 +244,23 @@ exports.ImageCategory = exports.$Enums.ImageCategory = {
   OTHER: 'OTHER'
 };
 
+exports.Category = exports.$Enums.Category = {
+  SOLAR_SYSTEM: 'SOLAR_SYSTEM',
+  GALAXIES: 'GALAXIES',
+  STARS: 'STARS',
+  EXOPLANETS: 'EXOPLANETS',
+  BLACK_HOLES: 'BLACK_HOLES',
+  COSMOLOGY: 'COSMOLOGY',
+  ASTROBIOLOGY: 'ASTROBIOLOGY',
+  TELESCOPES: 'TELESCOPES',
+  SPACE_MISSIONS: 'SPACE_MISSIONS'
+};
+
+exports.Status = exports.$Enums.Status = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+};
+
 exports.GroupStatus = exports.$Enums.GroupStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
@@ -238,6 +271,13 @@ exports.GroupStatus = exports.$Enums.GroupStatus = {
 exports.GroupRole = exports.$Enums.GroupRole = {
   MEMBER: 'MEMBER',
   ADMIN: 'ADMIN'
+};
+
+exports.MemberStatus = exports.$Enums.MemberStatus = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
+  AWAY: 'AWAY',
+  BUSY: 'BUSY'
 };
 
 exports.EventType = exports.$Enums.EventType = {

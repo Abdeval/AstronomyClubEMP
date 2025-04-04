@@ -1,26 +1,22 @@
+import { api, astroApi, nasaApi } from "./axios-instance";
 
-// ! get method
+const createApiMethods = (instance: any) => ({
+  get: (route: string, params?: any, headers?: any) =>
+    instance.get(route, { params, headers }).then((res: any) => res.data),
+  post: (route: string, body: any, args?: any) =>
+    instance.post(route, body, args),
+  delete: (route: string) =>
+    instance.delete(route).then((res: any) => res.data),
+  put: (route: string, body: any) =>
+    instance.put(route, body).then((res: any) => res.data),
+  patch: (route: string, body: any, options: object = {}) =>
+    instance.patch(route, body, options).then((res: any) => res.data),
+});
 
-import { api } from "./axios-instance"
+export const apiMethods = createApiMethods(api);
+export const nasaApiMethods = createApiMethods(nasaApi);
+export const astroApiMethods = createApiMethods(astroApi);
 
-export const getApi = async (route: string, params?: any, headers?: any) => {
-    return api.get(route, { params }).then(res => res.data)
-}
-
-// ! post method
-
-export const postApi = (route: string, body: any, args?: any) => {
-    return api.post(route, body, args)
-}
-
-// ! delete method
-
-export const deleteApi = async (route: string) => {
-    return api.delete(route).then(res => res.data);
-}
-
-// ! update method
-
-export const updateApi = async (route: string, body: any) => {
-    return api.put(route, body).then(res => res.data);
-}
+export const { get: getApi, post: postApi, delete: deleteApi, put: putApi, patch: patchApi } = apiMethods;
+export const { get: getNasaApi, post: postNasaApi } = nasaApiMethods;
+export const { get: getAstroApi, post: postAstroApi } = astroApiMethods;

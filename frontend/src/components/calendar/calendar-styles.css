@@ -124,3 +124,83 @@
   @apply bg-repeat;
 }
 
+/* Event types */
+.event-meteor-shower {
+  background-color: #3b82f6 !important; /* blue-500 */
+  border-color: #2563eb !important; /* blue-600 */
+  color: white !important;
+}
+
+.event-planet-viewing {
+  background-color: #8b5cf6 !important; /* purple-500 */
+  border-color: #7c3aed !important; /* purple-600 */
+  color: white !important;
+}
+
+.event-moon-phase {
+  background-color: #eab308 !important; /* yellow-500 */
+  border-color: #ca8a04 !important; /* yellow-600 */
+  color: white !important;
+}
+
+.event-eclipse {
+  background-color: #6b7280 !important; /* gray-500 */
+  border-color: #4b5563 !important; /* gray-600 */
+  color: white !important;
+}
+
+.event-deadline {
+  background-color: #ef4444 !important; /* red-500 */
+  border-color: #dc2626 !important; /* red-600 */
+  color: white !important;
+}
+
+.event-sun {
+  background-color: #f97316 !important; /* orange-500 */
+  border-color: #ea580c !important; /* orange-600 */
+  color: white !important;
+}
+
+.event-default {
+  background-color: #10b981 !important; /* emerald-500 */
+  border-color: #059669 !important; /* emerald-600 */
+  color: white !important;
+}
+
+/* Weather conditions */
+.event-weather-unsuitable {
+  opacity: 0.6 !important;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 10px,
+    rgba(0, 0, 0, 0.2) 10px,
+    rgba(0, 0, 0, 0.2) 20px
+  ) !important;
+}
+
+/* Day cells */
+.weather-suitable {
+  background-color: rgba(16, 185, 129, 0.05) !important; /* emerald-500 with low opacity */
+}
+
+.weather-unsuitable {
+  background-color: rgba(239, 68, 68, 0.05) !important; /* red-500 with low opacity */
+}
+
+/* Time slots */
+.time-slot.weather-suitable {
+  background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+.time-slot.weather-unsuitable {
+  background-color: rgba(239, 68, 68, 0.05) !important;
+}
+
+/* Fix for popup events */
+.rbc-overlay {
+  z-index: 1000;
+}
+
+
+

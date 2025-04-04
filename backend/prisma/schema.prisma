@@ -71,9 +71,33 @@ model Article {
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+  category  Category 
+  tags      Json?    
+  status    Status   @default(DRAFT) 
+  image     String   
 
   @@map("articles")
 }
+
+// ENUM for status
+enum Status {
+  DRAFT
+  PUBLISHED
+}
+
+// ENUM for astronomy article categories
+enum Category {
+  SOLAR_SYSTEM
+  GALAXIES
+  STARS
+  EXOPLANETS
+  BLACK_HOLES
+  COSMOLOGY
+  ASTROBIOLOGY
+  TELESCOPES
+  SPACE_MISSIONS
+}
+
 
 // status of the group
 enum GroupStatus {
@@ -107,8 +131,16 @@ model GroupMember {
   group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   role     GroupRole @default(MEMBER)
   joinedAt DateTime  @default(now())
+  status MemberStatus @default(ONLINE)
 
   @@map("group_members")
+}
+
+enum MemberStatus {
+  ONLINE
+  OFFLINE
+  AWAY
+  BUSY
 }
 
 enum GroupRole {

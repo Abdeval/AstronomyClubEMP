@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import type { Equipment } from "@/lib/types"
 import { getGroupLabel, getStatusBadgeVariant } from "@/lib/utils"
-import { Link } from "react-router-dom"
 import EditEquipmentDialog from "./edit-equipment-dialog"
 
 interface EquipmentDetailProps {
@@ -55,14 +54,6 @@ export default function EquipmentDetail({ equipment }: EquipmentDetailProps) {
   return (
     <div>
       <div className="mb-6 font-regular">
-        {/* <Link
-          to="/members/equipments"
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to Equipment
-        </Link> */}
-
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <Badge variant="default" className="mb-2">

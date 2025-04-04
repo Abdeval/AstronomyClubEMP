@@ -1,40 +1,48 @@
-import { deleteApi, getApi, postApi } from "@/lib/api";
-import { ImageType } from "@/lib/types";
-import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
+import { deleteApi, getApi, patchApi, postApi } from "@/lib/api";
+import { useMutation, useMutationState, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Image } from "shared-types";
 
 export const useImage = () => {
+  const queryClient = useQueryClient();
+
+
   const response = useQuery({
     queryKey: ["images"],
     queryFn: () => getApi("/images"),
   });
 
-  const addImage = async (image: ImageType) => {
-    const mutation = useMutation({
-      mutationKey: ["add-image"],
-      mutationFn: () => postApi("/images/add", image),
-    });
+  const addImageMutation = useMutation({
+    mutationKey: ["add-image"],
+    mutationFn: (formData: FormData) => postApi("/images/create", formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["images"]
+      })
+    }
+  });
 
-    return mutation.mutate;
-  };
+  const deleteImageMutation = useMutation({
+    mutationKey: ["delete-image"],
+    mutationFn: (imageId: string | number) => deleteApi(`/images/delete/${imageId}`),
+  });
 
-  const deleteImage = async (imageId: string | number) => {
-    const mutation = useMutation({
-      mutationKey: ["delete-image"],
-      mutationFn: () => deleteApi(`/images/delete/${imageId}`),
-    });
+  const updateImageMutation = useMutation({
+    mutationKey: ["update-image"],
+    mutationFn: (data: {
+      imageId: string,
+      body: Partial<Image>
+    }) => patchApi(`/images/update/${data.imageId}`, data.body),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["images"]
+      })
 
-    return mutation.mutate;
-  };
-
-  const imageInfo = (imageId: string) => {
-    const { data } = useQuery({
-      queryKey: ["image-by-id", imageId],
-      queryFn: () => getApi(`/images/${imageId}`),
-      enabled: !!imageId,
-    });
-    
-    return data;
-  };
+      queryClient.invalidateQueries({
+        queryKey: ["image-by-id", variables.imageId]
+      })
+    }
+  });
+  
 
   const getImageDataHistory = (mutationKey: unknown[]) => {
     const data = useMutationState({
@@ -49,9 +57,20 @@ export const useImage = () => {
 
   return {
     ...response,
-    addImage,
-    deleteImage,
+    addImage: addImageMutation.mutate,
+    updateImage: updateImageMutation.mutate,
+    deleteImage: deleteImageMutation.mutate,
     getImageDataHistory,
-    imageInfo,
   };
+};
+
+
+export const useImageInfo = (imageId: string) => {
+  const { data: image, isLoading: isImageLoading, isError: isImageError } = useQuery({
+    queryKey: ["image-by-id", imageId],
+    queryFn: () => getApi(`/images/${imageId}`),
+    enabled: !!imageId,
+  });
+  
+  return { image, isImageError, isImageLoading };
 };

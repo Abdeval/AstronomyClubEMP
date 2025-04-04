@@ -8,3 +8,5 @@ export * from './gallery'
 export * from './observation'
 export * from './equipments';
 export * from './groups';
+export * from './tasks';
+export * from './users';

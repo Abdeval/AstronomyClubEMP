@@ -148,6 +148,17 @@ body {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+/* Hide scrollbar for Chrome, Safari, and Edge */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.hidden-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 
 /* calendar styles */
 
