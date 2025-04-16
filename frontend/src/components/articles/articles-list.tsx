@@ -32,6 +32,7 @@ import { useArticle } from "@/hooks";
 import { ArticleType } from "@/lib/types";
 import ConfirmDeletionDialog from "../confirm-deletion-dialog";
 import { toast } from "sonner";
+import SearchInputCustom from "../inputs/search-input-custom";
 
 export default function ArticlesList() {
   const [filteredArticles, setFilteredArticles] = useState<ArticleType[]>([]);
@@ -41,7 +42,8 @@ export default function ArticlesList() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [articleToDelete, setArticleToDelete] = useState<Article | null>(null);
   const [viewType, setViewType] = useState<"grid" | "list">("grid");
-  const { articles, isLoading, error, addArticle, deleteArticle } = useArticle();
+  const { articles, isLoading, error, addArticle, deleteArticle } =
+    useArticle();
 
   useEffect(() => {
     if (articles) {
@@ -67,7 +69,7 @@ export default function ArticlesList() {
     try {
       addArticle(formData);
       setIsCreateDialogOpen(false);
-      toast(`Article created with success ${formData.get("title")}`)
+      toast(`Article created with success ${formData.get("title")}`);
     } catch (error) {
       console.error("Failed to create article:", error);
     }
@@ -106,15 +108,11 @@ export default function ArticlesList() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <div className="flex flex-1 gap-2 w-full sm:w-auto">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 bg-background"
-            />
-          </div>
+          <SearchInputCustom
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            placeHolder="Search articles..."
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">

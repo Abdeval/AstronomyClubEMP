@@ -1,12 +1,10 @@
-import BarChartComponent from '@/components/charts/bar-chart'
+import { DashboardCards } from '@/components/dashboard/dashboard-cards'
 
 
 export default function MemberDashboard() {
   return (
     <div className="w-full h-full font-regular">
-      {/* <PageHeader title="Dashboard"/> */}
-      {/* <SignButton /> */}
-      <BarChartComponent />
+      <DashboardCards />
     </div>
   )
 }

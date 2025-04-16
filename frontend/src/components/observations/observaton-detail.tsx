@@ -1,8 +1,7 @@
-
-import type React from "react"
-import { useState } from "react"
-import { format } from "date-fns"
-import { motion, AnimatePresence } from "framer-motion"
+import type React from "react";
+import { useState } from "react";
+import { format } from "date-fns";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
   MapPin,
@@ -16,114 +15,123 @@ import {
   ChevronRight,
   ChevronUp,
   ChevronDown,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import EditObservationDialog from "./edit-observation-dialog"
-import type { ImageType, Observation } from "@/lib/types"
-import { Link } from "react-router-dom"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import EditObservationDialog from "./edit-observation-dialog";
+import type { ImageType, ObservationType } from "@/lib/types";
+import ConfirmDeletionDialog from "../confirm-deletion-dialog";
+import { useObservation } from "@/hooks";
+import { useNavigate } from "react-router-dom";
 
 interface ObservationDetailProps {
-  observation: Observation
+  observation: ObservationType;
 }
 
-export default function ObservationDetail({ observation }: ObservationDetailProps) {
+export default function ObservationDetail({
+  observation,
+}: ObservationDetailProps) {
+  const { deleteObservation, updateObservation } = useObservation();
+  const navigate = useNavigate();
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
-    observation.images && observation.images.length > 0 ? 0 : null,
-  )
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [isFullscreen, setIsFullscreen] = useState(false)
-  const [showAllImages, setShowAllImages] = useState(false)
-
-  const hasImages = observation.images && observation.images.length > 0
-  const visibleImages = showAllImages ? observation.images : observation.images?.slice(0, 6) || []
-  const hasMoreImages = observation.images && observation.images.length > 6
+    observation.images && observation.images.length > 0 ? 0 : null
+  );
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showAllImages, setShowAllImages] = useState(false);
+  
+  const hasImages = observation.images && observation.images.length > 0;
+  const visibleImages = showAllImages
+    ? observation.images
+    : observation.images?.slice(0, 6) || [];
+  const hasMoreImages = observation.images && observation.images.length > 6;
 
   const handleDeleteObservation = async () => {
-    // In a real app, you would call an API to delete the observation
-    console.log("Deleting observation:", observation.id)
-    setIsDeleteDialogOpen(false)
-    // Redirect to observations list after deletion
-    window.location.href = "/observations"
-  }
+    deleteObservation(observation.id);
+    setIsDeleteDialogOpen(false);
+    navigate("/members/observations");
+  };
 
-  const handleUpdateObservation = (updatedObservation: Observation) => {
-    // In a real app, you would update the observation data
-    console.log("Updated observation:", updatedObservation)
-    setIsEditDialogOpen(false)
-    // Refresh the page to show updated data
-    window.location.reload()
-  }
+  const handleUpdateObservation = (
+    updatedObservation: FormData
+  ) => {
+    updateObservation(updatedObservation)
+  };
 
-  const handleImageClick = (index: number) => {
-    setSelectedImageIndex(index)
-    setIsFullscreen(true)
-  }
+  // const handleImageClick = (index: number) => {
+  //   setSelectedImageIndex(index)
+  //   setIsFullscreen(true)
+  // }
 
   const handleNextImage = () => {
-    if (selectedImageIndex === null || !observation.images) return
-    setSelectedImageIndex((selectedImageIndex + 1) % observation.images.length)
-  }
+    if (selectedImageIndex === null || !observation.images) return;
+    setSelectedImageIndex((selectedImageIndex + 1) % observation.images.length);
+  };
 
   const handlePreviousImage = () => {
-    if (selectedImageIndex === null || !observation.images) return
-    setSelectedImageIndex((selectedImageIndex - 1 + observation.images.length) % observation.images.length)
-  }
+    if (selectedImageIndex === null || !observation.images) return;
+    setSelectedImageIndex(
+      (selectedImageIndex - 1 + observation.images.length) %
+        observation.images.length
+    );
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isFullscreen) return
+    if (!isFullscreen) return;
 
     switch (e.key) {
       case "ArrowRight":
-        handleNextImage()
-        break
+        handleNextImage();
+        break;
       case "ArrowLeft":
-        handlePreviousImage()
-        break
+        handlePreviousImage();
+        break;
       case "Escape":
-        setIsFullscreen(false)
-        break
+        setIsFullscreen(false);
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   return (
-    <div className="container mx-auto py-8 px-4" onKeyDown={handleKeyDown} tabIndex={0}>
+    <div
+      className="container mx-auto py-8 px-4"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       <div className="mb-6">
-        <Link
-          to="/members/observations"
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to Observations
-        </Link>
-
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <h1 className="text-3xl font-bold">{observation.title}</h1>
+          <h1 className="text-3xl font-bold capitalize text-muted-foreground">
+            {observation.title}
+          </h1>
 
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(window.location.href)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                navigator.clipboard.writeText(window.location.href)
+              }
+            >
               <Share className="h-4 w-4 mr-2" />
               Share
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setIsEditDialogOpen(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditDialogOpen(true)}
+            >
               <Edit className="h-4 w-4 mr-2" />
               Edit
             </Button>
-            <Button variant="destructive" size="sm" onClick={() => setIsDeleteDialogOpen(true)}>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </Button>
@@ -143,11 +151,10 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
           )}
           <div className="flex items-center text-sm text-muted-foreground">
             <User className="h-4 w-4 mr-1" />
-            {observation.user.firstName}
+            {observation.user?.firstName}
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           {/* Main image and gallery */}
@@ -158,7 +165,10 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
                   <div className="relative aspect-video bg-muted rounded-md overflow-hidden">
                     {selectedImageIndex !== null && (
                       <img
-                        src={observation.images[selectedImageIndex]?.url || "/placeholder.svg"}
+                        src={
+                          observation?.images[selectedImageIndex]?.url ||
+                          "/placeholder.svg"
+                        }
                         alt={`Observation image ${selectedImageIndex + 1}`}
                         className="object-contain"
                       />
@@ -191,23 +201,29 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
 
                   {observation.images && observation?.images?.length > 1 && (
                     <div className="space-y-2">
-                      <h3 className="text-sm font-medium">Gallery ({observation.images?.length} images)</h3>
+                      <h3 className="text-sm font-medium">
+                        Gallery ({observation.images?.length} images)
+                      </h3>
                       <div className="grid grid-cols-6 gap-2">
-                        {visibleImages?.map((image: ImageType, index: number) => (
-                          <div
-                            key={index}
-                            className={`relative aspect-square rounded-md overflow-hidden cursor-pointer border-2 ${
-                              selectedImageIndex === index ? "border-primary" : "border-transparent"
-                            }`}
-                            onClick={() => setSelectedImageIndex(index)}
-                          >
-                            <img
-                              src={image.url || "/placeholder.svg"}
-                              alt={`Thumbnail ${index + 1}`}
-                              className="object-cover"
-                            />
-                          </div>
-                        ))}
+                        {visibleImages?.map(
+                          (image: ImageType, index: number) => (
+                            <div
+                              key={index}
+                              className={`relative aspect-square rounded-md overflow-hidden cursor-pointer border-2 ${
+                                selectedImageIndex === index
+                                  ? "border-primary"
+                                  : "border-transparent"
+                              }`}
+                              onClick={() => setSelectedImageIndex(index)}
+                            >
+                              <img
+                                src={image.url || "/placeholder.svg"}
+                                alt={`Thumbnail ${index + 1}`}
+                                className="object-cover"
+                              />
+                            </div>
+                          )
+                        )}
                       </div>
 
                       {hasMoreImages && (
@@ -255,7 +271,9 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
                         </svg>
                       </div>
                     </div>
-                    <p className="text-muted-foreground">No images for this observation</p>
+                    <p className="text-muted-foreground">
+                      No images for this observation
+                    </p>
                   </div>
                 </div>
               )}
@@ -271,7 +289,9 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
                   <p>{observation.details}</p>
                 </div>
               ) : (
-                <p className="text-muted-foreground">No details provided for this observation.</p>
+                <p className="text-muted-foreground">
+                  No details provided for this observation.
+                </p>
               )}
             </CardContent>
           </Card>
@@ -284,12 +304,19 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
               <h2 className="text-lg font-semibold mb-4">Observer</h2>
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={observation.user.image || ""} alt={observation.user.firstName} />
-                  <AvatarFallback>{observation.user.firstName?.charAt(0)}</AvatarFallback>
+                  <AvatarImage
+                    src={observation.user?.avatar || ""}
+                    alt={observation.user?.firstName as string}
+                  />
+                  <AvatarFallback>
+                    {observation.user?.firstName?.charAt(0)}
+                  </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium">{observation.user.firstName}</p>
-                  <p className="text-sm text-muted-foreground">{observation.user.email}</p>
+                  <p className="font-medium">{observation.user?.firstName}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {observation.user?.email}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -302,7 +329,9 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
               <dl className="space-y-3">
                 <div className="flex flex-col">
                   <dt className="text-sm text-muted-foreground">Created</dt>
-                  <dd className="font-medium">{format(new Date(observation.date), "PPP 'at' p")}</dd>
+                  <dd className="font-medium">
+                    {format(new Date(observation.date), "PPP 'at' p")}
+                  </dd>
                 </div>
                 {observation.location && (
                   <div className="flex flex-col">
@@ -312,18 +341,21 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
                 )}
                 <div className="flex flex-col">
                   <dt className="text-sm text-muted-foreground">Images</dt>
-                  <dd className="font-medium">{observation.images?.length || 0}</dd>
+                  <dd className="font-medium">
+                    {observation.images?.length || 0}
+                  </dd>
                 </div>
                 <div className="flex flex-col">
                   <dt className="text-sm text-muted-foreground">ID</dt>
-                  <dd className="font-medium text-xs text-muted-foreground truncate">{observation.id}</dd>
+                  <dd className="font-medium text-xs text-muted-foreground truncate">
+                    {observation.id}
+                  </dd>
                 </div>
               </dl>
             </CardContent>
           </Card>
         </div>
       </div>
-
       {/* Fullscreen image viewer */}
       <AnimatePresence>
         {isFullscreen && selectedImageIndex !== null && observation.images && (
@@ -377,7 +409,10 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
 
             <div className="w-full h-full flex items-center justify-center">
               <img
-                src={observation.images[selectedImageIndex].url || "/placeholder.svg"}
+                src={
+                  observation.images[selectedImageIndex].url ||
+                  "/placeholder.svg"
+                }
                 alt={`Observation image ${selectedImageIndex + 1}`}
                 className="object-contain"
                 sizes="100vw"
@@ -386,25 +421,13 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
           </motion.div>
         )}
       </AnimatePresence>
-
       {/* Delete confirmation dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure you want to delete this observation?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the observation and all associated images.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteObservation} className="bg-destructive text-destructive-foreground">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
+      <ConfirmDeletionDialog
+        isDeleteDialogOpen={isDeleteDialogOpen}
+        onDelete={handleDeleteObservation}
+        item="observation"
+        onOpenChange={setIsDeleteDialogOpen}
+      />
       {/* Edit observation dialog */}
       <EditObservationDialog
         open={isEditDialogOpen}
@@ -412,7 +435,7 @@ export default function ObservationDetail({ observation }: ObservationDetailProp
         observation={observation}
         onUpdateObservation={handleUpdateObservation}
       />
+      calendar
     </div>
-  )
+  );
 }
-

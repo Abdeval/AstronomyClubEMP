@@ -6,7 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { Article } from "shared-types";
 
 export const useArticle = () => {
   const queryClient = useQueryClient();

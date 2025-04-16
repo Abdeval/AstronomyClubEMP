@@ -1,4 +1,4 @@
-import { Article, Event, Group, Image, MemberStatus, Task, User } from "shared-types"
+import { Article, Event, Group, Image, MemberStatus, Observation, Task, User } from "shared-types"
 
 
 export type EquipmentGroup = "webdev" | "rovers" | "astrography" | "all"
@@ -59,17 +59,21 @@ export interface Equipment {
 }
 
 
-export interface Observation {
-  id: string
-  title: string
-  details?: string
-  location?: string
-  date: Date | string
-  userId: string
-  user: UserType
-  images?: ImageType[]
-}
+// export interface Observation {
+//   id: string
+//   title: string
+//   details?: string
+//   location?: string
+//   date: Date | string
+//   userId: string
+//   user: UserType
+//   images?: ImageType[]
+// }
 
+export interface ObservationType extends Observation {
+  user?: User,
+  images?: Image[]
+}
 
 export interface UserType {
   id: string,

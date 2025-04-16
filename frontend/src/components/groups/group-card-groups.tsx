@@ -83,6 +83,8 @@ export default function GroupCard({
       (m: MemberType) => m.id === currentUser?.id && m.role === "ADMIN"
     );
 
+  console.log(isAdminOrLeader, currentUser);
+
   const handleAddMember = (member: Partial<GroupMember>) => {
     if (isAdminOrLeader) {
       console.log("adding a member");
@@ -348,7 +350,7 @@ export default function GroupCard({
         </Collapsible>
       </CardContent>
 
-      <CardFooter className="pt-2 flex gap-2 flex flex-row lg:flex-row md:flex-col">
+      <CardFooter className="pt-2 flex gap-2 flex-row lg:flex-row md:flex-col">
         <Button
           variant="outline"
           className="flex-1"

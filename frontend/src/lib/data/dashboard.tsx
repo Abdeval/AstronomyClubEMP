@@ -6,11 +6,11 @@ export const dashboardNavs: DashboardNavType[] = [
     icon: "Home",
     link: "",
   },
-  {
-    name: "profile",
-    icon: "UserIcon",
-    link: "profile",
-  },
+  // {
+  //   name: "profile",
+  //   icon: "UserIcon",
+  //   link: "profile",
+  // },
   {
     name: "calendar",
     icon: "Calendar",

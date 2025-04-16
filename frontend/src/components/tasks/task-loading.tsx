@@ -1,21 +1,13 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronLeft, Edit, Trash2 } from 'lucide-react'
-import { Link } from "react-router-dom"
+import { Edit, Trash2 } from 'lucide-react'
 
 export default function TaskLoading() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-6">
-        <Link
-          to="/members/tasks"
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to Tasks
-        </Link>
-
+      
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Skeleton className="h-10 w-64" />

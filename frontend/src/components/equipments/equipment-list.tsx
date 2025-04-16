@@ -7,6 +7,7 @@ import type { Equipment, EquipmentStatus } from "@/lib/types"
 import EquipmentCard from "./equipment-card"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import SearchInputCustom from "../inputs/search-input-custom"
 
 interface EquipmentListProps {
   equipment: Equipment[]
@@ -40,15 +41,11 @@ export default function EquipmentList({ equipment, onUpdate, onDelete }: Equipme
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1 bg-background rounded-md">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search equipment..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8"
-          />
-        </div>
+        <SearchInputCustom 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            placeHolder="search equipment..."
+        />
 
         <Select 
         value={statusFilter} onValueChange={(value) => setStatusFilter(value as EquipmentStatus | "all")}>

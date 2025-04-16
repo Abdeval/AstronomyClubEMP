@@ -5,20 +5,20 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import type { Observation } from "@/lib/types"
 import { Link } from "react-router-dom"
+import { ObservationType } from "@/lib/types"
 
 
 interface ObservationCardProps {
-  observation: Observation
+  observation: ObservationType
 }
 
 export default function ObservationCard({ observation }: ObservationCardProps) {
   const [imageError, setImageError] = useState(false)
 
-  const hasImages = observation.images && observation.images.length > 0
-  const mainImage = hasImages ? observation?.images[0]?.url : null
-
+  const hasImages = observation.images && observation.images.length > 0 && observation.images[0];
+  const mainImage = hasImages ? observation?.images[0]?.url : ""
+  const observationLength = observation?.images?.length || 0;
   return (
     <Card className="overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow duration-200">
       <div className="aspect-video relative bg-muted">
@@ -34,9 +34,9 @@ export default function ObservationCard({ observation }: ObservationCardProps) {
             <Telescope className="h-12 w-12 text-muted-foreground" />
           </div>
         )}
-        {hasImages && observation?.images?.length > 1 && (
+        {hasImages && observationLength > 1 && (
           <Badge className="absolute bottom-2 right-2 bg-black/60 text-white">
-            +{observation?.images?.length - 1} more
+            +{observationLength - 1} more
           </Badge>
         )}
       </div>
@@ -64,13 +64,13 @@ export default function ObservationCard({ observation }: ObservationCardProps) {
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 flex justify-between items-center border-t mt-auto">
+      <CardFooter className="p-4 flex justify-between items-center border-t mt-auto pt-2">
         <div className="flex items-center gap-2">
           <Avatar className="h-6 w-6">
-            <AvatarImage src={observation.user.image || ""} alt={observation.user.firstName} />
-            <AvatarFallback>{observation.user.firstName.charAt(0)}</AvatarFallback>
+            <AvatarImage src={observation.user?.avatar || ""} alt={observation.user?.firstName || "user observation"} />
+            <AvatarFallback>{observation.user?.firstName?.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="text-xs text-muted-foreground">{observation.user.firstName}</span>
+          <span className="text-xs text-muted-foreground">{observation.user?.firstName}</span>
         </div>
 
         <Button variant="ghost" size="sm" asChild>

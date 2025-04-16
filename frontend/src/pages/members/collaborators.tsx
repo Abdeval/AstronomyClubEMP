@@ -26,13 +26,13 @@ export default function Collaborators() {
          bg-background rounded-none relative w-full min-h-full"
     >
       {/* hello */}
-      <div className="grid col-span-1 row-span-1 bg-secondary rounded-br-[16px] items-center justify-center">
+      <div className="grid col-span-1 row-span-1 bg-secondary/50 rounded-br-[16px] items-center justify-center">
         <img
           className="md:w-[40px] md:h-[40px] w-[30px] h-[30px]"
           src={group.image || "/images/groups/rover.png"}
         />
       </div>
-      <div className="lg:col-span-10 col-span-9 lg:row-span-11 row-span-10 bg-secondary">
+      <div className="lg:col-span-10 col-span-9 lg:row-span-11 row-span-10 bg-secondary/50">
         <div
           className="w-full h-full rounded-[16px] rounded-bl-none bg-background 
               flex items-center justify-center flex-col gap-3 p-2"
@@ -77,7 +77,7 @@ export default function Collaborators() {
           <CollaboratorsList collaborators={group.members} groupId={group.id}/>
         </div>
       </div>
-      <div className="lg:col-span-1 col-span-1 lg:row-span-10 row-span-9 bg-secondary">
+      <div className="lg:col-span-1 col-span-1 lg:row-span-10 row-span-9 bg-secondary/50">
         <div
           className="w-full h-full rounded-l-[16px] bg-background
          flex items-center justify-center flex-col  gap-2"

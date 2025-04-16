@@ -19,6 +19,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { extname, join } from 'path';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { extname, join } from 'path';
     GroupModule,
     MemberModule,
     ImageModule,
+    // PrismaModule,
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'), 
       serveRoot: '/uploads', 
@@ -47,6 +49,7 @@ import { extname, join } from 'path';
         },
       }),
     }),
+    DashboardModule,
   ],
 
   controllers: [AppController],

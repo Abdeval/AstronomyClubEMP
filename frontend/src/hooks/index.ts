@@ -8,3 +8,5 @@ export * from "./use-nasa";
 export * from "./use-astro";
 export * from "./use-weather";
 export * from "./use-astronomy-calendar-events";
+export * from './use-observation';
+export * from './use-dashboard';

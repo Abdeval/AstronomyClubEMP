@@ -23,6 +23,10 @@ export const useTask = () => {
       queryClient.invalidateQueries({
         queryKey: ["tasks"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["task-by-id"],
+      });
     },
   });
 
@@ -32,6 +36,9 @@ export const useTask = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["tasks"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["task-by-id"],
       });
     },
   });

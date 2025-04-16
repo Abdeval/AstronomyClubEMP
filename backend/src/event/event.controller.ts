@@ -15,10 +15,4 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
-  // ! get events from an exterior api (proxy)
-  @Get()
-  getEventsFromApi() {
-    return this.eventService.getEventsFromApi();
-  }
-
 }

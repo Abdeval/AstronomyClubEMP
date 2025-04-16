@@ -303,7 +303,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/youtcode/projects/AstronomyClubEMP/backend/shared-types/prisma",
+      "value": "/home/abdelatif/projects/astro-app-1/backend/shared-types/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -317,7 +317,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/youtcode/projects/AstronomyClubEMP/backend/prisma/schema.prisma",
+    "sourceFilePath": "/home/abdelatif/projects/astro-app-1/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

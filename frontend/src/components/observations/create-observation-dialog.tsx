@@ -1,8 +1,5 @@
-"use client"
-
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { format } from "date-fns"
 import { CalendarIcon, Upload, X } from "lucide-react"
 import {
@@ -20,74 +17,43 @@ import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import type { Observation } from "@/lib/types"
+import { useObservation } from "@/hooks"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 
 interface CreateObservationDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onCreateObservation: (observation: Observation) => void
 }
 
-export default function CreateObservationDialog({
-  open,
-  onOpenChange,
-  onCreateObservation,
-}: CreateObservationDialogProps) {
-  const [title, setTitle] = useState("")
-  const [details, setDetails] = useState("")
-  const [location, setLocation] = useState("")
-  const [date, setDate] = useState<Date>(new Date())
+// Define form validation schema with Zod
+const formSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  details: z.string().optional(),
+  location: z.string().optional(),
+  date: z.date({
+    required_error: "Observation date is required",
+  }),
+})
+
+export default function CreateObservationDialog({ open, onOpenChange }: CreateObservationDialogProps) {
+  const { addObservation } = useObservation()
   const [images, setImages] = useState<File[]>([])
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [titleError, setTitleError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const validateForm = () => {
-    let isValid = true
-
-    if (!title.trim()) {
-      setTitleError("Title is required")
-      isValid = false
-    } else {
-      setTitleError("")
-    }
-
-    return isValid
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (validateForm()) {
-      // In a real app, you would upload images to a server and get URLs back
-      // For this example, we'll create object URLs for the images
-      const uploadedImages = images.map((file, index) => ({
-        id: `temp-${index}`,
-        url: imageUrls[index],
-        title: file.name,
-      }))
-
-      // Create a new observation
-      const newObservation: Observation = {
-        id: `temp-${Date.now()}`,
-        title,
-        details,
-        location,
-        date,
-        userId: "current-user-id", // In a real app, this would come from authentication
-        user: {
-          id: "current-user-id",
-          firstName: "Current User",
-          email: "user@example.com",
-          image: "/avatars/1.png",
-          role: "MEMBER"
-        },
-        images: uploadedImages,
-      }
-
-      onCreateObservation(newObservation)
-      resetForm()
-    }
-  }
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      details: "",
+      location: "",
+      date: new Date(),
+    },
+  })
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -104,7 +70,7 @@ export default function CreateObservationDialog({
     const newUrls = [...imageUrls]
 
     // Revoke the object URL to avoid memory leaks
-    URL.revokeObjectURL(newUrls[index])
+    URL.revokeObjectURL(newUrls[index]);
 
     newImages.splice(index, 1)
     newUrls.splice(index, 1)
@@ -114,17 +80,22 @@ export default function CreateObservationDialog({
   }
 
   const resetForm = () => {
-    setTitle("")
-    setDetails("")
-    setLocation("")
-    setDate(new Date())
+    form.reset({
+      title: "",
+      details: "",
+      location: "",
+      date: new Date(),
+    })
 
     // Revoke all object URLs to avoid memory leaks
     imageUrls.forEach((url) => URL.revokeObjectURL(url))
 
     setImages([])
     setImageUrls([])
-    setTitleError("")
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }
 
   const handleClose = () => {
@@ -132,68 +103,121 @@ export default function CreateObservationDialog({
     onOpenChange(false)
   }
 
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    try {
+
+      setIsSubmitting(true)
+
+      const formData = new FormData()
+
+      formData.append("title", values.title)
+      formData.append("date", values.date.toDateString())
+
+      if (values.details) {
+        formData.append("details", values.details)
+      }
+
+      if (values.location) {
+        formData.append("location", values.location)
+      }
+
+      // Add images to FormData
+      images.forEach((image) => {
+        formData.append(`files`, image);
+      })
+       
+      addObservation(formData);
+
+      handleClose();
+    } catch (error) {
+      console.error("Failed to create observation:", error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[600px]">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Create New Observation</DialogTitle>
-            <DialogDescription>Record your astronomical observation with details and images.</DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter observation title"
-              />
-              {titleError && <p className="text-sm text-destructive">{titleError}</p>}
-            </div>
+        <DialogHeader>
+          <DialogTitle>Create New Observation</DialogTitle>
+          <DialogDescription>Record your astronomical observation with details and images.</DialogDescription>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter observation title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="date">Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn("justify-start text-left font-normal", !date && "text-muted-foreground")}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "PPP") : "Select date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={date} onSelect={(date) => date && setDate(date)} initialFocus />
-                  </PopoverContent>
-                </Popover>
-              </div>
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            className={cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground")}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {field.value ? format(field.value, "PPP") : "Select date"}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div className="grid gap-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="Enter observation location"
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="details">Details</Label>
-              <Textarea
-                id="details"
-                value={details}
-                onChange={(e) => setDetails(e.target.value)}
-                placeholder="Enter observation details"
-                rows={4}
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter observation location" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
 
-            <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="details"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Details</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Enter observation details" rows={4} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="space-y-2">
               <Label>Images</Label>
               <div className="border border-dashed border-input rounded-md p-4">
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -234,19 +258,23 @@ export default function CreateObservationDialog({
                       multiple
                       className="hidden"
                       onChange={handleImageChange}
+                      ref={fileInputRef}
                     />
                   </label>
                 </div>
               </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button type="submit">Create Observation</Button>
-          </DialogFooter>
-        </form>
+
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Creating..." : "Create Observation"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

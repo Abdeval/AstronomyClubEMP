@@ -47,7 +47,7 @@ export class GroupService {
     try {
       let groupInfo: any;
       if (adminId) {
-        // console.log('admin group info');
+        console.log('admin group info');
         groupInfo = await this.prisma.group.findFirst({
           where: {
             members: {
@@ -77,7 +77,7 @@ export class GroupService {
           },
         });
       } else if (groupId) {
-        // console.log('group info');
+        console.log('group info');
         groupInfo = await this.prisma.group.findFirst({
           where: {
             id: groupId,

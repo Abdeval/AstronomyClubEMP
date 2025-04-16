@@ -1,19 +1,21 @@
+import ObservationLoading from "@/components/observations/observation-loading";
+import ObservationDetail from "@/components/observations/observaton-detail";
+import { useObservationInfo } from "@/hooks";
+import { ObservationType } from "@/lib/types";
+import { useParams } from "react-router-dom";
 
-import ObservationDetail from "@/components/observations/observaton-detail"
-import { getObservationById } from "@/lib/data"
-import { Observation } from "@/lib/types"
-// import { NOTFOUND } from "dns"
-import { useParams } from "react-router-dom"
-
-
-export default async function ObservationDetailPage() {
+export default function ObservationDetailPage() {
+  
   const { id } = useParams();
-  const observation = await getObservationById(id as string);
+  const { observation, isObservationLoading, isObservationError } = useObservationInfo(
+    id as string
+  );
 
-  if (!observation) {
-    return <div>not found</div>
-  }
+  if(isObservationError) return <p className="text-red-500">Internal error</p>
 
-  return <ObservationDetail observation={observation as Observation} />
+  return isObservationLoading ? (
+    <ObservationLoading />
+  ) : (
+    <ObservationDetail observation={observation as ObservationType} />
+  );
 }
-

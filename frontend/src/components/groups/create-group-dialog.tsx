@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -30,6 +30,7 @@ export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }:
   const [description, setDescription] = useState("")
   const [status, setStatus] = useState<GroupStatus>("ACTIVE")
   const [imageFile, setImageFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [nameError, setNameError] = useState("")
 
@@ -54,9 +55,8 @@ export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }:
         name,
         description,
         status,
-        image: imagePreview || "", // Use the preview URL for display
-        // imageFile: imageFile, // Add the actual file for upload
-        rating: 0, // New groups start with 0 rating
+        image: imagePreview || "", 
+        rating: 0,
       })
       resetForm()
       onOpenChange(false)
@@ -127,12 +127,13 @@ export default function CreateGroupDialog({ open, onOpenChange, onCreateGroup }:
               onImageChange={(file: File | null, preview?: string | undefined) => {
                 setImageFile(file)
                 setImagePreview(preview || null)
-              }}
+              } }
               previewWidth="w-32"
               previewHeight="h-32"
               // aspectRatio="square"
-              description="Recommended: Square image for group avatar, max 5MB"
-            />
+              description="Recommended: Square image for group avatar, max 5MB" type={"image"} 
+              fileInputRef={fileInputRef}         
+              />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={handleClose}>
